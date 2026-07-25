@@ -5,7 +5,7 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-07-25 (D4 sửa lần 2, thêm D5) |
+| Cập nhật lần cuối | 2026-07-25 (thêm D5; D4 đã xét lại React rồi giữ Angular) |
 | Trạng thái áp dụng | `PRD.md` v2.0 đồng bộ D1–D3; **còn 6 lỗ phải vá ở Bước 4** (roster/Sheet + chữ "PWA" + giới hạn offline) · `PLAN.md` / `GRILL-LOG.md` ⚠️ **chưa** — xem `docs/plan-v2-rewrite.md` |
 
 ---
@@ -136,41 +136,50 @@ Máy dùng chung → nút *"Không phải bạn? Đổi số"*. Mất mạng →
 
 ---
 
-## D4 — Stack: Spring Boot 3.5 + Postgres 16 + React (Vite)
+## D4 — Stack: Spring Boot 3.5 + Postgres 16 + Angular 20
 
-**Quyết định.** Backend Java. Lật ngược quyết định "Next.js + Supabase" ghi ở
+**Quyết định.** Quay lại stack Java. Lật ngược quyết định "Next.js + Supabase" ghi ở
 `PLAN.md` §2 (2026-07-19), vốn đã lật `GRILL-LOG.md` Q14 trước đó.
 
 | Lớp | Công nghệ |
 |---|---|
 | Backend | Spring Boot 3.5 + Postgres 16 + Flyway |
 | `/q/{code}` — trang hội viên | **Thymeleaf server-render** + vài chục dòng JS |
-| `/staff` + `/admin` | **React + Vite**, build ra file tĩnh, Spring Boot serve. **Không Next.js** |
-| `/staff` — riêng | **PWA đầy đủ**: manifest + service worker + IndexedDB (xem cơ chế 3) |
+| `/staff` + `/admin` | **Angular 20**, build ra file tĩnh, Spring Boot serve |
+| `/staff` — riêng | **PWA đầy đủ**: `@angular/pwa` + service worker + IndexedDB (xem cơ chế 3) |
 | Deploy | Fly.io hoặc 1 VPS + docker compose + Caddy — **không k8s** |
 
-> **Sửa 2026-07-25 (lần 2 trong ngày): Angular 20 → React + Vite.**
+> **Đã xét lại React và giữ nguyên Angular — 2026-07-25.**
 >
-> Đây là **lần lật thứ tư** cho cùng câu hỏi frontend (Q14 Angular → 19/07 Next.js+React →
-> D4 Angular → nay React). Lật nhiều vì **tiêu chí quyết định chưa được chốt** — lúc thì
-> "stack đang thành thạo", lúc thì "nhanh nhất". Chốt tiêu chí ở đây để dừng lật:
+> Câu hỏi frontend đã lật ba lần (Q14 Angular → 19/07 Next.js+React → D4 Angular), nên lần
+> này xét kỹ rồi ghi lại kết quả để **không mở lại lần thứ tư**.
 >
-> **Tiêu chí: cái nào người xây thật sự muốn mở editor lên làm, với điều kiện không phá
-> ràng buộc kỹ thuật nào.** Với dự án solo part-time sống nhiều năm, động lực là ràng buộc
-> thật, không phải chuyện cảm tính.
+> Đề xuất được xem xét: thay Angular bằng React + Vite, lý do *"cảm giác React nhanh hơn"*.
+> **Kết luận: giữ Angular.** Cái "nhanh hơn" của React là thật nhưng nằm ở ecosystem và trợ lực
+> AI, không phải ở bản thân framework — còn hai lợi thế kỹ thuật thường được viện dẫn thì
+> **không áp dụng trong bài toán này**:
 >
-> Kiểm lại: React **không** phá ràng buộc nào, vì hai lợi thế thường viện dẫn cho Angular
-> ở đây đều không áp dụng. (1) *Bundle nhẹ / cold start* — trang nhạy cold start là `/q`,
-> đã Thymeleaf; `/staff` và `/admin` nằm sau đăng nhập, dùng lặp lại hàng ngày, cài như PWA.
-> (2) *Batteries included* — Angular CLI cho sẵn router/forms/PWA, React phải tự lắp một lần
-> (~1 ngày), đổi lại ecosystem rộng hơn nhiều và **AI hỗ trợ tốt hơn rõ rệt** — yếu tố
-> velocity thật khi làm một mình.
+> | Lợi thế của React | Có áp dụng ở đây? |
+> |---|---|
+> | Bundle nhẹ, cold start nhanh | **Không.** Trang nhạy cold start là `/q`, đã Thymeleaf. `/staff` và `/admin` nằm sau đăng nhập, dùng lặp lại hàng ngày, cài như PWA — bundle không mua được gì |
+> | Đơn giản hơn, ít bề mặt tư duy | **Một phần.** Nhưng đổi lại phải tự lắp router / data fetching / forms / PWA plugin; Angular CLI cho sẵn |
+> | Ecosystem rộng, AI hỗ trợ tốt hơn | **Có** — đây là lợi thế thật duy nhất, và là cái đã bị đánh đổi |
 >
-> Phần khó nhất của frontend (outbox + sync offline) là **code tự viết ở cả hai** — framework
-> không giúp gì. Nên lựa chọn này không ảnh hưởng tới rủi ro lớn nhất.
+> Ba lý do quyết định giữ:
+> 1. **Angular là stack đi làm của người xây** *(Q14)* — năng suất, quy ước, tooling đã có sẵn.
+>    Đây là sản phẩm sống nhiều năm do một người bảo trì, không phải hackathon.
+> 2. **Phần khó nhất của frontend không phụ thuộc framework.** Offline outbox + sync là code tự
+>    viết ở cả hai. React không giảm được một dòng nào của rủi ro lớn nhất.
+> 3. **`/staff` cần PWA, và Angular cho sẵn.** `ng add @angular/pwa` sinh manifest + service
+>    worker + `ngsw-config.json` khai báo caching bằng JSON. Bên React phải tự lắp
+>    `vite-plugin-pwa`. Đúng cái phần nặng nhất thì Angular đỡ việc hơn.
 >
-> **Ràng buộc kèm theo:** React ở đây là **Vite build ra file tĩnh**, Spring Boot serve.
-> Tuyệt đối không Next.js — nó kéo theo một Node runtime phải vận hành, đúng thứ D4 vừa dọn đi.
+> **Tiêu chí chốt để dừng lật:** *stack đang thành thạo thắng, trừ khi có ràng buộc kỹ thuật
+> cụ thể bắt phải đổi.* Đã kiểm ngày 25/07: **không có ràng buộc nào.** Lần sau muốn mở lại
+> câu hỏi này thì phải nêu được một ràng buộc kỹ thuật, không phải một cảm giác.
+>
+> **Và dù chọn gì cũng không Next.js** — nó kéo theo một Node runtime phải vận hành, đúng thứ
+> D4 vừa dọn đi. Angular/React ở đây đều là build ra file tĩnh cho Spring Boot serve.
 
 **Lý do.** Lợi thế lớn nhất của Supabase là **phone OTP có sẵn**. Nhưng Supabase phone auth
 chạy qua Twilio/Vonage — đắt và deliverability kém với số VN. Muốn OTP qua ZNS thì **phải tự
@@ -236,17 +245,19 @@ manage-pwa/
 │   ├── src/main/resources/
 │   │   ├── templates/q/            # Thymeleaf — /q/{code}
 │   │   ├── db/migration/           # Flyway
-│   │   └── static/app/             # ← bundle React copy vào lúc build
+│   │   └── static/app/             # ← bundle Angular copy vào lúc build
 │   └── pom.xml
-├── frontend/                       # Vite + React → /staff + /admin
+├── frontend/                       # Angular 20 → /staff + /admin
 │   ├── src/
-│   ├── public/manifest.json
-│   └── vite.config.ts
+│   ├── ngsw-config.json            # cấu hình service worker (PWA cho /staff)
+│   └── angular.json
 ├── docker-compose.yml              # postgres + app (+ caddy)
 └── Dockerfile
 ```
 
-Build: Vite → file tĩnh → copy vào `static/app/` → Maven đóng **một** jar → **một** image.
+Build: `ng build` → file tĩnh → copy vào `static/app/` → Maven đóng **một** jar → **một** image.
+Có thể để `frontend-maven-plugin` chạy `ng build` trong vòng đời Maven, hoặc một script gọi tay —
+với một người thì script đơn giản hơn, không cần plugin.
 
 **Vì sao không microservices — lý do mạnh nhất nằm trong chính ba cơ chế dưới.**
 Lập luận thường gặp: tải chỉ **1–2 write/giây**; microservices giải bài toán **tổ chức**
@@ -289,7 +300,7 @@ nhau.** Giữ được thì 5 năm sau cần tách sẽ tách theo đường có
 | Gửi Zalo/ZNS, digest ngày | ✅ | Bảng `notification_outbox` **chính là** hàng chờ + một `@Scheduled` quét bảng. Postgres là message queue đủ tốt ở quy mô này |
 | Mirror Google Sheet | ✅ | Một job định kỳ ghi theo batch, trong cùng app |
 
-**Ai serve file React tĩnh.** Chọn **Spring Boot serve từ `static/`** — đúng một artifact để
+**Ai serve file Angular tĩnh.** Chọn **Spring Boot serve từ `static/`** — đúng một artifact để
 deploy, để rollback, dev/prod đồng nhất. Cần một controller fallback trả `index.html` cho route
 phía client (`/admin/members`). Caddy chỉ làm TLS. Phương án Caddy-serve-tĩnh-proxy-`/api` tốt
 hơn về cache header nhưng thêm chỗ cấu hình phải đồng bộ — đổi sang sau là việc mười phút.
@@ -377,11 +388,15 @@ Mức 1 tốn gần bằng mức 2 nhưng hỏng đúng lúc cần, và tệ nh�
 Hứa mà hỏng tệ hơn không hứa.
 
 **Chi phí mức 2 cộng thêm trên mức 1: ~2–3 ngày part-time.** Phần nặng (outbox + sync) mức 1 cũng
-phải làm. Cộng thêm: `vite-plugin-pwa` sinh service worker (~½ ngày) + lưu danh sách vào IndexedDB
-thay vì RAM (~½ ngày) + đường khởi-động-không-mạng (~½ ngày) + ~1 ngày vật lộn với hai nỗi đau
-kinh điển (deploy rồi người dùng vẫn thấy bản cũ vì service worker cũ còn phục vụ từ cache; và
-debug ma quái vì tưởng code mới mà đang chạy bản cache). Dùng `registerType: 'prompt'` để hiện
-thanh *"có bản mới, tải lại"* thay vì đổi ngầm.
+phải làm. Cộng thêm: `ng add @angular/pwa` sinh manifest + `ngsw-worker.js` + `ngsw-config.json`
+(~½ ngày) + lưu danh sách vào IndexedDB thay vì RAM (~½ ngày) + đường khởi-động-không-mạng
+(~½ ngày) + ~1 ngày vật lộn với hai nỗi đau kinh điển (deploy rồi người dùng vẫn thấy bản cũ vì
+service worker cũ còn phục vụ từ cache; và debug ma quái vì tưởng code mới mà đang chạy bản cache).
+
+Của Angular thì caching khai báo bằng JSON, không phải viết tay: `assetGroups` với
+`installMode: prefetch` cho vỏ app, `dataGroups` cho API. Và **đừng để nó tự đổi bản ngầm** —
+dùng service `SwUpdate` (observable `versionUpdates`) để hiện thanh *"có bản mới, tải lại"*,
+vì đổi ngầm giữa lúc giáo viên đang điểm danh là mất dữ liệu trong RAM.
 
 **Đừng lẫn hai thứ:** service worker làm app **mở được** khi offline (cache vỏ: HTML/JS/CSS);
 IndexedDB outbox làm **tap không mất** (dữ liệu). Cần cả hai, nhiệm vụ khác nhau.

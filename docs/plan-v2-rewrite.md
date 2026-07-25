@@ -40,7 +40,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | Mục | Thay đổi |
 |---|---|
 | **§1** | Giữ kết luận web-không-native *(Q13)*, nhưng **sửa cách dùng chữ "PWA"** — nó chỉ áp cho `/staff` (manifest + service worker); `/q` là trang web thường; `/admin` chỉ cần manifest. Bổ sung: `/q/{code}` **không phải SPA** — 1 lượt request thay vì 4–5. *(D4)* |
-| **§2 Stack** | Viết lại toàn bộ theo D4 + D5: Spring Boot 3.5 + Postgres 16 + Flyway + **React (Vite)** + Thymeleaf. **Không Next.js** — build ra file tĩnh, Spring Boot serve, cần controller fallback trả `index.html` cho route phía client. Nêu lý do lật quyết định (lần thứ tư — kèm tiêu chí đã chốt để dừng lật). Thêm mục **kiến trúc**: monorepo + modular monolith, một tiến trình, vì sao không microservices. Giữ exit door: logic ở tầng app, `pg_dump` sang Postgres VN-region cho PDPL. Deploy Fly.io hoặc VPS + docker compose + Caddy, **không k8s** |
+| **§2 Stack** | Viết lại toàn bộ theo D4 + D5: Spring Boot 3.5 + Postgres 16 + Flyway + **Angular 20** + Thymeleaf. **Không Next.js, không SSR** — `ng build` ra file tĩnh, Spring Boot serve, cần controller fallback trả `index.html` cho route phía client. Nêu lý do lật Next.js+Supabase, **và ghi rằng React đã được xét lại ngày 25/07 rồi loại** — kèm tiêu chí đã chốt để dừng lật (stack thành thạo thắng, trừ khi có ràng buộc kỹ thuật cụ thể). Thêm mục **kiến trúc**: monorepo + modular monolith, một tiến trình, vì sao không microservices. Giữ exit door: logic ở tầng app, `pg_dump` sang Postgres VN-region cho PDPL. Deploy Fly.io hoặc VPS + docker compose + Caddy, **không k8s** |
 | **§3 Domain model** | Bổ sung bảng: `member_device`, `staff_user` (email auth), `notification_outbox`. Ghi rõ 3 cơ chế kỹ thuật trong `DECISIONS.md`. Thêm layout package theo miền nghiệp vụ *(D5)* |
 | **§4 Milestones** | Sắp xếp lại — xem bảng dưới |
 | **§6 Risk register** | Bỏ rủi ro "Supabase/PDPL". Thêm: gian lận khi không OTP; **offline mức 2 của `/staff` là phần frontend nặng nhất** (~2–3 ngày cộng thêm, chưa kể ~½ ngày màn hình hướng dẫn cài trên iOS — bỏ bước đó thì offline vô dụng với người dùng iPhone) |
@@ -62,9 +62,9 @@ Giữ nguyên giá trị lịch sử, làm đúng cách Q14 đã được xử l
 
 - **Q6** — thêm `> Superseded 2026-07-25:` Zalo rời khỏi lõi v1, lý do GPKD + không free tier
 - **Q14** — thêm ghi chú lật lại về Spring Boot, kèm lý do (Supabase auth advantage bốc hơi).
-  **Và ghi chú thứ hai:** frontend Angular → **React (Vite)** (25/07), kèm tiêu chí đã chốt để
-  dừng lật lần thứ năm. Lưu ý: câu *"Angular là stack đi làm của bạn"* trong Q14 là tiền đề đã
-  không còn đứng — D4 giờ đứng trên tiêu chí khác
+  **Và ghi chú thứ hai:** ngày 25/07 đã xét lại React và **giữ Angular** — verdict gốc của Q14
+  đứng vững, kèm tiêu chí đã chốt để dừng lật (stack thành thạo thắng, trừ khi có ràng buộc
+  kỹ thuật cụ thể; muốn mở lại phải nêu ràng buộc, không phải cảm giác)
 - **Q13** — thêm ghi chú: kết luận web-không-native **vẫn đúng**, nhưng chữ "PWA" trong câu trả lời
   bị dùng cho cả sản phẩm trong khi thực tế chỉ `/staff` cần manifest + service worker
 - Thêm **Q16** mới: *"Bạn lấy tiền đâu trả OTP khi chưa có doanh thu?"* — ghi lại phép tính
@@ -169,11 +169,12 @@ Chạy `/init` sau khi có code để `CLAUDE.md` được bổ sung lệnh buil
 Thứ tự đề xuất, mỗi session một việc:
 
 1. Khởi tạo monorepo: `backend/` Spring Boot + Postgres + Flyway + docker compose; `frontend/`
-   Vite + React build ra `static/app/` + controller fallback *(D5)*
+   Angular 20, `ng build` ra `static/app/` + controller fallback *(D5)*
 2. Schema `org` / `scan_point` / `member` + RLS + **bộ test cô lập đa tenant** — làm trước, không làm sau
 3. Email magic link cho chủ/nhân viên *(F10)*
 4. Trang `/q/{code}` Thymeleaf + import danh sách (upsert theo SĐT, có preview) + bind device token *(F2)*
 5. `entitlement` + `checkin_event` + dedupe unique index + Testcontainers test *(F5)*
-6. `/staff` React: danh sách + outbox IndexedDB + sync *(F3)*
-7. `/staff` offline mức 2: `vite-plugin-pwa` + service worker + cache danh sách + màn hình hướng dẫn
-   cài trên iOS *(cơ chế 3)* — tách khỏi bước 6 để bước 6 dùng được trước khi offline xong
+6. `/staff` Angular: danh sách + outbox IndexedDB + sync *(F3)*
+7. `/staff` offline mức 2: `ng add @angular/pwa` + `ngsw-config.json` + cache danh sách + `SwUpdate`
+   + màn hình hướng dẫn cài trên iOS *(cơ chế 3)* — tách khỏi bước 6 để bước 6 dùng được trước
+   khi offline xong

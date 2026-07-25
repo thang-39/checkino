@@ -25,9 +25,10 @@ kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.
   khớp thì bind device token ngay. ZNS không có free tier (300đ/tin xác thực).
 - **D3** — Tách hai nhu cầu auth: chủ/nhân viên dùng **email magic link**; hội viên dùng
   **device token** (cookie httpOnly, TTL 1 năm). Email cho hội viên là sai thị trường.
-- **D4** — Stack **Spring Boot 3.5 + Postgres 16 + React (Vite)**. Riêng `/q/{code}`
-  server-render bằng Thymeleaf, không phải SPA. Đã lật ngược Next.js + Supabase, rồi lật
-  Angular → React (25/07). **Không Next.js** — React ở đây là Vite build ra file tĩnh.
+- **D4** — Stack **Spring Boot 3.5 + Postgres 16 + Angular 20**. Riêng `/q/{code}`
+  server-render bằng Thymeleaf, không phải SPA. Đã lật ngược Next.js + Supabase. **Đã xét lại
+  React ngày 25/07 và giữ Angular** — muốn mở lại câu hỏi này phải nêu được một ràng buộc kỹ
+  thuật, không phải một cảm giác. Angular build ra file tĩnh cho Spring Boot serve, **không SSR**.
 - **D5** — **Monorepo + modular monolith, một tiến trình.** Microservices không nằm trên bàn:
   nó phá cả ba cơ chế dưới, vì cả ba dựa vào một database + một transaction.
 
