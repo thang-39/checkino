@@ -39,11 +39,11 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 
 | Mục | Thay đổi |
 |---|---|
-| **§1** | Giữ kết luận PWA. Bổ sung: `/q/{code}` **không phải SPA** — server-render để tối ưu cold start. *(D4)* |
-| **§2 Stack** | Viết lại toàn bộ theo D4: Spring Boot 3.5 + Postgres 16 + Flyway + Angular 20 PWA + Thymeleaf. Nêu lý do lật quyết định. Giữ exit door: logic ở tầng app, `pg_dump` sang Postgres VN-region cho PDPL. Deploy Fly.io hoặc VPS + docker compose + Caddy, **không k8s** |
-| **§3 Domain model** | Bổ sung bảng: `member_device`, `staff_user` (email auth), `notification_outbox`. Ghi rõ 3 cơ chế kỹ thuật trong `DECISIONS.md` |
+| **§1** | Giữ kết luận web-không-native *(Q13)*, nhưng **sửa cách dùng chữ "PWA"** — nó chỉ áp cho `/staff` (manifest + service worker); `/q` là trang web thường; `/admin` chỉ cần manifest. Bổ sung: `/q/{code}` **không phải SPA** — 1 lượt request thay vì 4–5. *(D4)* |
+| **§2 Stack** | Viết lại toàn bộ theo D4 + D5: Spring Boot 3.5 + Postgres 16 + Flyway + **React (Vite)** + Thymeleaf. **Không Next.js** — build ra file tĩnh, Spring Boot serve, cần controller fallback trả `index.html` cho route phía client. Nêu lý do lật quyết định (lần thứ tư — kèm tiêu chí đã chốt để dừng lật). Thêm mục **kiến trúc**: monorepo + modular monolith, một tiến trình, vì sao không microservices. Giữ exit door: logic ở tầng app, `pg_dump` sang Postgres VN-region cho PDPL. Deploy Fly.io hoặc VPS + docker compose + Caddy, **không k8s** |
+| **§3 Domain model** | Bổ sung bảng: `member_device`, `staff_user` (email auth), `notification_outbox`. Ghi rõ 3 cơ chế kỹ thuật trong `DECISIONS.md`. Thêm layout package theo miền nghiệp vụ *(D5)* |
 | **§4 Milestones** | Sắp xếp lại — xem bảng dưới |
-| **§6 Risk register** | Bỏ rủi ro "Supabase/PDPL". Thêm: gian lận khi không OTP; Angular PWA offline queue là phần frontend nặng nhất |
+| **§6 Risk register** | Bỏ rủi ro "Supabase/PDPL". Thêm: gian lận khi không OTP; **offline mức 2 của `/staff` là phần frontend nặng nhất** (~2–3 ngày cộng thêm, chưa kể ~½ ngày màn hình hướng dẫn cài trên iOS — bỏ bước đó thì offline vô dụng với người dùng iPhone) |
 | **§7 Definition of done** | Bỏ "nhận digest Zalo" khỏi tiêu chí v1 — nó đã là tính năng Pro |
 
 **Milestone mới** — Zalo không còn chặn đường:
@@ -61,7 +61,12 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 Giữ nguyên giá trị lịch sử, làm đúng cách Q14 đã được xử lý:
 
 - **Q6** — thêm `> Superseded 2026-07-25:` Zalo rời khỏi lõi v1, lý do GPKD + không free tier
-- **Q14** — thêm ghi chú lật lại lần hai về Spring Boot, kèm lý do (Supabase auth advantage bốc hơi)
+- **Q14** — thêm ghi chú lật lại về Spring Boot, kèm lý do (Supabase auth advantage bốc hơi).
+  **Và ghi chú thứ hai:** frontend Angular → **React (Vite)** (25/07), kèm tiêu chí đã chốt để
+  dừng lật lần thứ năm. Lưu ý: câu *"Angular là stack đi làm của bạn"* trong Q14 là tiền đề đã
+  không còn đứng — D4 giờ đứng trên tiêu chí khác
+- **Q13** — thêm ghi chú: kết luận web-không-native **vẫn đúng**, nhưng chữ "PWA" trong câu trả lời
+  bị dùng cho cả sản phẩm trong khi thực tế chỉ `/staff` cần manifest + service worker
 - Thêm **Q16** mới: *"Bạn lấy tiền đâu trả OTP khi chưa có doanh thu?"* — ghi lại phép tính
   (device token: 1.000 hội viên = 300k một lần, so với login mỗi lần: 3,6tr/tháng) và kết luận D2
 
@@ -77,6 +82,47 @@ Không có code nên không chạy test được. Kiểm tra bằng tính nhất
 4. **Đối chiếu chéo** — mọi feature F1–F10 trong PRD phải xuất hiện ở đúng một milestone trong PLAN,
    không sót không trùng
 5. `git log` hiển thị đủ các bước, `git show <commit-snapshot>:PRD.md` xem lại được bản v1
+
+### Lỗ đã phát hiện, phải vá ở Bước 4
+
+Tìm ra khi rà câu hỏi *"chủ sửa Google Sheet thì backend có sync không?"* (25/07). Gốc chung:
+**D2 biến roster từ dữ liệu báo cáo thành dữ liệu định danh**, nhưng F1/F5/F7 vẫn viết với giọng
+của thời roster chỉ để xem.
+
+1. **Thiếu màn hình quản lý hội viên trong PRD.** F1 chỉ nói "import", F5 nói gán thẻ nhưng không
+   nói quản lý hội viên ở đâu. Bốn việc bắt buộc cần nó: gán/gia hạn thẻ *(F5)*, chuyển lead thành
+   hội viên *(F4)*, sửa SĐT nhập sai (SĐT là khoá định danh — sai thì hội viên vĩnh viễn không vào
+   được), thu hồi device token khi hội viên đổi máy *(F2)*. Đây là lỗ độc lập với chuyện Sheet.
+2. **F1 phải nói rõ import là việc làm nhiều lần, không phải một lần** — **upsert theo số điện
+   thoại**. Hai ràng buộc đã chốt: (a) **import không bao giờ xoá** — file thiếu ai thì giữ nguyên
+   người đó, vì tải nhầm file cũ sẽ xoá sạch roster và cả trung tâm không check-in được; cho nghỉ
+   phải làm tay trong app; (b) **preview trước khi apply** — *"thêm 12, cập nhật 3, giữ nguyên 185"*
+   → chủ xác nhận mới ghi.
+3. **F7 phải ghi hành vi khi chủ sửa Sheet** — hiện chỉ ghi "never the reverse" mà không nói chuyện
+   gì xảy ra. Chốt: tab do app ghi bị **protected range** + một dòng cảnh báo ở đầu tab
+   (*"Tab này do app ghi. Sửa tay sẽ bị ghi đè."*). Chủ **đọc ở Sheet, sửa ở app**. Không có tích
+   hợp Sheets API ở chiều vào, không OAuth thêm, không sync ngầm.
+4. **Ghi vào out of scope:** sync hai chiều với Google Sheet; quản lý roster bằng cách gõ trực tiếp
+   vào Sheet. Lý do: không đặt dữ liệu xác thực trong một file ai có link cũng sửa được và không có
+   audit trail.
+5. **`PRD.md` F2 viết `(PWA, no install)` — tự mâu thuẫn.** "PWA không cài" chính là *một website*.
+   Chữ PWA ở đó không mang thông tin gì. Gốc: tài liệu dùng "PWA" cho **hai nghĩa** — (a) *"web chứ
+   không phải native"* (quyết định Q13, áp cho cả sản phẩm) và (b) *"app cài được, chạy offline"*
+   (yêu cầu kỹ thuật, **chỉ `/staff`**). Sửa F2 thành *"trang web, không cài"*, và chỉ dùng chữ PWA
+   ở F3. Bảng ba mức theo mặt tiền ở `DECISIONS.md` D4.
+6. **`PRD.md` §6 phải ghi ba giới hạn offline đã chấp nhận** *(cơ chế 3 trong `DECISIONS.md`)*:
+   lần đầu buộc có mạng để cài service worker; danh sách cache có thể cũ; iOS không tự mời cài nên
+   cần màn hình hướng dẫn. Cả ba là giới hạn có chủ đích, không phải bug — không ghi ra thì sau này
+   sẽ bị báo là lỗi.
+
+Bốn đường vào roster sau khi vá — không chồng chéo, và F4 gánh phần lớn:
+
+| Tình huống | Đường | Chủ phải gõ |
+|---|---|---|
+| Ngày đầu, đã có sẵn Excel | Import file *(F1)* | không |
+| Đầu khoá, thêm cả lớp | Import lại, upsert theo SĐT | không |
+| Một người mới lẻ tự đến | **F4** — họ tự điền form học thử → chủ convert | một cú bấm |
+| Sửa tên / đổi số / cho nghỉ | Màn hình quản lý hội viên *(lỗ #1)* | vài ô |
 
 ---
 
@@ -122,9 +168,12 @@ Chạy `/init` sau khi có code để `CLAUDE.md` được bổ sung lệnh buil
 
 Thứ tự đề xuất, mỗi session một việc:
 
-1. Khởi tạo Spring Boot + Postgres + Flyway + docker compose
+1. Khởi tạo monorepo: `backend/` Spring Boot + Postgres + Flyway + docker compose; `frontend/`
+   Vite + React build ra `static/app/` + controller fallback *(D5)*
 2. Schema `org` / `scan_point` / `member` + RLS + **bộ test cô lập đa tenant** — làm trước, không làm sau
 3. Email magic link cho chủ/nhân viên *(F10)*
-4. Trang `/q/{code}` Thymeleaf + import danh sách + bind device token *(F2)*
+4. Trang `/q/{code}` Thymeleaf + import danh sách (upsert theo SĐT, có preview) + bind device token *(F2)*
 5. `entitlement` + `checkin_event` + dedupe unique index + Testcontainers test *(F5)*
-6. Angular PWA cho `/staff` với offline queue *(F3)*
+6. `/staff` React: danh sách + outbox IndexedDB + sync *(F3)*
+7. `/staff` offline mức 2: `vite-plugin-pwa` + service worker + cache danh sách + màn hình hướng dẫn
+   cài trên iOS *(cơ chế 3)* — tách khỏi bước 6 để bước 6 dùng được trước khi offline xong

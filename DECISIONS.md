@@ -5,8 +5,8 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-07-25 |
-| Trạng thái áp dụng | `PRD.md` ✅ đã đồng bộ (v2.0, 2026-07-25) · `PLAN.md` / `GRILL-LOG.md` ⚠️ **chưa** — xem `docs/plan-v2-rewrite.md` |
+| Cập nhật lần cuối | 2026-07-25 (D4 sửa lần 2, thêm D5) |
+| Trạng thái áp dụng | `PRD.md` v2.0 đồng bộ D1–D3; **còn 6 lỗ phải vá ở Bước 4** (roster/Sheet + chữ "PWA" + giới hạn offline) · `PLAN.md` / `GRILL-LOG.md` ⚠️ **chưa** — xem `docs/plan-v2-rewrite.md` |
 
 ---
 
@@ -136,17 +136,41 @@ Máy dùng chung → nút *"Không phải bạn? Đổi số"*. Mất mạng →
 
 ---
 
-## D4 — Stack: Spring Boot 3.5 + Postgres 16 + Angular 20 PWA
+## D4 — Stack: Spring Boot 3.5 + Postgres 16 + React (Vite)
 
-**Quyết định.** Quay lại stack Java. Lật ngược quyết định "Next.js + Supabase" ghi ở
+**Quyết định.** Backend Java. Lật ngược quyết định "Next.js + Supabase" ghi ở
 `PLAN.md` §2 (2026-07-19), vốn đã lật `GRILL-LOG.md` Q14 trước đó.
 
 | Lớp | Công nghệ |
 |---|---|
 | Backend | Spring Boot 3.5 + Postgres 16 + Flyway |
 | `/q/{code}` — trang hội viên | **Thymeleaf server-render** + vài chục dòng JS |
-| `/staff` + `/admin` | **Angular 20 PWA** (offline queue, IndexedDB, service worker) |
+| `/staff` + `/admin` | **React + Vite**, build ra file tĩnh, Spring Boot serve. **Không Next.js** |
+| `/staff` — riêng | **PWA đầy đủ**: manifest + service worker + IndexedDB (xem cơ chế 3) |
 | Deploy | Fly.io hoặc 1 VPS + docker compose + Caddy — **không k8s** |
+
+> **Sửa 2026-07-25 (lần 2 trong ngày): Angular 20 → React + Vite.**
+>
+> Đây là **lần lật thứ tư** cho cùng câu hỏi frontend (Q14 Angular → 19/07 Next.js+React →
+> D4 Angular → nay React). Lật nhiều vì **tiêu chí quyết định chưa được chốt** — lúc thì
+> "stack đang thành thạo", lúc thì "nhanh nhất". Chốt tiêu chí ở đây để dừng lật:
+>
+> **Tiêu chí: cái nào người xây thật sự muốn mở editor lên làm, với điều kiện không phá
+> ràng buộc kỹ thuật nào.** Với dự án solo part-time sống nhiều năm, động lực là ràng buộc
+> thật, không phải chuyện cảm tính.
+>
+> Kiểm lại: React **không** phá ràng buộc nào, vì hai lợi thế thường viện dẫn cho Angular
+> ở đây đều không áp dụng. (1) *Bundle nhẹ / cold start* — trang nhạy cold start là `/q`,
+> đã Thymeleaf; `/staff` và `/admin` nằm sau đăng nhập, dùng lặp lại hàng ngày, cài như PWA.
+> (2) *Batteries included* — Angular CLI cho sẵn router/forms/PWA, React phải tự lắp một lần
+> (~1 ngày), đổi lại ecosystem rộng hơn nhiều và **AI hỗ trợ tốt hơn rõ rệt** — yếu tố
+> velocity thật khi làm một mình.
+>
+> Phần khó nhất của frontend (outbox + sync offline) là **code tự viết ở cả hai** — framework
+> không giúp gì. Nên lựa chọn này không ảnh hưởng tới rủi ro lớn nhất.
+>
+> **Ràng buộc kèm theo:** React ở đây là **Vite build ra file tĩnh**, Spring Boot serve.
+> Tuyệt đối không Next.js — nó kéo theo một Node runtime phải vận hành, đúng thứ D4 vừa dọn đi.
 
 **Lý do.** Lợi thế lớn nhất của Supabase là **phone OTP có sẵn**. Nhưng Supabase phone auth
 chạy qua Twilio/Vonage — đắt và deliverability kém với số VN. Muốn OTP qua ZNS thì **phải tự
@@ -160,13 +184,115 @@ Không có ràng buộc kỹ thuật nào bắt phải dùng Next/Supabase: tả
 (1.000 trung tâm × 100 check-in/ngày). Đây là sản phẩm sống nhiều năm, do một người bảo trì —
 ưu tiên stack người đó thành thạo.
 
-**Vì sao `/q/{code}` không phải SPA.** Trang này chỉ hiện trạng thái thẻ + 1 nút, nhưng phải
-load nhanh trên 4G nguội khi người ta đang đứng ở cửa. Nhét Angular vào đây là tự hại:
-bundle nặng, cold start chậm, mà không dùng đến gì của framework.
+**Vì sao `/q/{code}` không phải SPA — quy về một con số.** Hội viên **chưa từng vào site này**
+(lần đầu quét QR, cache trống), đang **đứng ở cửa** trên **4G nguội**. Đếm số lượt đi lại:
+
+| | SPA | Thymeleaf |
+|---|---|---|
+| | 1. tải `index.html` rỗng | 1. tải HTML **đã có sẵn** "Còn 12 buổi" |
+| | 2. tải bundle JS ← chỗ đau | |
+| | 3. JS khởi động | |
+| | 4. JS gọi API lấy trạng thái thẻ | |
+| | 5. mới hiện chữ | |
+| **Tổng** | 4–5 lượt | **1 lượt** |
+
+Và trang đó có gì? Một ô nhập SĐT, một dòng chữ, một cái nút. Framework không mua được gì —
+không state phức tạp, không routing, không real-time. Đây là trang **duy nhất** trong sản phẩm
+mà người dùng chưa từng vào, và nó nằm ngay giữa vòng lặp cốt lõi.
+
+**Chữ "PWA" chỉ áp cho `/staff`.** PWA không phải công nghệ, nó là cái nhãn cho *website +
+`manifest.json` + service worker*. Ba mặt tiền cần ba mức khác nhau — trộn chúng vào một chữ
+là nguồn gốc của lẫn lộn:
+
+| Mặt tiền | manifest | service worker | Thực chất là |
+|---|---|---|---|
+| `/q` hội viên | ❌ | ❌ | **một trang web thường** — quét, xem, bấm, đi |
+| `/staff` | ✅ | ✅ | **PWA đầy đủ** — cài icon, toàn màn hình, chạy offline |
+| `/admin` | ✅ | ❌ | website + icon cho tiện bấm |
+
+`display: "standalone"` trong manifest là thứ bỏ thanh địa chỉ đi, khiến `/staff` trông như app
+tải từ store. Đổi lại việc **không qua App Store**: không xét duyệt, không chờ Apple, sửa lỗi là
+deploy. Đây là lý do `GRILL-LOG` Q13 chọn web — vòng lặp cốt lõi bắt đầu bằng camera quét QR dán
+trên tường, bắt cài app ở cửa là vòng lặp chết ngay tại đó.
 
 **Exit door vẫn giữ (cho PDPL data residency).** Business logic nằm ở tầng ứng dụng, không
 nằm trong DB. Migration = `pg_dump` → managed Postgres ở VN region (Viettel/VNG/FPT) →
 đổi một connection string.
+
+---
+
+## D5 — Kiến trúc: monorepo + modular monolith, một tiến trình
+
+**Quyết định.** Một repo. **Một tiến trình khi chạy.** Một lần deploy. Microservices **không nằm
+trên bàn**, kể cả về sau, trừ khi có team.
+
+Hai chữ hay bị gộp — chúng là hai trục độc lập: *repo* (monorepo ↔ multi-repo) và *runtime*
+(monolith ↔ microservices). Quyết định này là **monorepo + monolith**.
+
+```
+manage-pwa/
+├── backend/                        # Spring Boot 3.5
+│   ├── src/main/java/com/checkinhub/...
+│   ├── src/main/resources/
+│   │   ├── templates/q/            # Thymeleaf — /q/{code}
+│   │   ├── db/migration/           # Flyway
+│   │   └── static/app/             # ← bundle React copy vào lúc build
+│   └── pom.xml
+├── frontend/                       # Vite + React → /staff + /admin
+│   ├── src/
+│   ├── public/manifest.json
+│   └── vite.config.ts
+├── docker-compose.yml              # postgres + app (+ caddy)
+└── Dockerfile
+```
+
+Build: Vite → file tĩnh → copy vào `static/app/` → Maven đóng **một** jar → **một** image.
+
+**Vì sao không microservices — lý do mạnh nhất nằm trong chính ba cơ chế dưới.**
+Lập luận thường gặp: tải chỉ **1–2 write/giây**; microservices giải bài toán **tổ chức**
+(nhiều team deploy độc lập), mà đây là một người — không có chi phí phối hợp nào để giải.
+
+Nhưng lý do cứng hơn: **cơ chế 1 đòi insert check-in và trừ buổi cùng một transaction.** Tách
+`checkin-service` / `entitlement-service` → `@Transactional` biến thành **saga phân tán với
+compensating action** (ghi check-in xong, trừ buổi lỗi, phải gọi ngược để xoá, lệnh xoá cũng có
+thể lỗi...). Đổi một dòng annotation lấy một hệ thống bù trừ, để phục vụ 2 write/giây.
+
+**Cơ chế 2 cũng vỡ:** RLS + `SET LOCAL app.org_id` chỉ có nghĩa trong **một connection, một
+transaction**. Tách service là mất lớp cô lập, phải tự canh `org_id` bằng tay ở mọi chỗ gọi —
+đúng thứ RLS được chọn để khỏi phải làm.
+
+Cả ba cơ chế đã chốt đều dựa vào **một database, một transaction**. Microservices phá cả ba.
+
+**Nhưng giữ cửa thoát — modular monolith.** Một tiến trình, code chia theo miền nghiệp vụ:
+
+```
+com.checkinhub
+├── org/            # tenant, scan_point, giờ mở cửa, GPS
+├── member/         # member, member_device
+├── entitlement/    # gói thẻ, consume policy
+├── checkin/        # checkin_event, dedupe bucket
+├── trial/          # lead pipeline (F4)
+├── report/         # xếp hạng, CSV, mirror Sheet
+├── notification/   # outbox, Zalo (Pro)
+├── auth/           # magic link, device token
+└── shared/         # config, RLS interceptor, SSE
+```
+
+Quy tắc duy nhất phải giữ: **module gọi nhau qua interface, không thò tay vào repository của
+nhau.** Giữ được thì 5 năm sau cần tách sẽ tách theo đường có sẵn; không cần thì chẳng mất gì.
+Đúng tinh thần exit door của D4: **chuẩn bị đường thoát, không xây sẵn con đường.**
+
+**Hai chỗ đừng tách thành service.**
+
+| Việc | Nghe như cần service riêng vì async | Thực tế |
+|---|---|---|
+| Gửi Zalo/ZNS, digest ngày | ✅ | Bảng `notification_outbox` **chính là** hàng chờ + một `@Scheduled` quét bảng. Postgres là message queue đủ tốt ở quy mô này |
+| Mirror Google Sheet | ✅ | Một job định kỳ ghi theo batch, trong cùng app |
+
+**Ai serve file React tĩnh.** Chọn **Spring Boot serve từ `static/`** — đúng một artifact để
+deploy, để rollback, dev/prod đồng nhất. Cần một controller fallback trả `index.html` cho route
+phía client (`/admin/members`). Caddy chỉ làm TLS. Phương án Caddy-serve-tĩnh-proxy-`/api` tốt
+hơn về cache header nhưng thêm chỗ cấu hình phải đồng bộ — đổi sang sau là việc mười phút.
 
 ---
 
@@ -216,12 +342,64 @@ CREATE POLICY org_isolation ON checkin_event
 token của A cố đọc/sửa dữ liệu của B → assert 403 hoặc rỗng. Chạy trong CI.
 Không có bộ test này thì lớp 1 chỉ là niềm tin. **Viết test này trước, không phải sau.**
 
-### 3. Roster offline — idempotency key
+### 3. Roster offline — idempotency key **và** service worker
 
 Nhân viên tap tên → ghi vào outbox trong IndexedDB `{client_event_id: uuid, member_id, ...}` →
 UI tick xanh ngay (optimistic) → có mạng thì POST cả batch. Server dedupe bằng unique index
 trên `client_event_id`. Client gửi lại 10 lần vì mạng chập chờn → vẫn đúng 1 dòng.
 Không cần logic conflict resolution phức tạp.
+
+**Vì sao `/staff` chạy được offline mà `/q` thì không** — bất đối xứng này là cả câu trả lời:
+
+| | `/q` hội viên tự quét | `/staff` nhân viên điểm danh |
+|---|---|---|
+| Dữ liệu cần | Không biết trước — ai sẽ quét? | **Biết trước** — danh sách hôm nay, tải từ sáng lúc còn mạng |
+| Cần server trả lời? | **Có** — tra hội viên, kiểm thẻ, trừ buổi, rồi mới hiện "còn 12 buổi" | **Không** — giáo viên đang *nhìn thấy* học viên |
+| Kết quả | Phải hiện ngay cho hội viên đọc | Chỉ là *ghi nhận*, hoãn gửi được |
+
+Cả input lẫn output của `/staff` đều ở local → offline được. `/q` thì không có cách nào.
+
+**Quyết định 2026-07-25: làm offline "mức 2" (có service worker), bỏ "mức 1".**
+
+| Mức | Gồm | Chịu được |
+|---|---|---|
+| 0 | Chỉ hàng chờ để request lỗi không mất dữ liệu | Mạng chập chờn. **Không** hứa offline |
+| ~~1~~ | Outbox, **không** service worker | Mạng chết *khi trang đang mở*. **Chết khi F5** |
+| **2** | Outbox + service worker + danh sách trong IndexedDB | Mở app khi đang offline từ đầu |
+
+**Vì sao gạch mức 1.** Không có service worker thì F5 khi offline = browser đi xin `index.html`
+từ mạng → không có → trang lỗi. Và **trên điện thoại F5 không cần ai bấm**: iOS Safari tự hủy
+tab khi thiếu bộ nhớ (rất hay xảy ra trên máy rẻ, mà nhân viên trung tâm nhỏ dùng máy rẻ);
+giáo viên chuyển sang Zalo 10 phút rồi quay lại là tab có thể đã bị hủy. Giả định *"trang vẫn
+mở suốt 90 phút của lớp"* không đáng tin trên mobile.
+
+Mức 1 tốn gần bằng mức 2 nhưng hỏng đúng lúc cần, và tệ nhất là nó **cho cảm giác đã có offline**.
+Hứa mà hỏng tệ hơn không hứa.
+
+**Chi phí mức 2 cộng thêm trên mức 1: ~2–3 ngày part-time.** Phần nặng (outbox + sync) mức 1 cũng
+phải làm. Cộng thêm: `vite-plugin-pwa` sinh service worker (~½ ngày) + lưu danh sách vào IndexedDB
+thay vì RAM (~½ ngày) + đường khởi-động-không-mạng (~½ ngày) + ~1 ngày vật lộn với hai nỗi đau
+kinh điển (deploy rồi người dùng vẫn thấy bản cũ vì service worker cũ còn phục vụ từ cache; và
+debug ma quái vì tưởng code mới mà đang chạy bản cache). Dùng `registerType: 'prompt'` để hiện
+thanh *"có bản mới, tải lại"* thay vì đổi ngầm.
+
+**Đừng lẫn hai thứ:** service worker làm app **mở được** khi offline (cache vỏ: HTML/JS/CSS);
+IndexedDB outbox làm **tap không mất** (dữ liệu). Cần cả hai, nhiệm vụ khác nhau.
+
+**Ba giới hạn đã chấp nhận — ghi ra để không ai tưởng là bug:**
+
+1. **Lần đầu buộc phải có mạng.** Service worker chỉ được cài khi mở app lần đầu online. Nhân
+   viên mới, máy mới, chưa từng mở app → xuống hầm là vô dụng. → Onboarding phải có bước
+   *"mở app một lần ở chỗ có mạng trước khi vào lớp"*.
+2. **Danh sách cache có thể cũ.** Cache từ 8h sáng thì hội viên thêm lúc 17h không có trong đó,
+   offline không cách nào biết. Đường thoát: chủ sửa lại sau trong `/admin`. **Không giải ở v1.**
+3. **iOS không tự mời cài.** Chrome/Android tự hiện thanh *"Cài ứng dụng này?"*; Safari thì người
+   dùng phải bấm Share → cuộn → *"Thêm vào MH chính"*, và **không ai tự tìm ra**. → Cần màn hình
+   hướng dẫn có ảnh, hiện khi phát hiện Safari trên iPhone (~½ ngày). Bỏ qua bước này thì 2–3 ngày
+   làm offline trở thành vô dụng với một nửa người dùng.
+
+Phụ: service worker chỉ chạy trên **HTTPS** (hoặc `localhost`), và chỉ quản phạm vi đường dẫn của
+nó — đăng ký ở `/staff/` thì `/q` và `/admin` không bị dính vào. Tiện.
 
 ---
 
