@@ -47,6 +47,19 @@ Time-based covers gym monthly cards; SESSION_PACK covers swim/yoga punch cards; 
 
 **Verdict:** v1 notification stack = live dashboard (free, real-time) + daily ZNS/OA digest to owner + per-event OA message to OA followers + **ZNS to parent phone as a paid add-on** (message cost passed through as credits — a revenue line, not a cost). Never build on unofficial group APIs. Market it honestly: "official Zalo OA integration, no account-ban hacks."
 
+> **Superseded 2026-07-25 (D1):** Zalo leaves the v1 core entirely — it is a **Pro-tier feature**.
+> Two facts killed it as a core dependency: (a) calling any send API requires a **verified OA**,
+> and OA verification requires the *customer's own business licence* (GPKD) — many small VN
+> centers don't have one, and the multi-day paperwork is incompatible with the <10-min
+> self-serve north star (Q7); (b) **ZNS has no free tier** — 300đ per authentication message,
+> 120đ administrative, billed per successful send. The "pass-through credits" framing still
+> holds for Pro, but it cannot fund a free tier.
+>
+> The official-only stance in this verdict **stands unchanged** — no unofficial group APIs, ever.
+> What changed is placement: free tier ships with the **live dashboard as its only channel**
+> (variable cost = 0đ), and the Zalo milestone drops off the critical path to M4.
+> See `DECISIONS.md` D1.
+
 ## Q7. Why won't GymMaster / KiotViet / PosApp crush this?
 
 **A:** They are sales-led ("contact for quote"), onboarding-heavy, gym-focused, often hardware-tied. Our wedge: self-serve signup → first successful check-in in under 10 minutes, free tier, no hardware, cross-vertical.
@@ -89,6 +102,17 @@ Time-based covers gym monthly cards; SESSION_PACK covers swim/yoga punch cards; 
 
 **Verdict:** **Web-first (mobile-first PWA) for v1. No native app.** Phase 2 = **Zalo Mini App** (zero-install inside Zalo, gives Zalo identity + OA follow flow — the VN-native distribution cheat code). Native app: only if enterprise customers demand it, likely never.
 
+> **Note 2026-07-25 (D4) — the conclusion stands, the wording was sloppy.** Web-not-native is
+> still correct, and for exactly the reason given: the loop starts at a camera pointed at a
+> printed QR, so an install step at the door kills it. But this verdict says "PWA" about the
+> *whole product*, and the word was carrying **two different meanings**: (a) *"web, not native"*
+> — the actual Q13 decision, product-wide; (b) *"installable app that runs offline"* — a
+> technical requirement that applies to **`/staff` only**.
+>
+> Corrected split (`DECISIONS.md` D4): `/q` member page = **an ordinary web page**, no manifest,
+> no service worker; **`/staff` = the full PWA** (manifest + service worker + IndexedDB);
+> `/admin` = website + manifest for the icon only. Read "PWA" in this verdict as sense (a).
+
 ## Q14. Solo part-time builder. Spring Boot + Angular (your stack) or Next.js + Supabase (faster)?
 
 **A:** Supabase accelerates auth/multi-tenant RLS but means learning while building. Thang's productivity, conventions, and tooling are Spring Boot + Angular; this is a long-lived product, not a hackathon.
@@ -97,9 +121,79 @@ Time-based covers gym monthly cards; SESSION_PACK covers swim/yoga punch cards; 
 
 > **Superseded 2026-07-19:** decision flipped to **Next.js + Supabase** after complexity review — solo speed wins. Q14's maintainability concern is answered by an explicit exit door (logic in app layer, ORM, `pg_dump` path to VN-region Postgres) documented in `PLAN.md` §2, not by the heavier stack.
 
+> **Un-superseded 2026-07-25 (D4) — Q14's original verdict is reinstated: Spring Boot 3.5 +
+> Postgres 16 + Angular 20.** The 2026-07-19 flip rested on one concrete advantage: Supabase
+> ships **phone OTP** out of the box. That advantage evaporated on inspection — Supabase phone
+> auth runs through Twilio/Vonage (expensive, poor deliverability to VN numbers), so sending OTP
+> via ZNS means **hand-writing auth on any stack**. Then D2 removed member OTP from v1 entirely,
+> and the advantage disappeared outright.
+>
+> Everything else Supabase provided has a cheap equivalent: Realtime → `SseEmitter` (~30 lines);
+> RLS → plain Postgres, not a Supabase feature; managed Postgres → Neon/Railway/Fly. No technical
+> constraint forces Next/Supabase at an estimated **1–2 writes/second**. The exit door from the
+> 07-19 note is kept as-is (logic in the app layer, `pg_dump` → VN-region Postgres for PDPL) —
+> it was a good idea independent of which stack won.
+>
+> **And regardless of framework, no Next.js:** it drags in a Node runtime to operate, which is
+> the exact thing D4 removes. Angular (or React) here builds to static files served by Spring Boot.
+
+> **Second note, same day — React was reconsidered and Angular was kept.** The frontend question
+> had already flipped three times (Q14 Angular → 07-19 Next.js+React → D4 Angular), so it was
+> examined properly and the result recorded to avoid a fourth flip. The proposal was React + Vite,
+> motivated by *"React feels faster."* That speed is real but lives in the ecosystem and AI
+> assistance — the two technical advantages usually cited **don't apply here**:
+>
+> | Claimed React advantage | Applies? |
+> |---|---|
+> | Light bundle, fast cold start | **No.** The cold-start-sensitive page is `/q`, already Thymeleaf. `/staff` and `/admin` sit behind login, are used daily, installed as a PWA |
+> | Simpler, smaller surface | **Partly.** But router / data fetching / forms / PWA plugin must be assembled by hand; Angular CLI ships them |
+> | Wider ecosystem, better AI support | **Yes** — the one real advantage, and the one traded away |
+>
+> Decisive: (1) Angular is the builder's day-job stack — this verdict's original argument, still
+> the strongest; (2) the hardest frontend work (offline outbox + sync) is hand-written either way,
+> so React removes zero lines of the biggest risk; (3) `/staff` needs a PWA and `ng add
+> @angular/pwa` generates manifest + service worker + JSON-declared caching, whereas React needs
+> `vite-plugin-pwa` wired up manually.
+>
+> **Stopping rule, fixed here:** *the stack already mastered wins, unless a specific technical
+> constraint forces a change.* Checked 2026-07-25 — **there is none.** Reopening this question
+> requires naming a technical constraint, not a feeling. Details: `DECISIONS.md` D4.
+
 ## Q15. What is explicitly OUT of v1? (The question that saves the ship date.)
 
 **Verdict — out of v1:** class scheduling/booking/capacity, payment processing & tuition collection, payroll/PT commissions, belt/grade tracking, homework/lesson reports, turnstile/hardware integration, native apps, unofficial Zalo group posting, multi-language UI (VN only; English later).
+
+## Q16. Where does the money for OTP come from before there is any revenue? *(added 2026-07-25)*
+
+**A:** It doesn't — so v1 sends no OTP at all. ZNS authentication messages cost **300đ each**
+with **no free allowance**, while the free tier must have a **variable cost of 0đ** to be safe to
+give away. But the frightening number only appears if the design is wrong:
+
+| Design | OTP messages | Cost |
+|---|---|---|
+| **Device token** — OTP once per member, ever · 10 centers × 100 members | 1,000 messages, **one time** | **300,000đ** total |
+| Login on every visit — same scale | 1,000 × 12 visits/month = 12,000/**month** | **3.6M/month** |
+
+Device token brings a per-visit cost down to a one-off. D2 then takes it to **0đ**: the owner
+already has the member list in Excel, so **import the roster and let it be the identity check** —
+member scans QR → types phone number → number is on this center's roster → bind the device token
+immediately, no OTP. Unknown number → trial-registration form (lead), which is a *feature* (F4),
+not a failure path.
+
+What OTP would have defended against: A typing B's number to check in on B's behalf. The only
+consequence is a **skewed attendance ranking** — no money moves, nothing sensitive leaks (the
+screen shows *"12 sessions left"*). That risk is handled by anomaly flags (one number binding on
+two devices in a short window) plus owner review before monthly prizes.
+
+**Verdict:** v1 ships **no member OTP** — roster import + device token (httpOnly cookie, 1-year
+TTL), soft identity by design, documented as an accepted risk in `PRD.md` §6. OTP becomes a Pro
+upgrade, where 300đ/message is already covered by the 199k/month subscription. Later upgrade path:
+**Zalo Login (OAuth)** — no per-message fee, only one-off OA verification. See `DECISIONS.md` D2/D3.
+
+> Consequence worth naming: this turns the roster from *reporting data* into **identity data**.
+> Hence the v2.1 patches — import must be an **upsert by phone number that never deletes**, with
+> a preview before applying, and there must be a **member-management screen** (F11) to fix a
+> mistyped number, since a wrong number locks that member out permanently.
 
 ---
 
