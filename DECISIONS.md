@@ -6,7 +6,7 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 | | |
 |---|---|
 | Cập nhật lần cuối | 2026-07-25 (thêm D5; D4 đã xét lại React rồi giữ Angular) |
-| Trạng thái áp dụng | `PRD.md` **v2.1** đồng bộ D1–D5, **6 lỗ đã vá** (F11 quản lý hội viên, import upsert, hướng ghi Sheet, chữ "PWA", ba giới hạn offline) · `PLAN.md` / `GRILL-LOG.md` ⚠️ **chưa** — xem `docs/plan-v2-rewrite.md` |
+| Trạng thái áp dụng | `PRD.md` **v2.1** đồng bộ D1–D5, **6 lỗ đã vá** (F11 quản lý hội viên, import upsert, hướng ghi Sheet, chữ "PWA", ba giới hạn offline) · `PLAN.md` **v2.0** đồng bộ D1–D5 (milestone sắp lại, Zalo xuống M4, offline mức 2 tách sang M3) · `GRILL-LOG.md` ⚠️ **chưa** — xem `docs/plan-v2-rewrite.md` |
 
 ---
 
