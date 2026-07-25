@@ -6,7 +6,7 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 | | |
 |---|---|
 | Cập nhật lần cuối | 2026-07-25 |
-| Trạng thái áp dụng | ⚠️ Đã chốt nhưng **chưa** phản ánh vào `PRD.md` / `PLAN.md` / `GRILL-LOG.md` — xem `docs/plan-v2-rewrite.md` |
+| Trạng thái áp dụng | `PRD.md` ✅ đã đồng bộ (v2.0, 2026-07-25) · `PLAN.md` / `GRILL-LOG.md` ⚠️ **chưa** — xem `docs/plan-v2-rewrite.md` |
 
 ---
 

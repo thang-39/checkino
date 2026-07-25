@@ -10,8 +10,8 @@ SaaS điểm danh QR + quản lý thẻ hội viên cho các trung tâm nhỏ �
 ## Đọc trước khi làm bất cứ việc gì
 
 **[`DECISIONS.md`](DECISIONS.md)** — sổ quyết định kiến trúc & sản phẩm, kèm lý do và số liệu
-kiểm chứng. Đây là nguồn sự thật. `PRD.md` và `PLAN.md` **chưa được cập nhật** theo các
-quyết định này; khi hai bên mâu thuẫn thì `DECISIONS.md` thắng.
+kiểm chứng. Đây là nguồn sự thật. `PRD.md` đã được đồng bộ (v2.0), nhưng `PLAN.md` **chưa được
+cập nhật** theo các quyết định này; khi hai bên mâu thuẫn thì `DECISIONS.md` thắng.
 
 [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) — kế hoạch thi hành việc cập nhật đó,
 kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.

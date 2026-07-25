@@ -5,7 +5,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | | |
 |---|---|
 | Tạo | 2026-07-25 |
-| Trạng thái | Bước 0 ✅ xong · Bước 1–4 ⬜ chưa làm |
+| Trạng thái | Bước 0–1 ✅ xong · Bước 2–4 ⬜ chưa làm |
 
 ---
 
@@ -14,7 +14,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | Bước | Việc | Trạng thái |
 |---|---|---|
 | 0 | `git init`, snapshot v1, tạo `DECISIONS.md` + `CLAUDE.md` + file này | ✅ 2026-07-25 |
-| 1 | Viết lại `PRD.md` → v2.0 | ⬜ |
+| 1 | Viết lại `PRD.md` → v2.0 | ✅ 2026-07-25 |
 | 2 | Viết lại `PLAN.md` → v2.0 | ⬜ |
 | 3 | Thêm ghi chú superseded vào `GRILL-LOG.md` | ⬜ |
 | 4 | Đối chiếu chéo PRD ↔ PLAN | ⬜ |
