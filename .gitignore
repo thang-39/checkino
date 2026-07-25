@@ -1,0 +1,48 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Java / Maven / Gradle
+target/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+.gradle/
+*.class
+*.jar
+*.war
+hs_err_pid*
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IDE
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
+.settings/
+.project
+.classpath
+
+# Env & secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+application-local.yml
+application-local.properties
+
+# Logs & temp
+*.log
+tmp/
+
+# Claude Code internals
+.claude/.cc-writes/
