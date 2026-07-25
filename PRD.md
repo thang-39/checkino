@@ -5,8 +5,8 @@
 | | |
 |---|---|
 | Author | Thang Tran |
-| Date | 2026-07-19 (v1.0/v1.1) · 2026-07-25 (v2.0) |
-| Status | Draft v2.0 — rewritten 2026-07-25 after verifying Zalo/ZNS cost & OA requirements |
+| Date | 2026-07-19 (v1.0/v1.1) · 2026-07-25 (v2.0, v2.1) |
+| Status | Draft v2.1 — 2026-07-25, roster-as-identity gaps patched (F11, upsert import, Sheet write-direction, offline limits) |
 | Companion docs | **`DECISIONS.md` (source of truth for architecture & product decisions — wins on conflict)**, `GRILL-LOG.md` (assumption stress-test), `PLAN.md` (implementation) |
 
 ---
@@ -48,7 +48,15 @@ The `notify` primitive at free tier is served by the **live owner dashboard**, n
 
 The import step is **mandatory, not optional**: F2 identifies a member by matching their phone number against this org's roster, so an empty roster means nobody can check in. The onboarding wizard must say so, because the failure is silent and confusing otherwise — an owner who prints the QR and scans it themselves, before importing anyone, lands in the F4 trial form rather than a check-in, and concludes the product is broken. Wizard order is therefore: org → scan point → **roster** → QR poster.
 
-**F2. Member self check-in (PWA, no install; no OTP in v1).** *(`DECISIONS.md` D2, D3)*
+**Import is a repeated operation, not a one-off — it is an upsert keyed on the phone number.** Owners re-import at the start of every term, whenever a class is added, whenever they clean up their Excel. Two constraints follow, and both exist because D2 turned the roster into *identity* data rather than reporting data:
+
+- **Import never deletes.** A member absent from the uploaded file is left untouched, never removed or deactivated. The failure this prevents is fatal and easy to hit: uploading last year's file would wipe the roster, and every member at that center would be unable to check in the next morning. Ending a membership is a deliberate manual action in F11.
+- **Preview before apply.** The upload is parsed and diffed first — *"12 new, 3 updated, 185 unchanged"*, with the rows listed — and nothing is written until the owner confirms. Rows that fail validation (unparseable phone, duplicate phone within the file) are reported in the same preview and skipped, not silently dropped.
+- **The match key is the normalized phone number.** Consequently a typo'd phone cannot be repaired by re-importing — a corrected number is simply a new person to the upsert. Fixing a wrong number is an F11 operation.
+
+**F2. Member self check-in (a plain web page, no install; no OTP in v1).** *(`DECISIONS.md` D2, D3)*
+
+> **Terminology, fixed here once.** "PWA" in this document means exactly one thing — *installable, runs offline* — and it applies to **`/staff` only** (F3). `/q` is an ordinary web page: no manifest, no service worker. `/admin` gets a manifest for the home-screen icon and nothing more. The earlier phrase "PWA, no install" was self-contradictory: a PWA you don't install is a website. Three-tier table in `DECISIONS.md` D4.
 
 ```
 Member scans printed QR (QR = a plain URL identifying the scan point)
@@ -63,6 +71,7 @@ Member scans printed QR (QR = a plain URL identifying the scan point)
 ```
 
 - **Device token:** httpOnly cookie, TTL 1 year. The server stores only a **hash** of the token, never the token itself. Max 3 devices per member; the oldest is evicted.
+- **Revoking a token** (member changed or lost their phone, or an anomaly flag needs clearing) is an owner action in **F11**, not something the member can do from `/q`.
 - **Shared device:** "Not you? Switch number" re-runs the phone step.
 - **Network failure fallback:** the page shows a 6-digit code for staff to key in manually.
 - **Abuse signal:** one phone number binding on two devices within a short window raises an anomaly flag (F9) — it is logged and surfaced, not blocked.
@@ -70,13 +79,15 @@ Member scans printed QR (QR = a plain URL identifying the scan point)
 
 Why no OTP: it defends against exactly one attack — A entering B's number to check in on B's behalf — whose entire consequence is a distorted attendance ranking. See §6 (identity assurance NFR) for the accepted risk and its ceiling.
 
-**F3. Staff roster check-in.** Staff opens today's roster (filter by program), taps names present. Works offline, queues, syncs later (§6 offline NFR). Covers kids' classes and no-phone members.
+**F3. Staff roster check-in (`/staff` — the one surface that is a PWA).** Staff opens today's roster (filter by program), taps names present. Each tap writes to an IndexedDB outbox with a `client_event_id`, the UI ticks immediately, and the batch POSTs when connectivity returns (§6 offline NFR). Covers kids' classes and no-phone members.
 
-**F4. New member / trial registration.** Unknown phone scanning QR → registration form (name, phone, program, consent checkbox) → lands in owner's "trial pipeline" list with follow-up status (contacted / converted / lost). This is also where an owner's own test scan lands before they import a roster (F1).
+**Full offline capability is a separate, sequenced piece of work, not part of the first cut of F3.** The outbox above survives a network that drops *while the page is open*; it does not survive a reload. Making `/staff` genuinely offline-capable adds: `@angular/pwa` (manifest + service worker + `ngsw-config.json`), caching today's roster into IndexedDB rather than memory, a no-network boot path, an explicit `SwUpdate` "new version available, reload" bar instead of silent swaps mid-class, and **an iOS install-instruction screen** (see §6). Splitting it out lets staff use roster check-in before offline lands; shipping the outbox alone was rejected as the worst of both worlds, since it *feels* offline-capable and then fails on reload (`DECISIONS.md`, mechanism 3). The three limits that remain even when this is done are in §6 — they are deliberate, not defects.
+
+**F4. New member / trial registration.** Unknown phone scanning QR → registration form (name, phone, program, consent checkbox) → lands in owner's "trial pipeline" list with follow-up status (contacted / converted / lost). Converting a lead into a member happens in **F11**. This is also where an owner's own test scan lands before they import a roster (F1).
 
 **F5. Entitlements (membership cards/packages).**
 `{ type: TIME_BASED | SESSION_PACK | COURSE_TERM | TRIAL | DROP_IN; scope: program(s) | whole org; valid window; session quota; consume policy }`.
-Owner creates plan templates, assigns to members, renews, freezes. Expiry warnings surfaced at check-in and in owner dashboard.
+Owner creates plan templates here; **assigning, renewing and freezing a specific member's card happens in F11**. Expiry warnings surfaced at check-in and in owner dashboard.
 
 **F6. Notifications — live feed free, Zalo is Pro.** *(`DECISIONS.md` D1; Grill Q6)*
 
@@ -97,6 +108,14 @@ Owner creates plan templates, assigns to members, renews, freezes. Expiry warnin
 - **Never:** unofficial Zalo group APIs. Official APIs only, in every tier.
 
 **F7. Reports, rankings & data ownership.** Monthly attendance ranking per program/location (the gig's "khen thưởng" list), attendance history per member, expiring-cards list, trial conversion. **CSV export at any tier, including free** (0đ, no external quota). **Near-real-time one-way mirror into the customer's own Google Sheet** (their Drive, their property; monthly archive tabs) is a **Pro** feature — gated on API quota risk at multi-customer scale (§10.2), not on cost. ToS guarantee: cancel anytime, the Sheet and every export stay with the customer. Architecture stance (from the "bridge-only" review): the operational DB is ours — speed, transactions, race-safe dedupe; the customer's Sheet is the always-fresh visible copy. Never the reverse (Grill Q9).
+
+**Write-direction contract — what happens when the owner edits the Sheet.** "One-way" has to say what the other way does, or owners will discover it by losing an afternoon's edits:
+
+- Tabs written by the app are **protected ranges**, with a warning line pinned at the top of each: *"Tab này do app ghi. Sửa tay sẽ bị ghi đè."*
+- The rule for owners is one sentence: **read in the Sheet, edit in the app** (F11).
+- There is **no inbound Sheets API path** — no extra OAuth scope requested, no background reconciliation, no attempt to detect or merge manual edits. An edit made in a protected tab is overwritten at the next mirror write, and that is the specified behavior.
+
+Two-way sync is out of scope, for a reason stated in the out-of-scope list below rather than left implicit.
 
 **F8. Multi-location & roles.** Unlimited locations per org (paid tier), roles: Owner / Manager (per location) / Staff.
 
@@ -125,9 +144,31 @@ Human review at reward time beats any technical control — the owner knows thei
 - **Members never use email.** People training at a VN gym don't check email, many have no email they use regularly, and standing at the door opening Gmail for a code is worse than typing an OTP. Email is right for owner/staff and wrong for members — hence two mechanisms, not one.
 - **Important distinction:** we still **store** every member's phone number (the center needs it to call them). *Needing to store a number* ≠ *needing to verify it.*
 
+**F11. Member management (`/admin`).** A searchable, filterable member list opening onto a per-member detail page. This is the owner's day-to-day workspace, and it exists as its own feature because the jobs it carries belong to three different features — folding it into F5 would put "fix a member's phone number" inside a feature called *Entitlements*.
+
+Why each of the four is mandatory rather than nice-to-have:
+
+| Job | Why it cannot be dropped |
+|---|---|
+| Assign / renew / freeze a card | *(F5)* The only place an entitlement is attached to a specific person. F5 defines plan templates; F11 is where they are applied |
+| Convert a lead into a member | *(F4)* The trial pipeline's exit. Without it, walk-in registrations never reach the roster and therefore never check in |
+| Correct a mistyped phone number | *(F2)* The phone number **is the identity key**. A wrong digit means that member can never check in, and re-importing cannot repair it — the upsert (F1) would create a second person instead |
+| Revoke a device token | *(F2)* New phone, lost phone, shared handset, or clearing an F9 anomaly flag. Members cannot do this from `/q` |
+
+Also here, for completeness of the roster lifecycle: **mark a member inactive** — the only exit path, since import never deletes (F1) — and **add a single member by hand**, for the owner who has one new person and no file.
+
+**The four ways into the roster, after F11 exists** — deliberately non-overlapping, and F4 carries the common case of a single newcomer:
+
+| Situation | Path | Owner typing |
+|---|---|---|
+| Day one, Excel already exists | File import *(F1)* | none |
+| New term, a whole class added | Re-import, upsert on phone *(F1)* | none |
+| One newcomer walks in | **F4** — they fill in the trial form themselves → owner converts | one tap *(F11)* |
+| Fix a name, change a number, end a membership | Member management *(F11)* | a few fields |
+
 ### Out of scope — v1 (Grill Q15)
 
-Class scheduling/booking/capacity · payment processing & tuition collection · payroll/PT commissions · belt/grade tracking · homework/lesson reports · hardware (turnstiles, fingerprint) · native iOS/Android apps · unofficial Zalo group posting · multi-language UI (VN-only; EN later) · **SMS/ZNS OTP for members** (Pro upgrade, see F2) · **Zalo as a required dependency** — no flow in the core product may block, degrade, or wait on the customer having a verified OA.
+Class scheduling/booking/capacity · payment processing & tuition collection · payroll/PT commissions · belt/grade tracking · homework/lesson reports · hardware (turnstiles, fingerprint) · native iOS/Android apps · unofficial Zalo group posting · multi-language UI (VN-only; EN later) · **SMS/ZNS OTP for members** (Pro upgrade, see F2) · **Zalo as a required dependency** — no flow in the core product may block, degrade, or wait on the customer having a verified OA · **two-way Google Sheet sync** and **managing the roster by typing into the Sheet** (F7) — the roster is authentication data since D2, and it will not live in a file that anyone holding the link can edit with no audit trail; the app is the system of record, the Sheet is a mirror.
 
 ## 5. Vertical fit matrix (v1 core only)
 
@@ -147,7 +188,12 @@ Same core, four config values — and the notification channel is a tier setting
 - **Privacy (PDPL — Law 91/2025/QH15, effective 2026-01-01, replaces Decree 13; guided by Decree 356/2025):** consent at registration, privacy policy, delete-on-request, minors need parental consent, cross-border transfer disclosed. **Residency path:** business logic lives in the application layer, never in the database, so migration is `pg_dump` → managed Postgres in a VN region (Viettel/VNG/FPT) → change one connection string. The MVP hosting region is disclosed in the privacy policy until that move happens (see PLAN §2 exit door).
 - **Performance:** check-in round-trip < 2s on 4G. `/q/{code}` is **server-rendered, not a SPA** — it must load fast on a cold 4G connection while someone stands at the door, and it needs nothing a framework provides *(`DECISIONS.md` D4)*.
 - **Concurrency:** dedupe is enforced by the database, not by app logic — `UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)` + `INSERT ... ON CONFLICT DO NOTHING`, where `dedupe_bucket` is derived from the entitlement's consume policy. Never an app-level `if (!exists)` check: two concurrent scans both see "not there" and write two rows. The insert and the session decrement share one transaction. *(`DECISIONS.md`, mechanism 1)*
-- **Offline (roster mode):** fully offline-capable. Staff taps write to an IndexedDB outbox as `{client_event_id: uuid, member_id, ...}`, the UI ticks optimistically, and the batch POSTs when connectivity returns. The server dedupes on a unique index over `client_event_id`, so a flaky network resending ten times still produces one row — no conflict-resolution logic. *(`DECISIONS.md`, mechanism 3)*
+- **Offline (roster mode):** fully offline-capable. Staff taps write to an IndexedDB outbox as `{client_event_id: uuid, member_id, ...}`, the UI ticks optimistically, and the batch POSTs when connectivity returns. The server dedupes on a unique index over `client_event_id`, so a flaky network resending ten times still produces one row — no conflict-resolution logic. Two distinct jobs, both required: the **service worker** is what lets the app *open* with no network (it caches the shell); the **IndexedDB outbox** is what keeps taps from being lost (it holds the data). *(`DECISIONS.md`, mechanism 3)*
+- **Accepted offline limits — by design, not bugs.** Written down so they are not filed as defects later:
+  1. **The first launch must be online.** A service worker can only be installed while the page loads over the network. A new staff member on a new phone who has never opened the app is out of luck in a basement. → Onboarding must include the step *"open the app once somewhere with signal, before class"*.
+  2. **The cached roster can be stale.** A roster cached at 8am does not contain a member added at 5pm, and there is no way to learn that offline. The workaround is the owner correcting it afterwards in F11. **Not solved in v1.**
+  3. **iOS never offers to install.** Chrome/Android show an install prompt on their own; Safari requires Share → scroll → *"Add to Home Screen"*, and nobody discovers that unaided. → An illustrated instruction screen, shown when Safari-on-iPhone is detected, is part of F3's offline work. Skipping it makes the whole offline effort useless for roughly half the users.
+  - Two operational notes: a service worker only runs over **HTTPS** (or `localhost`), and its scope is its own path — registering under `/staff/` leaves `/q` and `/admin` untouched, which is what we want.
 - **Identity assurance is soft by design in v1.** Member identity rests on a roster match only; there is no OTP *(F2, `DECISIONS.md` D2)*.
   - **Accepted risk:** A enters B's number and checks in on B's behalf.
   - **Consequence ceiling:** a distorted monthly attendance ranking. No money moves and no sensitive data is exposed — the screen shows only "12 sessions left".
@@ -162,13 +208,13 @@ Same core, four config values — and the notification channel is a tier setting
 | Tier | Price | Includes |
 |---|---|---|
 | Free | 0đ | 1 location, ≤50 active members, self-scan + roster, live dashboard feed, CSV export |
-| Pro | ~199k VND/location/month | Unlimited members, rankings, trial pipeline, Google Sheets sync, member OTP, **Zalo OA integration (requires the customer's own verified OA → their GPKD)** |
+| Pro | ~199k VND/location/month | Unlimited members, rankings, trial pipeline, one-way Google Sheets mirror, member OTP, **Zalo OA integration (requires the customer's own verified OA → their GPKD)** |
 | Business | ~499k VND/month | Multi-location dashboard, roles, API access, priority support |
 | Credits | pass-through | ZNS wallet for parent alerts, billed at the F6 rates (120–300đ/message + surcharges) |
 
 Anchor: 12 months of Pro ≈ half a one-off freelancer build (5–6M). Free tier = growth engine in FB owner groups. Annual plan: pay 10 months, get 12.
 
-**Upgrade journey — and the trap inside it.** Free → Pro activates instantly for everything *except* Zalo. Zalo is a separate, assisted, multi-day step: the customer must obtain or produce a GPKD, verify their OA, and register an app before a single message can be sent. Two consequences: (1) sell Pro on rankings, unlimited members, and Sheets sync — features that switch on immediately — and treat Zalo as a bonus that arrives later; (2) **never make anything in the core loop depend on it** (§4 out of scope).
+**Upgrade journey — and the trap inside it.** Free → Pro activates instantly for everything *except* Zalo. Zalo is a separate, assisted, multi-day step: the customer must obtain or produce a GPKD, verify their OA, and register an app before a single message can be sent. Two consequences: (1) sell Pro on rankings, unlimited members, and Sheets sync — features that switch on immediately — and treat Zalo as a bonus that arrives later; (2) **never make anything in the core loop depend on it** (§4 out of scope). Note that the Sheets line above is a **one-way mirror** — read there, edit in the app (F7).
 
 **Collection mechanics (VN reality):** Stage 1 (<20 customers) — VietQR bank transfer with org code in the memo, manual admin confirmation, renewal reminders. Stage 2 — PayOS/SePay webhook auto-activates on payment (Stripe is unavailable to VN merchants). Dunning: 7-day grace → soft-lock Pro features only; **check-in and customer data are never locked** (no data hostage — reputation in FB groups is the growth channel). Legal: register a household business (HKD) or LLC for invoicing — many centers require VAT invoices; hire a bookkeeping service (~300–500k/month).
 
@@ -207,7 +253,9 @@ Full reasoning and the five verification sources are in `DECISIONS.md`. The v1.1
 2. **Brand name & domain** — "CheckinHub" is a placeholder.
 3. **Indoor GPS accuracy at a real storefront** — determines the radius threshold for the F9 soft-check layer.
 
-## 11. Changes from v1.1
+## 11. Changelog
+
+### v2.0 — changes from v1.1
 
 | Change | Decision |
 |---|---|
@@ -218,3 +266,7 @@ Full reasoning and the five verification sources are in `DECISIONS.md`. The v1.1
 | Free tier's variable cost stated as a hard constraint: **0đ** | cross-cutting |
 
 The v1.1 text is preserved in git: `git show 4d227dc:PRD.md`. The reasoning, cost arithmetic, and verification sources behind every row above live in `DECISIONS.md`.
+
+### v2.1 — changes from v2.0
+
+**v2.1 (2026-07-25)** — patched the six roster-as-identity gaps D2 opened, all traceable to one root cause: D2 turned the roster from reporting data into identity data, but F1/F5/F7 were still written as if it were only there to be looked at. Member management is now its own feature (**F11**, spanning jobs that belong to F2/F4/F5); import is an upsert on phone that never deletes and previews before applying (F1); the Google Sheet write-direction contract is explicit — protected ranges, read there, edit in the app (F7); two-way Sheet sync and Sheet-as-roster are out of scope; "PWA" now names only `/staff` and full offline is sequenced separately from F3 (F2, F3); and the three accepted offline limits are written down so they are not later reported as bugs (§6).
