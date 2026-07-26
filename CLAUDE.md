@@ -11,13 +11,13 @@ SaaS điểm danh QR + quản lý thẻ hội viên cho các trung tâm nhỏ �
 
 **[`DECISIONS.md`](DECISIONS.md)** — sổ quyết định kiến trúc & sản phẩm, kèm lý do và số liệu
 kiểm chứng. Đây là nguồn sự thật. `PRD.md` (v2.1), `PLAN.md` (v2.0) và `GRILL-LOG.md` đã đồng bộ
-**D1–D5**; **D6–D8 chưa vào PRD/PLAN** (việc của Bước 5). Khi hai bên mâu thuẫn thì
+**D1–D5**; **D6–D10 chưa vào PRD/PLAN** (việc của Bước 5). Khi hai bên mâu thuẫn thì
 `DECISIONS.md` thắng.
 
 [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) — kế hoạch thi hành việc cập nhật đó,
 kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.
 
-## Tám quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
+## Mười quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
 
 - **D1** — Zalo OA/ZNS là tính năng **gói Pro**, không thuộc lõi v1. Free tier chạy hoàn toàn
   không cần Zalo. Lý do: xác thực OA bắt buộc có GPKD của khách hàng, giết mục tiêu onboarding
@@ -41,6 +41,12 @@ kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.
 - **D8** — **Một SĐT = một hội viên** (`UNIQUE (org_id, phone_normalized)`). Không hỗ trợ hội viên
   không có SĐT; trẻ con dùng số phụ huynh, mỗi đứa một số. Ở `/staff` cô giáo tap theo **tên**,
   không đụng SĐT.
+
+- **D9** — **Bỏ fallback "mã 6 số" ở `/q`.** Không mạng thì `/q` không mở được (không service
+  worker), nên chẳng có mã nào để hiện. Mạng hỏng → nhờ nhân viên điểm danh hộ qua `/staff` (F3).
+- **D10** — **`audit_log` thuộc v1**, bảng dựng ở M1. Roster là dữ liệu định danh (D2) nên thao
+  tác sửa nó phải để lại vết. Nhưng lý do loại Sheet-làm-roster **dẫn đầu bằng "không phân quyền"**,
+  không phải bằng audit trail.
 
 **Ràng buộc xuyên suốt:** free tier phải có chi phí biến đổi = **0đ**.
 

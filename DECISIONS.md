@@ -5,8 +5,8 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-07-26 (thêm D6–D8, chốt từ đợt đối chiếu chéo PRD ↔ PLAN ở Bước 4) |
-| Trạng thái áp dụng | `PRD.md` **v2.1** đồng bộ D1–D5, **6 lỗ đã vá** (F11 quản lý hội viên, import upsert, hướng ghi Sheet, chữ "PWA", ba giới hạn offline) · `PLAN.md` **v2.0** đồng bộ D1–D5 (milestone sắp lại, Zalo xuống M4, offline mức 2 tách sang M3) · `GRILL-LOG.md` ✅ đã thêm ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử · ⬜ **D6–D8 chưa vào PRD/PLAN** — việc đó là Bước 5 trong [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md), cùng 11 mục lệch còn lại |
+| Cập nhật lần cuối | 2026-07-26 (thêm D6–D10, chốt từ đợt đối chiếu chéo PRD ↔ PLAN ở Bước 4) |
+| Trạng thái áp dụng | `PRD.md` **v2.1** đồng bộ D1–D5, **6 lỗ đã vá** (F11 quản lý hội viên, import upsert, hướng ghi Sheet, chữ "PWA", ba giới hạn offline) · `PLAN.md` **v2.0** đồng bộ D1–D5 (milestone sắp lại, Zalo xuống M4, offline mức 2 tách sang M3) · `GRILL-LOG.md` ✅ đã thêm ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử · ⬜ **D6–D10 chưa vào PRD/PLAN** — việc đó là Bước 5 trong [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md), cùng 14 mục lệch |
 
 ---
 
@@ -397,6 +397,66 @@ phép một số trỏ tới nhiều người thì cả ba chỗ đó đều ph�
 **Đường thoát nếu về sau thấy đau** — ghi lại để khỏi nghĩ lại từ đầu: đổi khoá upsert thành
 **(SĐT + tên chuẩn hoá)**, và thêm ở `/q` một bước *"Bạn là ai?"* khi một số khớp nhiều người.
 `/staff` không phải đổi gì. Chỉ làm khi có khách hàng thật kêu, không làm trước.
+
+---
+
+## D9 — Bỏ fallback "mã 6 số" ở `/q`
+
+**Quyết định.** Xoá câu *"Network failure fallback: the page shows a 6-digit code for staff to key
+in manually"* khỏi `PRD.md` F2. Thay bằng: **mạng hỏng thì nhờ nhân viên điểm danh hộ qua
+`/staff`** *(F3)* — đường đó chạy được cả khi offline.
+
+**Lý do.** Ba chỗ hở, cả ba là hệ quả của quyết định đã chốt ở nơi khác:
+
+1. **Không mạng thì `/q` không mở được, nên không có mã nào để hiện.** `/q` không có service
+   worker *(D4)* → không cache gì → mất mạng là trang lỗi. Cái fallback chỉ đỡ được đúng một khe
+   hẹp: trang đã tải xong, mạng mới chết, hội viên chưa kịp bấm. Trường hợp phổ biến hơn — sóng
+   yếu ngay từ đầu, quét QR mà trang không mở — nó không đỡ được gì.
+2. **Không có đường kiểm mã.** Nhân viên gõ mã vào `/staff`, mà `/staff` lúc đó cũng có thể đang
+   offline (đó là cả lý do nó có service worker). Vậy mã phải kiểm được **không cần server**, tức
+   phải suy ra từ danh sách đã cache. Mã suy ra từ hội viên thì nó chỉ là cái tên viết bằng số.
+3. **`/staff` đã làm đúng việc này, ít thao tác hơn.** Nhân viên gõ tên hoặc SĐT vào ô tìm, tap
+   một cái — offline vẫn chạy, đã có trong F3, đã nằm ở M2. Mã 6 số bắt hội viên đọc sáu chữ số
+   cho nhân viên gõ lại: nhiều bước hơn, dễ nghe nhầm hơn, và cần thêm bảng lưu mã + quy tắc kiểm
+   offline + ô nhập mã.
+
+**Nói thẳng chỗ đau còn lại:** `/q` mất mạng thì **trang không mở được**, và không có cơ chế nào
+trong tầm v1 cứu được điều đó. Đường thoát duy nhất là con người — nhân viên với `/staff`.
+
+---
+
+## D10 — `audit_log` thuộc v1, không phải "grow later"
+
+**Quyết định.** Chuyển `audit_log` từ nhóm *Grow later* *(`PLAN.md` §3.1)* vào **schema lõi**.
+Bảng dựng ở **M1** cùng schema nền; mỗi tính năng có thao tác sửa dữ liệu thì ghi log ngay khi
+làm tính năng đó — F1 import *(M1)*, F11 *(M2)*.
+
+Ghi tối thiểu: `(id, org_id, actor_staff_user_id, action, entity_type, entity_id, summary,
+created_at)`. Trường `summary` giữ dạng người đọc được (*"import: thêm 12, cập nhật 3"*) để chủ
+tra được mà không cần công cụ.
+
+**Lý do.**
+
+1. **Lập luận loại Sheet-làm-roster đang dựa vào nó.** `PRD.md` §4 out of scope viết: không để
+   roster trong *"một file ai có link cũng sửa được và không có audit trail"*. Câu đó ngầm khẳng
+   định app **có** nhật ký. Với `audit_log` ở "grow later" thì v1 cũng không có, và lý do tự sụp
+   — trong khi **kết luận vẫn đúng**. Đưa `audit_log` vào v1 làm lý do đó thành thật.
+2. **Roster là dữ liệu định danh từ D2.** Sửa roster = đổi ai được vào cửa. Thao tác có sức nặng
+   như vậy mà không để lại vết là thiếu sót, không phải tối giản.
+3. **Trả lời được khiếu nại.** *"Sao thẻ tôi bị trừ buổi"*, *"ai cho tôi nghỉ"*, *"ai đổi số của
+   tôi"* — chủ có chỗ tra thay vì đoán. Với `/admin` nhiều người dùng chung (F8: Owner / Manager /
+   Staff) thì đây là thứ sớm muộn cũng cần.
+
+**Chi phí:** một bảng + một lượt ghi ở mỗi thao tác sửa, ~nửa đến một ngày.
+
+**Dù vậy, vẫn viết lại lý do out-of-scope cho mạnh hơn** — đừng để nó đứng một chân trên
+audit trail, vì Google Sheet cũng có version history (yếu, nhưng khác không). Ba lý do đúng ngay
+ở v1 và mạnh hơn hẳn: **(a) không phân quyền** — ai có link là sửa được, còn app có vai trò *(F8)*
+và RLS *(cơ chế 2)*, mà sửa được roster nghĩa là **tự thêm số của mình vào = check-in miễn phí**;
+**(b) không có ràng buộc dữ liệu** — Sheet không có `UNIQUE (org_id, phone_normalized)` *(D8)*,
+không có màn hình preview trước khi ghi *(F1)*; **(c) xoá không phục hồi được** — đúng cái cửa mà
+quy tắc *"import không bao giờ xoá"* đã đóng lại. Audit trail là lý do thứ tư, không phải lý do
+thứ nhất.
 
 ---
 

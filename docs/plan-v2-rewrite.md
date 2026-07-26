@@ -5,7 +5,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | | |
 |---|---|
 | Tạo | 2026-07-25 |
-| Trạng thái | Bước 0–4 ✅ xong · Bước 5 ⬜ chưa làm (vá 14 mục lệch + D6–D8 vào PRD/PLAN) |
+| Trạng thái | Bước 0–4 ✅ xong · Bước 5 ⬜ chưa làm (vá 14 mục lệch + D6–D10 vào PRD/PLAN) |
 
 ---
 
@@ -19,7 +19,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | 2 | Viết lại `PLAN.md` → v2.0 | ✅ 2026-07-25 |
 | 3 | Thêm ghi chú superseded vào `GRILL-LOG.md` (Q6, Q13, Q14) + thêm Q16 | ✅ 2026-07-25 |
 | 4 | Đối chiếu chéo PRD ↔ PLAN — tìm ra 14 mục lệch, chốt D6/D7/D8 | ✅ 2026-07-26 |
-| 5 | Vá 14 mục lệch + D6–D8 vào `PRD.md` (→ v2.2) và `PLAN.md` (→ v2.1) | ⬜ |
+| 5 | Vá 14 mục lệch + D6–D10 vào `PRD.md` (→ v2.2) và `PLAN.md` (→ v2.1) | ⬜ |
 
 ---
 
@@ -115,9 +115,9 @@ Ba mục nặng nhất đã được chốt thành quyết định trong `DECISI
 | **F** | Câu *"Every PRD feature appears in exactly one milestone"* sai với chính bảng dưới nó (F3 ở M2+M3, F6 và F8 ở M1+M4) | PLAN §4 + file này, mục 4 | Việc tách là đúng; sửa câu thành "mỗi feature có một milestone chủ, phần Pro tách sang M4" |
 | **G** | §7 nói *"Pro bật ngay trừ Zalo"*, nhưng bảng Pro có member OTP — cũng đi qua ZNS, cũng cần GPKD | PRD nội bộ | Sửa: **hai** thứ bị chặn sau GPKD |
 | **H** | Danh sách cắt khi trễ: *Sheet mirror → GPS → rankings* — cắt đúng hai trong ba thứ bán Pro | PLAN §6 ↔ PRD §7 | Theo **D6**, rankings nay là tính năng free mà gig đòi → bỏ khỏi danh sách cắt |
-| **I** | Fallback *"mã 6 số cho nhân viên nhập tay"* có ở PRD F2, không có ở milestone nào, không có bảng nào | PRD → PLAN | Chọn: đưa vào M2 hoặc bỏ khỏi PRD |
+| **I** | Fallback *"mã 6 số cho nhân viên nhập tay"* có ở PRD F2, không có ở milestone nào, không có bảng nào | PRD → PLAN | **D9** — bỏ; thay bằng nhờ nhân viên tap ở `/staff` |
 | **K** | Tuần chồng nhau (M1 W1–3, M2 W3–5, M3 W5–7) và M4 nhồi billing + PDPL + Zalo + OTP + onboard 5–10 pilot vào ~1 tuần | PLAN §4 | Nhiều khả năng "~8 tuần" thực ra là tới hết M3 — nói rõ ra |
-| **L** | Lý do loại Sheet-làm-roster là *"no audit trail"* (hàm ý app có), nhưng `audit_log` nằm ở "Grow later" | PRD §4 ↔ PLAN §3.1 | Đổi lý do, hoặc kéo `audit_log` vào core |
+| **L** | Lý do loại Sheet-làm-roster là *"no audit trail"* (hàm ý app có), nhưng `audit_log` nằm ở "Grow later" | PRD §4 ↔ PLAN §3.1 | **D10** — kéo `audit_log` vào v1 (bảng ở M1), **và** viết lại lý do cho mạnh hơn |
 | **M** | Cảnh báo hết hạn nằm ở cả F5 (M2) và F7 (M3) | PRD nội bộ | Nói rõ: cảnh báo lúc check-in ở M2, danh sách ở M3 |
 | **N** | DoD đòi *"zero contact with the founder"* nhưng gồm mirror Sheet — Pro — mà Pro thanh toán VietQR **có admin xác nhận tay** | PLAN §7 | Tách DoD thành phần free (không contact) và phần Pro |
 
@@ -183,8 +183,8 @@ Không có quyết định nào còn treo; đây là việc thi hành.
 | §4 F1 | Thêm bước tạo bộ môn **tuỳ chọn, bỏ qua được**; cột bộ môn trong file import tuỳ chọn; preview liệt kê bộ môn sẽ tạo mới | **D7** |
 | §4 F3 | Bỏ cụm *"no-phone members"*. Thêm một câu: ở `/staff` cô giáo tap theo **tên**, không đụng SĐT — nên lớp trẻ con không bị ảnh hưởng | **D8** |
 | §4 F5 | Nói rõ cảnh báo hết hạn **lúc check-in** thuộc F5; **danh sách** thẻ sắp hết hạn thuộc F7 | **M** |
-| §4 F2 | Chốt số phận fallback mã 6 số: giữ (thì phải có chỗ trong PLAN) hay bỏ | **I** |
-| §4 out of scope | Bỏ *"SMS/ZNS OTP for members"* khỏi danh sách; nó là **tính năng Pro trong v1**, không phải out of scope. Đổi lý do loại Sheet-làm-roster để không dựa vào `audit_log` | **E**, **L** |
+| §4 F2 | **Bỏ** fallback mã 6 số; thay bằng một câu chỉ sang F3 (nhân viên điểm danh hộ, chạy được offline) | **D9** |
+| §4 out of scope | Bỏ *"SMS/ZNS OTP for members"* khỏi danh sách; nó là **tính năng Pro trong v1**, không phải out of scope. Viết lại lý do loại Sheet-làm-roster: dẫn đầu bằng **không phân quyền** → sửa roster = tự thêm mình vào; rồi **không có ràng buộc dữ liệu** (D8, preview F1); rồi **xoá không phục hồi**; audit trail là lý do thứ tư | **E**, **D10** |
 | §6 | Thêm giới hạn đã chấp nhận thứ tư: một SĐT một người, phụ huynh hai con cần hai số | **D8** |
 | §10.2 | Thêm câu hỏi mở: **ngưỡng email free tier** ở quy mô nhiều org free | **J** |
 | §11 | Changelog v2.2 | |
@@ -193,10 +193,10 @@ Không có quyết định nào còn treo; đây là việc thi hành.
 
 | Mục | Thay đổi | Nguồn |
 |---|---|---|
-| §3.1 | Thêm `program`, `member_program`; `scan_point` thêm `program_id NULL`; `member` thêm `UNIQUE (org_id, phone_normalized)` | **D7**, **D8** |
-| §3.3 | Bộ môn thuộc package nào — `org/` (cùng `scan_point`) hay `member/`. Nghiêng về `org/` | **D7** |
-| §4 M1 | Thêm bảng `program` + bước tạo bộ môn tuỳ chọn trong wizard | **D7** |
-| §4 M2 | Thêm bộ lọc bộ môn cho roster `/staff`; sửa exit criteria — *"trừ báo cáo tháng"* | **D7**, **B** |
+| §3.1 | Thêm `program`, `member_program`; `scan_point` thêm `program_id NULL`; `member` thêm `UNIQUE (org_id, phone_normalized)`; chuyển `audit_log` từ *Grow later* lên **Core — ship first** | **D7**, **D8**, **D10** |
+| §3.3 | Bộ môn thuộc package nào — `org/` (cùng `scan_point`) hay `member/`. Nghiêng về `org/`. `audit_log` vào `shared/` | **D7**, **D10** |
+| §4 M1 | Thêm bảng `program` + bước tạo bộ môn tuỳ chọn trong wizard; thêm bảng `audit_log` + F1 import ghi log lượt import | **D7**, **D10** |
+| §4 M2 | Thêm bộ lọc bộ môn cho roster `/staff`; F11 ghi log mọi thao tác sửa (gán/gia hạn thẻ, sửa SĐT, thu hồi token, cho nghỉ); sửa exit criteria — *"trừ báo cáo tháng"* | **D7**, **D10**, **B** |
 | §4 bảng map | Sửa câu *"exactly one milestone"*; ghi rõ F3/F6/F8 tách phần Pro sang M4 | **F** |
 | §4 M4 | Member OTP giữ nguyên ở M4, nhưng ghi là **Pro trong v1** cho khớp PRD | **E** |
 | §4 tuần | Nói rõ "~8 tuần" tính tới hết M3; M4 không nằm trong con số đó | **K** |
@@ -243,11 +243,10 @@ báo mọi chỗ mâu thuẫn. Đừng tự sửa, hỏi tôi trước.
 
 **Bước 5:**
 ```
-Đọc DECISIONS.md (chú ý D6, D7, D8) và docs/plan-v2-rewrite.md.
+Đọc DECISIONS.md (chú ý D6–D10) và docs/plan-v2-rewrite.md.
 Làm Bước 5: vá PRD.md lên v2.2 và PLAN.md lên v2.1 theo hai bảng ở mục Bước 5.
+Không còn quyết định nào treo — cứ vá thẳng.
 Chạy lại năm mục kiểm tra của Bước 4 sau khi vá. Hai commit riêng.
-Còn hai chỗ cần tôi chốt: (I) giữ hay bỏ fallback mã 6 số, và (L) đổi lý do
-loại Sheet-làm-roster hay kéo audit_log vào core.
 ```
 
 Nhớ cập nhật bảng **Tiến độ** ở đầu file này sau mỗi bước.
