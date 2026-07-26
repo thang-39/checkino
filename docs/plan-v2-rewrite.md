@@ -5,7 +5,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | | |
 |---|---|
 | Tạo | 2026-07-25 |
-| Trạng thái | Bước 0–5 ✅ xong — tài liệu đã đồng bộ D1–D10, hết mục lệch. Tiếp theo: **Bước 6, bắt đầu code** (mục cuối file này) |
+| Trạng thái | Bước 0–5.5 ✅ xong — tài liệu đã đồng bộ D1–D11, hết mục lệch; tên đã chốt: **Checkino**. Tiếp theo: **Bước 6, bắt đầu code** (mục cuối file này) |
 
 ---
 
@@ -20,6 +20,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | 3 | Thêm ghi chú superseded vào `GRILL-LOG.md` (Q6, Q13, Q14) + thêm Q16 | ✅ 2026-07-25 |
 | 4 | Đối chiếu chéo PRD ↔ PLAN — tìm ra 14 mục lệch, chốt D6/D7/D8 | ✅ 2026-07-26 |
 | 5 | Vá 14 mục lệch + D6–D10 vào `PRD.md` (→ v2.2) và `PLAN.md` (→ v2.1) | ✅ 2026-07-26 |
+| 5.5 | Chốt tên thương hiệu **Checkino** (**D11**) — thay CheckinHub/manage-pwa khắp tài liệu (`PRD.md` → v2.3, `PLAN.md` → v2.2); đổi tên thư mục repo sang `checkino` (lệnh `mv` do Thang tự chạy) | ✅ 2026-07-26 |
 
 ---
 

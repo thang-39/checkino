@@ -1,12 +1,12 @@
-# PRD — CheckinHub (working name)
+# PRD — Checkino
 
 **One-line:** Self-serve QR check-in & membership SaaS for any class-based center in Vietnam — gym, martial arts, yoga, language, arts, tutoring. The free tier runs end-to-end at **zero variable cost**; Zalo notifications are a Pro add-on, not a dependency.
 
 | | |
 |---|---|
 | Author | Thang Tran |
-| Date | 2026-07-19 (v1.0/v1.1) · 2026-07-25 (v2.0, v2.1) · 2026-07-26 (v2.2) |
-| Status | Draft v2.2 — 2026-07-26, D6–D10 applied (rankings & trials are free, `program` is its own table, one phone = one member, no 6-digit fallback, `audit_log` in v1) |
+| Date | 2026-07-19 (v1.0/v1.1) · 2026-07-25 (v2.0, v2.1) · 2026-07-26 (v2.2, v2.3) |
+| Status | Draft v2.3 — 2026-07-26, product named **Checkino** (D11); v2.2 applied D6–D10 (rankings & trials are free, `program` is its own table, one phone = one member, no 6-digit fallback, `audit_log` in v1) |
 | Companion docs | **`DECISIONS.md` (source of truth for architecture & product decisions — wins on conflict)**, `GRILL-LOG.md` (assumption stress-test), `PLAN.md` (implementation) |
 
 ---
@@ -280,7 +280,7 @@ Full reasoning and the five verification sources are in `DECISIONS.md`. The v1.1
 ### 10.2 Still open
 
 1. **Google Sheets API quota at multi-customer scale** — measure real write rates; write in batches per customer Sheet (gates F7's Sheet mirror to Pro).
-2. **Brand name & domain** — "CheckinHub" is a placeholder.
+2. ~~**Brand name & domain** — "CheckinHub" is a placeholder.~~ **Settled 2026-07-26: Checkino** (`DECISIONS.md` D11 — criteria, rejected candidates, collision checks). What remains is the domain: a manual whois of `checkino.vn` / `.com` / `.app`, then purchase.
 3. **Indoor GPS accuracy at a real storefront** — determines the radius threshold for the F9 soft-check layer.
 4. **The email free-tier ceiling — how many free orgs fit inside it** (§7). Needs the real number, not the estimate: measure magic links per org per month during the pilot, and measure the *daily peak*, since the daily cap (Resend ~100/day, Brevo ~300/day) binds before the monthly one. Also worth knowing before it matters: whether one paid email plan (tens of USD/month) is the right answer or whether magic-link sessions should simply live longer, which reduces the send rate at no cost.
 
@@ -317,3 +317,7 @@ The v1.1 text is preserved in git: `git show 4d227dc:PRD.md`. The reasoning, cos
 | Expiry warning split explicitly: **at check-in → F5**, **the proactive list → F7** | F5, F7 | cross-check **M** |
 | Member OTP is no longer listed as out of scope — it is a Pro feature *inside* v1; only "OTP at the free tier" is out | out of scope | cross-check **E** |
 | Every roster mutation and every import writes an **audit log**, in v1. The Sheet-as-roster rejection was rewritten to lead with **no permissions** (editing the Sheet = free membership), then no data constraints, then unrecoverable deletion; audit trail is the fourth reason, not the first | F1, F11, out of scope | **D10** |
+
+### v2.3 — changes from v2.2
+
+**v2.3 (2026-07-26)** — the product is named: **Checkino** (repo `checkino`, package `com.checkino`). No scope change; naming criteria, rejected candidates, and internet-collision checks are in `DECISIONS.md` D11. §10.2 #2 is closed except for the domain purchase.

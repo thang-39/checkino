@@ -1,12 +1,12 @@
-# DECISIONS — CheckinHub
+# DECISIONS — Checkino
 
 Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quyết định đã chốt, kèm lý do.
 **Đọc file này trước khi làm bất cứ việc gì trong project.**
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-07-26 (Bước 5: D6–D10 đã vào PRD/PLAN; vá câu mã 6 số ở D3 vì D9 superseded nó) |
-| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D10, không còn mục lệch.** `PRD.md` **v2.2** · `PLAN.md` **v2.1** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
+| Cập nhật lần cuối | 2026-07-26 (D11: chốt tên thương hiệu **Checkino** — brand, repo, package dùng chung một tên; hết placeholder CheckinHub/manage-pwa) |
+| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D11, không còn mục lệch.** `PRD.md` **v2.3** · `PLAN.md` **v2.2** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
 
 ---
 
@@ -241,9 +241,9 @@ Hai chữ hay bị gộp — chúng là hai trục độc lập: *repo* (monorep
 (monolith ↔ microservices). Quyết định này là **monorepo + monolith**.
 
 ```
-manage-pwa/
+checkino/
 ├── backend/                        # Spring Boot 3.5
-│   ├── src/main/java/com/checkinhub/...
+│   ├── src/main/java/com/checkino/...
 │   ├── src/main/resources/
 │   │   ├── templates/q/            # Thymeleaf — /q/{code}
 │   │   ├── db/migration/           # Flyway
@@ -279,7 +279,7 @@ Cả ba cơ chế đã chốt đều dựa vào **một database, một transact
 **Nhưng giữ cửa thoát — modular monolith.** Một tiến trình, code chia theo miền nghiệp vụ:
 
 ```
-com.checkinhub
+com.checkino
 ├── org/            # tenant, scan_point, giờ mở cửa, GPS
 ├── member/         # member, member_device
 ├── entitlement/    # gói thẻ, consume policy
@@ -462,6 +462,64 @@ thứ nhất.
 
 ---
 
+## D11 — Tên thương hiệu: Checkino
+
+**Quyết định.** Brand + repo + package dùng chung một tên: **Checkino**. Thay placeholder
+*CheckinHub* và thư mục `manage-pwa`. Một token duy nhất ở mọi chỗ kỹ thuật: repo `checkino`,
+package `com.checkino`, artifactId/image Docker/database `checkino`. Chốt 2026-07-26 — **trước
+Bước 6**, vì sau bước đó tên nằm trong package Java, artifactId Maven, tên image và tên database:
+đổi bây giờ là sửa ~12 dòng tài liệu, đổi sau là refactor thật.
+
+**Tiêu chí** (suy từ PRD §1, §5 + một bổ sung 26/07):
+
+1. Chủ trung tâm nghe tên trong một comment FB phải **gõ lại đúng**. Kênh tăng trưởng duy nhất
+   là post trong group FB — "nghe→gõ đúng" quý hơn "dễ bảo hộ thương hiệu". (Đã vặn lại một ý:
+   không tên tiếng Anh nào khớp được cụm tìm kiếm "app điểm danh" — cụm đó thuộc về title
+   landing page và caption bài post, không thuộc về brand.)
+2. Không gym-only, không school-only — đa vertical là luận điểm sản phẩm *(PRD §5)*.
+3. Không đặt tên theo công nghệ (không "PWA", không "app", không "hub").
+4. Gọi được ít nhất việc số 1: **điểm danh** (việc số 2 là thẻ hội viên).
+5. Đứng được như tên *nền tảng*, không chỉ tên chức năng — hướng mở rộng đã định: trang public
+   cho người ngoài xem lớp/chương trình nào đang mở, xem thông tin chung, rồi tham gia.
+
+**Vì sao Checkino.**
+
+- "Check-in" là từ tiếng Anh đã Việt hoá hoàn toàn — nghe một lần hiểu ngay app làm gì
+  *(tiêu chí 4)*, gõ đúng vì ngày nào cũng gõ nó trên FB *(tiêu chí 1)*.
+- Trung tính vertical: "check-in buổi tập / buổi học / buổi gia sư" đều tự nhiên *(tiêu chí 2)*.
+- Một token sạch: `com.checkino` hợp lệ, không hyphen, không lẫn sang từ khác.
+- Hậu tố "-o" cùng văn phạm với các app Việt đã quen tai (Zalo, Momo, Sendo) — đứng được như
+  tên nền tảng *(tiêu chí 5)*.
+- Kiểm chứng search 2026-07-26: **không thấy sản phẩm/công ty nào tên Checkino.** Gần như mọi
+  tên "hiển nhiên" khác đều đã có chủ đúng ngành liền kề (bảng dưới).
+
+**Điểm yếu đã chấp nhận.** Vần "-ino" nghe thoáng giống *casino* — chấp nhận, đổi lấy độ sạch.
+**ACheckin** (Appota — chấm công nhân sự, acheckin.vn) cùng gốc "checkin" ở VN nhưng khác phân
+khúc (HRM nội bộ vs hội viên trung tâm) và khác cấu trúc tên; chung gốc là chấp nhận được, vì
+chính gốc đó làm tên tự giải thích.
+
+**Các tên đã loại** (đều kiểm bằng search 2026-07-26):
+
+| Tên | Vì sao loại |
+|---|---|
+| CheckinHub (placeholder cũ) | "hub" là từ công nghệ — phạm tiêu chí 3; là tên giữ chỗ ngay từ đầu |
+| **Onlist** (á quân) | Sạch trên internet; ẩn dụ "list" phủ cả ba việc (có tên trong list hôm nay = điểm danh, list hội viên = thẻ, list lớp public = mở rộng). Thua vì nghĩa điểm danh gián tiếp hơn "checkin" một nhịp, và nhìn hơi gần chữ "online" |
+| CheckinClub | CHECK IN CLUB (Trainerize) đã ở trên Google Play đúng ngành fitness; dài 11 ký tự; "club" lệch với gia sư 1-1 |
+| Tickin | tickin.app là phần mềm điểm danh đang hoạt động — trùng thẳng category; nghe→gõ vỡ (tick/tik, đứng cạnh Tiki) |
+| GoClass · Joinly | Gọi tính năng mở rộng chứ không gọi điểm danh — phạm tiêu chí 4; cả hai đều đã có sản phẩm cùng tên (goclass.com; Joinly — phần mềm quản lý hội viên CLB) |
+| ComeIn | "May I come in?" đẹp cảm xúc, nhưng Comeen (workplace platform Pháp) gần trùng âm; cụm quá generic để search ra mình |
+| Fullhouse | Full House Active đã làm đúng hướng mở rộng (nền tảng book lớp fitness/nghệ thuật); thêm FullHouse Software (property mgmt, từ 1978) |
+| TapIn | Nhiều sản phẩm TapIn check-in/điểm danh đang sống — trùng thẳng category |
+| Traino | App fitness cùng tên đang sống; "train" lệch fitness, không gọi được điểm danh |
+| CheckinViet | Đụng văn hoá "Check in Vietnam" du lịch — search sẽ ngập nội dung du lịch |
+| Diemdanh | Yêu cầu là tên tiếng Anh; `diemdanh.vn` nếu trống vẫn đáng mua làm redirect/SEO |
+
+**Domain — chưa xác nhận** (không kiểm được whois từ môi trường làm việc): Thang tự kiểm
+`checkino.vn` / `checkino.com` / `checkino.app` trước khi mua. Tài liệu này **không** khẳng định
+domain nào còn trống.
+
+---
+
 ## Ba cơ chế kỹ thuật đã chốt
 
 Ghi ở đây vì chúng dễ làm sai và hậu quả nặng.
@@ -586,6 +644,8 @@ nó — đăng ký ở `/staff/` thì `/q` và `/admin` không bị dính vào. 
 ## Còn bỏ ngỏ
 
 1. **Google Sheets API quota** ở quy mô nhiều khách hàng — cần đo write rate thực tế, ghi theo batch.
-2. **Tên thương hiệu & domain** — "CheckinHub" chỉ là placeholder.
+2. ~~**Tên thương hiệu & domain** — "CheckinHub" chỉ là placeholder.~~ → **Đã chốt: Checkino**
+   ([D11](#d11--tên-thương-hiệu-checkino)). Chỉ còn phần domain: chờ whois + mua tay
+   (`checkino.vn` / `.com` / `.app`).
 3. **Độ chính xác GPS** tại cửa hàng thật (trong nhà) — quyết định ngưỡng bán kính cho lớp
    soft-check chống gian lận.

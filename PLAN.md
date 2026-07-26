@@ -1,13 +1,13 @@
-# PLAN — CheckinHub v1
+# PLAN — Checkino v1
 
-Implementation plan derived from `PRD.md` (v2.2) and `DECISIONS.md` (D1–D10). Assumes one
+Implementation plan derived from `PRD.md` (v2.3) and `DECISIONS.md` (D1–D11). Assumes one
 developer, part-time (~15–20h/week).
 
 | | |
 |---|---|
-| Status | **v2.1 — 2026-07-26**, D6–D10 applied on top of the v2.0 D1–D5 rewrite |
+| Status | **v2.2 — 2026-07-26**, renamed to **Checkino** (D11); v2.1 applied D6–D10 on top of the v2.0 D1–D5 rewrite |
 | Target | **~8 weeks part-time to the end of M3** — that is the number; M4 (billing, PDPL pages, Zalo, pilot onboarding) is *not* inside it, see §4 |
-| Companion docs | **`DECISIONS.md` (source of truth — wins on conflict)**, `PRD.md` (v2.2), `GRILL-LOG.md` (historical) |
+| Companion docs | **`DECISIONS.md` (source of truth — wins on conflict)**, `PRD.md` (v2.3), `GRILL-LOG.md` (historical) |
 
 **What changed from v1.1 of this document.** The stack decision was reversed (§2): Next.js +
 Supabase is out, Spring Boot + Angular is in. Zalo left the critical path entirely, so the M0
@@ -155,9 +155,9 @@ Two words that get conflated are actually independent axes: *repo* (monorepo ↔
 *runtime* (monolith ↔ microservices). This is **monorepo + monolith**.
 
 ```
-manage-pwa/
+checkino/
 ├── backend/                        # Spring Boot 3.5
-│   ├── src/main/java/com/checkinhub/...
+│   ├── src/main/java/com/checkino/...
 │   ├── src/main/resources/
 │   │   ├── templates/q/            # Thymeleaf — /q/{code}
 │   │   ├── db/migration/           # Flyway
@@ -277,7 +277,7 @@ milestone order:
 ### 3.3 Package layout — by business domain *(D5)*
 
 ```
-com.checkinhub
+com.checkino
 ├── org/            # tenant, scan_point, program, opening hours, GPS
 ├── member/         # member, member_device, member_program
 ├── entitlement/    # packages/cards, consume policy
