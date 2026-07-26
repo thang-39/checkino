@@ -5,8 +5,8 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-07-25 (thêm D5; D4 đã xét lại React rồi giữ Angular) |
-| Trạng thái áp dụng | `PRD.md` **v2.1** đồng bộ D1–D5, **6 lỗ đã vá** (F11 quản lý hội viên, import upsert, hướng ghi Sheet, chữ "PWA", ba giới hạn offline) · `PLAN.md` **v2.0** đồng bộ D1–D5 (milestone sắp lại, Zalo xuống M4, offline mức 2 tách sang M3) · `GRILL-LOG.md` ✅ đã thêm ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử |
+| Cập nhật lần cuối | 2026-07-26 (thêm D6–D8, chốt từ đợt đối chiếu chéo PRD ↔ PLAN ở Bước 4) |
+| Trạng thái áp dụng | `PRD.md` **v2.1** đồng bộ D1–D5, **6 lỗ đã vá** (F11 quản lý hội viên, import upsert, hướng ghi Sheet, chữ "PWA", ba giới hạn offline) · `PLAN.md` **v2.0** đồng bộ D1–D5 (milestone sắp lại, Zalo xuống M4, offline mức 2 tách sang M3) · `GRILL-LOG.md` ✅ đã thêm ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử · ⬜ **D6–D8 chưa vào PRD/PLAN** — việc đó là Bước 5 trong [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md), cùng 11 mục lệch còn lại |
 
 ---
 
@@ -304,6 +304,99 @@ nhau.** Giữ được thì 5 năm sau cần tách sẽ tách theo đường có
 deploy, để rollback, dev/prod đồng nhất. Cần một controller fallback trả `index.html` cho route
 phía client (`/admin/members`). Caddy chỉ làm TLS. Phương án Caddy-serve-tĩnh-proxy-`/api` tốt
 hơn về cache header nhưng thêm chỗ cấu hình phải đồng bộ — đổi sang sau là việc mười phút.
+
+---
+
+## D6 — Xếp hạng và trial pipeline thuộc free tier
+
+**Quyết định.** Bảng xếp hạng chuyên cần tháng *(F7)* và danh sách học thử *(F4)* nằm ở **gói
+free**. Gói Pro bán bằng bốn thứ khác: gỡ cap 50 hội viên, mirror Google Sheet, đa cơ sở +
+phân quyền, và Zalo OA/ZNS.
+
+Sửa lại bảng gói ở `PRD.md` §7, vốn đang xếp *rankings* và *trial pipeline* vào Pro trong khi
+§4 F4/F7 mô tả chúng như tính năng lõi v1 — ba chỗ trong cùng một tài liệu nói ba kiểu.
+
+**Lý do.**
+
+1. **Xếp hạng chính là việc gig gốc thuê người làm** *(PRD §1)*. Free tier không có nó thì không
+   phải "phiên bản rút gọn của sản phẩm", mà là một sản phẩm khác.
+2. **D2 đứng được là nhờ xếp hạng tồn tại.** Lập luận bỏ OTP dựa trên câu *"hậu quả duy nhất của
+   gian lận là lệch bảng xếp hạng"*. Bỏ xếp hạng khỏi free tier thì câu đó rỗng nghĩa ở đúng nơi
+   phần lớn người dùng ở.
+3. **F4 gánh đường vào roster phổ biến nhất** — một người mới lẻ tự đến *(bảng "bốn đường vào
+   roster", PRD §4)*. Khoá nó sau tường trả tiền thì roster free chỉ lớn được bằng import file.
+   Và F4 còn là chỗ hứng **cú quét thử của chính chủ** trước khi import *(F1)* — khoá nó là hỏng
+   onboarding, tức hỏng north-star.
+
+**Cap 50 hội viên đã là ranh giới kiếm tiền rồi**, không cần cắt thêm tính năng. Ranh giới đó
+sạch: nó tăng theo giá trị khách nhận được, không chặn khách nhỏ dùng thử.
+
+**Hệ quả.** Danh sách cắt khi trễ tiến độ ở `PLAN.md` §6 phải sửa: *"cắt F7 rankings"* nay là
+cắt một tính năng free mà gig gốc đòi — không còn là món để cắt. Thứ tự cắt còn lại:
+mirror Sheet → lớp GPS của F9. Và lưu ý cắt lớp GPS thì phí luôn spike GPS ở M0, vốn là mục duy
+nhất còn lại của milestone đó.
+
+---
+
+## D7 — `program` (bộ môn) là bảng riêng, quan hệ nhiều–nhiều với hội viên
+
+**Quyết định.** Tách bộ môn ra khỏi `scan_point`:
+
+```sql
+program        (id, org_id, name, active)
+member_program (member_id, program_id)        -- nhiều–nhiều
+scan_point     (..., program_id NULL)         -- NULL = QR dùng chung cho cả cơ sở
+```
+
+`scan_point` giữ nguyên nghĩa **"một mã QR ở một chỗ"**, thêm một tham chiếu bộ môn tuỳ chọn.
+
+**Lý do.** `PLAN.md` §3.1 đang chú thích `scan_point` là *"location/program"* — gộp hai chiều
+độc lập làm một. PRD lại dùng bộ môn như một chiều riêng ở bốn chỗ. Ba chỗ gãy:
+
+| Chỗ gãy | Vì sao gộp thì hỏng |
+|---|---|
+| **Roster hôm nay của cô giáo** *(F3)* — chỗ đau thật | *"Lọc danh sách theo bộ môn"*, nhưng `member` không có liên kết nào tới bộ môn. Cô giáo lớp Yoga mở app ra thấy cả 200 hội viên của trung tâm, phải tự tìm 15 đứa của mình. Mà **lớp trẻ con là ca dùng chính của F3** |
+| **Thẻ theo bộ môn** *(F5)* | PRD viết `scope: program(s) \| whole org`. Không có bảng thật để trỏ tới thì "thẻ Boxing không dùng được cho lớp Yoga" không kiểm được |
+| **Xếp hạng theo bộ môn** *(F7)* | Thành xếp hạng theo QR. Trung tâm 3 cơ sở × 3 bộ môn = 9 mã QR; hỏi *"ai chăm nhất môn Boxing toàn hệ thống"* thì không trả lời được |
+
+**Bộ môn là tuỳ chọn — đây là điều kiện để không phá north-star.** Wizard F1 giữ nguyên bốn bước
+`org → điểm quét → roster → QR`; tạo bộ môn là bước **bỏ qua được**. Bỏ qua thì mọi thẻ và mọi
+xếp hạng nằm ở phạm vi cả org, đúng như hiện tại. Trung tâm một bộ môn không phải học thêm khái
+niệm nào; trung tâm nhiều bộ môn bật lên khi cần.
+
+Cột "bộ môn" trong file import cũng tuỳ chọn. Tên bộ môn chưa tồn tại thì **màn hình preview của
+F1 phải liệt kê ra** (*"sẽ tạo mới 2 bộ môn: Boxing, Yoga"*) — cùng tinh thần "xem trước rồi mới
+ghi" của D2/F1, không tự tạo ngầm.
+
+**Chi phí:** một bảng, một bảng nối, một màn hình CRUD nhỏ trong `/admin`, một bộ lọc ở `/staff`.
+Không phải một hệ thống.
+
+---
+
+## D8 — Một số điện thoại = một hội viên
+
+**Quyết định.** `UNIQUE (org_id, phone_normalized)` trên `member`. Không có hội viên nào không có
+số điện thoại. Trẻ con dùng số phụ huynh, và **mỗi đứa con cần một số riêng**.
+
+**Lý do.** SĐT đã là khoá định danh từ D2 — khoá của import upsert *(F1)*, của tra cứu ở `/q`
+*(F2)*, và là thứ F11 phải sửa được vì sai một chữ số là hội viên vĩnh viễn không vào được. Cho
+phép một số trỏ tới nhiều người thì cả ba chỗ đó đều phải sinh thêm nhánh: import không biết
+đang cập nhật ai, `/q` không biết trả về ai.
+
+**Giới hạn đã chấp nhận — ghi ra để sau không ai báo là bug:**
+
+1. **Phụ huynh hai con phải có hai số.** Số thứ hai thường có sẵn (số của người còn lại trong gia
+   đình). Ca này ít xảy ra, và chủ trung tâm xử lý được ngay ở F11 mà không cần chờ tính năng.
+2. **Không hỗ trợ hội viên không có SĐT.** Bỏ cụm *"no-phone members"* khỏi `PRD.md` F3 — nó
+   mâu thuẫn trực tiếp với D2. Lưu ý điều này **không** cản lớp trẻ con: ở `/staff` cô giáo tap
+   theo **tên**, không hề đụng tới số điện thoại. SĐT chỉ cần lúc import và lúc tự quét ở `/q`.
+
+**Hệ quả cần vá.** Preview của F1 phải báo trùng SĐT **trong file** như một lỗi và bỏ qua dòng đó
+*(PRD F1 đã viết)*; F11 sửa SĐT phải kiểm trùng và từ chối nếu số đã thuộc về người khác.
+
+**Đường thoát nếu về sau thấy đau** — ghi lại để khỏi nghĩ lại từ đầu: đổi khoá upsert thành
+**(SĐT + tên chuẩn hoá)**, và thêm ở `/q` một bước *"Bạn là ai?"* khi một số khớp nhiều người.
+`/staff` không phải đổi gì. Chỉ làm khi có khách hàng thật kêu, không làm trước.
 
 ---
 

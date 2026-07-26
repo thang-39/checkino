@@ -10,13 +10,14 @@ SaaS điểm danh QR + quản lý thẻ hội viên cho các trung tâm nhỏ �
 ## Đọc trước khi làm bất cứ việc gì
 
 **[`DECISIONS.md`](DECISIONS.md)** — sổ quyết định kiến trúc & sản phẩm, kèm lý do và số liệu
-kiểm chứng. Đây là nguồn sự thật. `PRD.md` (v2.1), `PLAN.md` (v2.0) và `GRILL-LOG.md` đều đã
-đồng bộ; khi hai bên mâu thuẫn thì `DECISIONS.md` thắng.
+kiểm chứng. Đây là nguồn sự thật. `PRD.md` (v2.1), `PLAN.md` (v2.0) và `GRILL-LOG.md` đã đồng bộ
+**D1–D5**; **D6–D8 chưa vào PRD/PLAN** (việc của Bước 5). Khi hai bên mâu thuẫn thì
+`DECISIONS.md` thắng.
 
 [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) — kế hoạch thi hành việc cập nhật đó,
 kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.
 
-## Năm quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
+## Tám quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
 
 - **D1** — Zalo OA/ZNS là tính năng **gói Pro**, không thuộc lõi v1. Free tier chạy hoàn toàn
   không cần Zalo. Lý do: xác thực OA bắt buộc có GPKD của khách hàng, giết mục tiêu onboarding
@@ -31,6 +32,15 @@ kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.
   thuật, không phải một cảm giác. Angular build ra file tĩnh cho Spring Boot serve, **không SSR**.
 - **D5** — **Monorepo + modular monolith, một tiến trình.** Microservices không nằm trên bàn:
   nó phá cả ba cơ chế dưới, vì cả ba dựa vào một database + một transaction.
+
+- **D6** — **Xếp hạng tháng và trial pipeline thuộc free tier.** Pro bán bằng: gỡ cap 50 hội viên,
+  mirror Sheet, đa cơ sở + phân quyền, Zalo, member OTP. Lý do: xếp hạng chính là việc gig gốc
+  thuê làm, và D2 chỉ đứng được khi xếp hạng tồn tại.
+- **D7** — **`program` (bộ môn) là bảng riêng** + `member_program` nhiều–nhiều; `scan_point` có
+  `program_id` nullable. Bộ môn là **tuỳ chọn**, bỏ qua được, để không phá north-star 10 phút.
+- **D8** — **Một SĐT = một hội viên** (`UNIQUE (org_id, phone_normalized)`). Không hỗ trợ hội viên
+  không có SĐT; trẻ con dùng số phụ huynh, mỗi đứa một số. Ở `/staff` cô giáo tap theo **tên**,
+  không đụng SĐT.
 
 **Ràng buộc xuyên suốt:** free tier phải có chi phí biến đổi = **0đ**.
 

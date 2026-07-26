@@ -5,7 +5,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | | |
 |---|---|
 | Tạo | 2026-07-25 |
-| Trạng thái | Bước 0–3 ✅ xong · Bước 4 ⬜ chưa làm |
+| Trạng thái | Bước 0–4 ✅ xong · Bước 5 ⬜ chưa làm (vá 14 mục lệch + D6–D8 vào PRD/PLAN) |
 
 ---
 
@@ -18,7 +18,8 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | 1.5 | Vá `PRD.md` → v2.1 — 6 lỗ roster-as-identity (F11, import upsert, hướng ghi Sheet, giới hạn offline) | ✅ 2026-07-25 |
 | 2 | Viết lại `PLAN.md` → v2.0 | ✅ 2026-07-25 |
 | 3 | Thêm ghi chú superseded vào `GRILL-LOG.md` (Q6, Q13, Q14) + thêm Q16 | ✅ 2026-07-25 |
-| 4 | Đối chiếu chéo PRD ↔ PLAN | ⬜ |
+| 4 | Đối chiếu chéo PRD ↔ PLAN — tìm ra 14 mục lệch, chốt D6/D7/D8 | ✅ 2026-07-26 |
+| 5 | Vá 14 mục lệch + D6–D8 vào `PRD.md` (→ v2.2) và `PLAN.md` (→ v2.1) | ⬜ |
 
 ---
 
@@ -88,6 +89,38 @@ Không có code nên không chạy test được. Kiểm tra bằng tính nhất
    ở M3, không lẫn trong M2
 5. `git log` hiển thị đủ các bước, `git show <commit-snapshot>:PRD.md` xem lại được bản v1
 
+### Kết quả chạy năm mục — 2026-07-26
+
+| # | Mục | Kết quả |
+|---|---|---|
+| 1 | `rg "supabase\|next\.js\|OTP"` | ✅ mọi kết quả nằm trong ngữ cảnh "đã bị thay thế" hoặc "gói Pro" — trừ `PLAN.md:371`, xem lệch **E** |
+| 2 | North-star F1→F2 | ✅ không còn bước nào cần GPKD, OA, hay trả tiền |
+| 3 | Chi phí biến đổi free tier | ⚠️ 0đ ở mọi khoản trừ email magic link — xem lệch **J** |
+| 4 | F1–F11 có mặt trong PLAN | ✅ đủ 11/11, không sót; có trùng **cố ý** nhưng PLAN khẳng định sai — xem lệch **F**. Offline mức 2 nằm ở M3, không lẫn vào M2 ✅ |
+| 5 | `git log` + `git show 4d227dc:PRD.md` | ✅ 8 commit, bản v1 mở lại được |
+
+### 14 mục lệch tìm được — chưa vá, để Bước 5
+
+Ba mục nặng nhất đã được chốt thành quyết định trong `DECISIONS.md`: **D6** (A), **D7** (C),
+**D8** (D). Mười một mục còn lại là sửa câu chữ, không cần quyết định thêm.
+
+| # | Mục lệch | Ở đâu | Chốt |
+|---|---|---|---|
+| **A** | Xếp hạng + trial pipeline: §7 xếp vào Pro, §4 mô tả như lõi v1, PLAN không gate gì | PRD nội bộ + PLAN | **D6** — cả hai vào free |
+| **C** | `program` (bộ môn) dùng như một chiều độc lập ở PRD (F1/F3/F5/F7) nhưng PLAN §3.1 gộp vào `scan_point` | PRD ↔ PLAN | **D7** — bảng riêng + `member_program` |
+| **D** | F3 nói phục vụ *"no-phone members"* nhưng SĐT là khoá định danh | PRD nội bộ | **D8** — 1 SĐT = 1 người, bỏ cụm đó |
+| **E** | Member OTP: PRD ghi out of scope v1, PLAN xếp vào M4 | PRD ↔ PLAN | Sửa PRD: OTP là **Pro trong v1**, không phải out of scope. Out of scope chỉ giữ "OTP ở free tier" |
+| **J** | *"Unlimited free orgs never produces a loss"* đúng về đơn giá, sai về **hạn mức** free tier của Resend/Brevo (~3.000 email/tháng, 100/ngày) | PRD §7 | Sửa thành "0đ tới ngưỡng ~N org" + thêm mục vào §10.2 Còn bỏ ngỏ: **đo ngưỡng email** |
+| **B** | Exit criteria M2 = *"toàn bộ workflow gig gốc chạy"*, nhưng gig đòi xếp hạng tháng — nằm ở M3 | PLAN | Sửa exit M2 thành "toàn bộ workflow **trừ báo cáo tháng**" |
+| **F** | Câu *"Every PRD feature appears in exactly one milestone"* sai với chính bảng dưới nó (F3 ở M2+M3, F6 và F8 ở M1+M4) | PLAN §4 + file này, mục 4 | Việc tách là đúng; sửa câu thành "mỗi feature có một milestone chủ, phần Pro tách sang M4" |
+| **G** | §7 nói *"Pro bật ngay trừ Zalo"*, nhưng bảng Pro có member OTP — cũng đi qua ZNS, cũng cần GPKD | PRD nội bộ | Sửa: **hai** thứ bị chặn sau GPKD |
+| **H** | Danh sách cắt khi trễ: *Sheet mirror → GPS → rankings* — cắt đúng hai trong ba thứ bán Pro | PLAN §6 ↔ PRD §7 | Theo **D6**, rankings nay là tính năng free mà gig đòi → bỏ khỏi danh sách cắt |
+| **I** | Fallback *"mã 6 số cho nhân viên nhập tay"* có ở PRD F2, không có ở milestone nào, không có bảng nào | PRD → PLAN | Chọn: đưa vào M2 hoặc bỏ khỏi PRD |
+| **K** | Tuần chồng nhau (M1 W1–3, M2 W3–5, M3 W5–7) và M4 nhồi billing + PDPL + Zalo + OTP + onboard 5–10 pilot vào ~1 tuần | PLAN §4 | Nhiều khả năng "~8 tuần" thực ra là tới hết M3 — nói rõ ra |
+| **L** | Lý do loại Sheet-làm-roster là *"no audit trail"* (hàm ý app có), nhưng `audit_log` nằm ở "Grow later" | PRD §4 ↔ PLAN §3.1 | Đổi lý do, hoặc kéo `audit_log` vào core |
+| **M** | Cảnh báo hết hạn nằm ở cả F5 (M2) và F7 (M3) | PRD nội bộ | Nói rõ: cảnh báo lúc check-in ở M2, danh sách ở M3 |
+| **N** | DoD đòi *"zero contact with the founder"* nhưng gồm mirror Sheet — Pro — mà Pro thanh toán VietQR **có admin xác nhận tay** | PLAN §7 | Tách DoD thành phần free (không contact) và phần Pro |
+
 ### Lỗ đã phát hiện — ✅ đã vá ở Bước 1.5 (2026-07-25)
 
 Tìm ra khi rà câu hỏi *"chủ sửa Google Sheet thì backend có sync không?"* (25/07). Gốc chung:
@@ -136,6 +169,44 @@ ngay sau F11)*:
 
 ---
 
+## Bước 5 — vá PRD + PLAN theo D6–D8 và 14 mục lệch
+
+Không có quyết định nào còn treo; đây là việc thi hành.
+
+**`PRD.md` → v2.2**
+
+| Mục | Thay đổi | Nguồn |
+|---|---|---|
+| §7 bảng gói | Xếp hạng + trial pipeline chuyển sang **Free**. Pro còn: gỡ cap 50 hội viên, mirror Sheet, đa cơ sở + phân quyền, Zalo, member OTP | **D6** |
+| §7 upgrade journey | *"Bật ngay trừ Zalo"* → **trừ Zalo và member OTP**, cả hai chặn sau GPKD | **G** |
+| §7 chi phí 0đ | Ghi rõ hạn mức free tier của nhà cung cấp email; đổi *"unlimited free orgs"* thành "0đ tới ngưỡng ~N org" | **J** |
+| §4 F1 | Thêm bước tạo bộ môn **tuỳ chọn, bỏ qua được**; cột bộ môn trong file import tuỳ chọn; preview liệt kê bộ môn sẽ tạo mới | **D7** |
+| §4 F3 | Bỏ cụm *"no-phone members"*. Thêm một câu: ở `/staff` cô giáo tap theo **tên**, không đụng SĐT — nên lớp trẻ con không bị ảnh hưởng | **D8** |
+| §4 F5 | Nói rõ cảnh báo hết hạn **lúc check-in** thuộc F5; **danh sách** thẻ sắp hết hạn thuộc F7 | **M** |
+| §4 F2 | Chốt số phận fallback mã 6 số: giữ (thì phải có chỗ trong PLAN) hay bỏ | **I** |
+| §4 out of scope | Bỏ *"SMS/ZNS OTP for members"* khỏi danh sách; nó là **tính năng Pro trong v1**, không phải out of scope. Đổi lý do loại Sheet-làm-roster để không dựa vào `audit_log` | **E**, **L** |
+| §6 | Thêm giới hạn đã chấp nhận thứ tư: một SĐT một người, phụ huynh hai con cần hai số | **D8** |
+| §10.2 | Thêm câu hỏi mở: **ngưỡng email free tier** ở quy mô nhiều org free | **J** |
+| §11 | Changelog v2.2 | |
+
+**`PLAN.md` → v2.1**
+
+| Mục | Thay đổi | Nguồn |
+|---|---|---|
+| §3.1 | Thêm `program`, `member_program`; `scan_point` thêm `program_id NULL`; `member` thêm `UNIQUE (org_id, phone_normalized)` | **D7**, **D8** |
+| §3.3 | Bộ môn thuộc package nào — `org/` (cùng `scan_point`) hay `member/`. Nghiêng về `org/` | **D7** |
+| §4 M1 | Thêm bảng `program` + bước tạo bộ môn tuỳ chọn trong wizard | **D7** |
+| §4 M2 | Thêm bộ lọc bộ môn cho roster `/staff`; sửa exit criteria — *"trừ báo cáo tháng"* | **D7**, **B** |
+| §4 bảng map | Sửa câu *"exactly one milestone"*; ghi rõ F3/F6/F8 tách phần Pro sang M4 | **F** |
+| §4 M4 | Member OTP giữ nguyên ở M4, nhưng ghi là **Pro trong v1** cho khớp PRD | **E** |
+| §4 tuần | Nói rõ "~8 tuần" tính tới hết M3; M4 không nằm trong con số đó | **K** |
+| §6 | Bỏ *rankings* khỏi danh sách cắt; ghi chú cắt lớp GPS thì phí spike GPS ở M0 | **D6**, **H** |
+| §7 DoD | Tách phần free (thật sự không cần contact) khỏi phần Pro (VietQR xác nhận tay) | **N** |
+
+Sau khi vá xong, chạy lại **năm mục kiểm tra** ở Bước 4 một lượt nữa.
+
+---
+
 ## Cách prompt ở session mới
 
 Mỗi session một bước. `CLAUDE.md` tự nạp nên không cần trỏ `DECISIONS.md` thủ công, nhưng
@@ -170,11 +241,20 @@ Làm Bước 4 trong docs/plan-v2-rewrite.md: đối chiếu PRD.md và PLAN.md,
 báo mọi chỗ mâu thuẫn. Đừng tự sửa, hỏi tôi trước.
 ```
 
+**Bước 5:**
+```
+Đọc DECISIONS.md (chú ý D6, D7, D8) và docs/plan-v2-rewrite.md.
+Làm Bước 5: vá PRD.md lên v2.2 và PLAN.md lên v2.1 theo hai bảng ở mục Bước 5.
+Chạy lại năm mục kiểm tra của Bước 4 sau khi vá. Hai commit riêng.
+Còn hai chỗ cần tôi chốt: (I) giữ hay bỏ fallback mã 6 số, và (L) đổi lý do
+loại Sheet-làm-roster hay kéo audit_log vào core.
+```
+
 Nhớ cập nhật bảng **Tiến độ** ở đầu file này sau mỗi bước.
 
 ---
 
-## Từ bước 5 trở đi — bắt đầu code
+## Từ bước 6 trở đi — bắt đầu code
 
 Chạy `/init` sau khi có code để `CLAUDE.md` được bổ sung lệnh build/test/run.
 
@@ -182,7 +262,9 @@ Thứ tự đề xuất, mỗi session một việc:
 
 1. Khởi tạo monorepo: `backend/` Spring Boot + Postgres + Flyway + docker compose; `frontend/`
    Angular 20, `ng build` ra `static/app/` + controller fallback *(D5)*
-2. Schema `org` / `scan_point` / `member` + RLS + **bộ test cô lập đa tenant** — làm trước, không làm sau
+2. Schema `org` / `scan_point` / `member` / `program` / `member_program` *(D7)*, `member` có
+   `UNIQUE (org_id, phone_normalized)` *(D8)* + RLS + **bộ test cô lập đa tenant** — làm trước,
+   không làm sau
 3. Email magic link cho chủ/nhân viên *(F10)*
 4. Trang `/q/{code}` Thymeleaf + import danh sách (upsert theo SĐT, có preview) + bind device token *(F2)*
 5. `entitlement` + `checkin_event` + dedupe unique index + Testcontainers test *(F5)*
