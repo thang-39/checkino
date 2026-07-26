@@ -5,8 +5,8 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-07-26 (thêm D6–D10, chốt từ đợt đối chiếu chéo PRD ↔ PLAN ở Bước 4) |
-| Trạng thái áp dụng | `PRD.md` **v2.1** đồng bộ D1–D5, **6 lỗ đã vá** (F11 quản lý hội viên, import upsert, hướng ghi Sheet, chữ "PWA", ba giới hạn offline) · `PLAN.md` **v2.0** đồng bộ D1–D5 (milestone sắp lại, Zalo xuống M4, offline mức 2 tách sang M3) · `GRILL-LOG.md` ✅ đã thêm ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử · ⬜ **D6–D10 chưa vào PRD/PLAN** — việc đó là Bước 5 trong [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md), cùng 14 mục lệch |
+| Cập nhật lần cuối | 2026-07-26 (Bước 5: D6–D10 đã vào PRD/PLAN; vá câu mã 6 số ở D3 vì D9 superseded nó) |
+| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D10, không còn mục lệch.** `PRD.md` **v2.2** · `PLAN.md` **v2.1** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
 
 ---
 

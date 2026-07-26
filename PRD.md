@@ -273,7 +273,7 @@ The v1.1 open question #1 — *"Zalo OA verified-account requirements/cost for e
 
 - Sending any OA message or ZNS requires a **verified OA**, and verification requires **that customer's own business licence (GPKD)**.
 - ZNS costs **300đ per authentication message**, billed on successful delivery, with **no free quota** (full table in §4 F6).
-- Therefore Zalo left the v1 core (D1) and member OTP was dropped from v1 (D2).
+- Therefore Zalo left the v1 core (D1) and member OTP left the default check-in flow (D2). Precisely: OTP is not gone from v1 — it ships as a **Pro** feature in M4 (F2, §7); what it can never be is a step in the free tier's core loop, where a 300đ metered message would break the 0đ constraint.
 
 Full reasoning and the five verification sources are in `DECISIONS.md`. The v1.1 plan to "validate in an M1 spike" is void — there is nothing left to spike, and Zalo is no longer on the critical path.
 

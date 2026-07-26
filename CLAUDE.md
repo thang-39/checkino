@@ -5,14 +5,14 @@ SaaS điểm danh QR + quản lý thẻ hội viên cho các trung tâm nhỏ �
 
 ## Trạng thái
 
-**Chưa có code.** Project hiện chỉ có tài liệu. Đang ở giai đoạn viết lại PRD/PLAN lên v2.
+**Chưa có code.** Project hiện chỉ có tài liệu. Đợt viết lại PRD/PLAN lên v2 **đã xong** —
+việc tiếp theo là khởi tạo monorepo (Bước 6 trong [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md)).
 
 ## Đọc trước khi làm bất cứ việc gì
 
 **[`DECISIONS.md`](DECISIONS.md)** — sổ quyết định kiến trúc & sản phẩm, kèm lý do và số liệu
-kiểm chứng. Đây là nguồn sự thật. `PRD.md` (v2.1), `PLAN.md` (v2.0) và `GRILL-LOG.md` đã đồng bộ
-**D1–D5**; **D6–D10 chưa vào PRD/PLAN** (việc của Bước 5). Khi hai bên mâu thuẫn thì
-`DECISIONS.md` thắng.
+kiểm chứng. Đây là nguồn sự thật. `PRD.md` (v2.2), `PLAN.md` (v2.1) và `GRILL-LOG.md` đã đồng bộ
+**đủ D1–D10**. Khi hai bên mâu thuẫn thì `DECISIONS.md` thắng.
 
 [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) — kế hoạch thi hành việc cập nhật đó,
 kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.

@@ -5,7 +5,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | | |
 |---|---|
 | Tạo | 2026-07-25 |
-| Trạng thái | Bước 0–4 ✅ xong · Bước 5 ⬜ chưa làm (vá 14 mục lệch + D6–D10 vào PRD/PLAN) |
+| Trạng thái | Bước 0–5 ✅ xong — tài liệu đã đồng bộ D1–D10, hết mục lệch. Tiếp theo: **Bước 6, bắt đầu code** (mục cuối file này) |
 
 ---
 
@@ -19,7 +19,7 @@ Tài liệu thi hành. Quyết định nền nằm ở [`../DECISIONS.md`](../DE
 | 2 | Viết lại `PLAN.md` → v2.0 | ✅ 2026-07-25 |
 | 3 | Thêm ghi chú superseded vào `GRILL-LOG.md` (Q6, Q13, Q14) + thêm Q16 | ✅ 2026-07-25 |
 | 4 | Đối chiếu chéo PRD ↔ PLAN — tìm ra 14 mục lệch, chốt D6/D7/D8 | ✅ 2026-07-26 |
-| 5 | Vá 14 mục lệch + D6–D10 vào `PRD.md` (→ v2.2) và `PLAN.md` (→ v2.1) | ⬜ |
+| 5 | Vá 14 mục lệch + D6–D10 vào `PRD.md` (→ v2.2) và `PLAN.md` (→ v2.1) | ✅ 2026-07-26 |
 
 ---
 
@@ -204,6 +204,28 @@ Không có quyết định nào còn treo; đây là việc thi hành.
 | §7 DoD | Tách phần free (thật sự không cần contact) khỏi phần Pro (VietQR xác nhận tay) | **N** |
 
 Sau khi vá xong, chạy lại **năm mục kiểm tra** ở Bước 4 một lượt nữa.
+
+### Kết quả Bước 5 — 2026-07-26
+
+Vá xong cả hai bảng, hai commit riêng: `PRD.md` **v2.2**, `PLAN.md` **v2.1**. Cả 14 mục lệch đã
+đóng. Ba chỗ làm thêm ngoài hai bảng, vì không vá thì tài liệu tự mâu thuẫn:
+
+1. **`DECISIONS.md` D3** còn câu *"mất mạng → hiện mã 6 số cho nhân viên nhập tay"* — D9 vừa xoá
+   đúng câu đó. Đã gạch và trỏ sang D9.
+2. **`PRD.md` §10.1** và **`PLAN.md` §2.2** viết *"member OTP was dropped from v1"* — mâu thuẫn với
+   chính mục **E** vừa vá. Sửa thành: OTP rời **luồng check-in lõi**, vẫn còn ở M4 như tính năng Pro.
+3. **`PLAN.md` §5** mục 3 nói free tier *"unlimited"* — cùng lỗi với mục **J** ở PRD §7. Đã thêm
+   ngưỡng email.
+
+Năm mục kiểm tra chạy lại:
+
+| # | Mục | Kết quả |
+|---|---|---|
+| 1 | `rg "supabase\|next\.js\|OTP"` | ✅ mọi kết quả nằm trong ngữ cảnh "đã bị thay thế" hoặc "gói Pro". `PLAN.md:371` (lệch **E**) đã đóng |
+| 2 | North-star F1→F2 | ✅ vẫn không có bước nào cần GPKD/OA/trả tiền. Bước tạo bộ môn của D7 **bỏ qua được** nên wizard vẫn bốn bước |
+| 3 | Chi phí biến đổi free tier | ✅ 0đ mỗi org; ngưỡng tổng thể (~vài trăm org, hạn mức email) đã ghi ở PRD §7 + §10.2 #4 — lệch **J** đã đóng |
+| 4 | F1–F11 có mặt trong PLAN | ✅ đủ 11/11. Câu *"exactly one milestone"* đã sửa: mỗi feature có một milestone **chủ**, phần Pro/offline tách ra có ghi rõ — lệch **F** đã đóng |
+| 5 | `git log` + `git show 4d227dc:PRD.md` | ✅ 13 commit, bản v1 vẫn mở lại được |
 
 ---
 
