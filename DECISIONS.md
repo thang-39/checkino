@@ -132,7 +132,9 @@ Nhưng email cho **chủ/nhân viên** thì đúng và miễn phí.
 member_device (id, member_id, token_hash, user_agent, created_at, last_seen_at, revoked_at)
 ```
 Lưu **hash** của token, không lưu bản gốc. Tối đa 3 device/member, cái cũ nhất bị đẩy ra.
-Máy dùng chung → nút *"Không phải bạn? Đổi số"*. Mất mạng → hiện mã 6 số cho nhân viên nhập tay.
+Máy dùng chung → nút *"Không phải bạn? Đổi số"*. ~~Mất mạng → hiện mã 6 số cho nhân viên nhập tay.~~
+→ **Superseded bởi [D9](#d9--bỏ-fallback-mã-6-số-ở-q):** mất mạng thì `/q` không mở được nên không
+có mã nào để hiện; đường thoát là nhân viên điểm danh hộ qua `/staff` *(F3)*.
 
 ---
 

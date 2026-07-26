@@ -5,8 +5,8 @@
 | | |
 |---|---|
 | Author | Thang Tran |
-| Date | 2026-07-19 (v1.0/v1.1) · 2026-07-25 (v2.0, v2.1) |
-| Status | Draft v2.1 — 2026-07-25, roster-as-identity gaps patched (F11, upsert import, Sheet write-direction, offline limits) |
+| Date | 2026-07-19 (v1.0/v1.1) · 2026-07-25 (v2.0, v2.1) · 2026-07-26 (v2.2) |
+| Status | Draft v2.2 — 2026-07-26, D6–D10 applied (rankings & trials are free, `program` is its own table, one phone = one member, no 6-digit fallback, `audit_log` in v1) |
 | Companion docs | **`DECISIONS.md` (source of truth for architecture & product decisions — wins on conflict)**, `GRILL-LOG.md` (assumption stress-test), `PLAN.md` (implementation) |
 
 ---
@@ -44,9 +44,15 @@ The `notify` primitive at free tier is served by the **live owner dashboard**, n
 
 ### In scope — v1
 
-**F1. Self-serve onboarding.** Owner signs up with **email + magic link** (F10) → creates org → locations → programs (bộ môn) → **imports the member roster** (CSV upload or paste from Excel; they already keep one) → downloads a printable QR poster per location/program. Target: **signup → first successful check-in < 10 minutes, no human contact** (north-star activation metric) — and the roster import is inside those 10 minutes.
+**F1. Self-serve onboarding.** Owner signs up with **email + magic link** (F10) → creates org → locations → *(optionally)* programs (bộ môn) → **imports the member roster** (CSV upload or paste from Excel; they already keep one) → downloads a printable QR poster per location/program. Target: **signup → first successful check-in < 10 minutes, no human contact** (north-star activation metric) — and the roster import is inside those 10 minutes.
 
 The import step is **mandatory, not optional**: F2 identifies a member by matching their phone number against this org's roster, so an empty roster means nobody can check in. The onboarding wizard must say so, because the failure is silent and confusing otherwise — an owner who prints the QR and scans it themselves, before importing anyone, lands in the F4 trial form rather than a check-in, and concludes the product is broken. Wizard order is therefore: org → scan point → **roster** → QR poster.
+
+**Programs (bộ môn) are a skippable step — that is the condition for not breaking the north-star.** *(`DECISIONS.md` D7)* A program is a first-class entity (its own table, many-to-many with members; a scan point may optionally point at one), because members, entitlement scopes (F5), roster filters (F3) and rankings (F7) all need to reference it independently of *which QR was scanned*. But the four-step wizard above stays four steps:
+
+- The program step can be **skipped entirely**. Skip it and every card and every ranking is org-wide, exactly as before — a single-program center never meets the concept.
+- The **program column in the import file is optional**. A member can belong to several programs; a member with no program is org-wide.
+- Program names in the file that don't exist yet are **listed in the F1 preview** (*"will create 2 new programs: Boxing, Yoga"*) and created only on confirm — same "show before you write" rule as the roster diff below, never silent creation.
 
 **Import is a repeated operation, not a one-off — it is an upsert keyed on the phone number.** Owners re-import at the start of every term, whenever a class is added, whenever they clean up their Excel. Two constraints follow, and both exist because D2 turned the roster into *identity* data rather than reporting data:
 
@@ -73,21 +79,25 @@ Member scans printed QR (QR = a plain URL identifying the scan point)
 - **Device token:** httpOnly cookie, TTL 1 year. The server stores only a **hash** of the token, never the token itself. Max 3 devices per member; the oldest is evicted.
 - **Revoking a token** (member changed or lost their phone, or an anomaly flag needs clearing) is an owner action in **F11**, not something the member can do from `/q`.
 - **Shared device:** "Not you? Switch number" re-runs the phone step.
-- **Network failure fallback:** the page shows a 6-digit code for staff to key in manually.
+- **No network → ask a staff member to check you in via `/staff` (F3).** There is no 6-digit fallback code, and the honest reason is that there is nothing to show it on: `/q` has no service worker by design *(`DECISIONS.md` D4)*, so with no network the page does not open at all. A code would only have covered the narrow case of a page that loaded and then lost connectivity, and it would still have needed to be verifiable by a `/staff` app that may itself be offline. `/staff` already does this job in fewer steps — the staff member types a name, taps once, and it works offline *(D9)*.
 - **Abuse signal:** one phone number binding on two devices within a short window raises an anomaly flag (F9) — it is logged and surfaced, not blocked.
 - **Upgrade path, not v1:** OTP is a **Pro** feature (a ZNS auth message costs 300đ — §4 F6). The better long-term answer is **Zalo Login (OAuth)**, which is not billed per message; it costs only the one-time OA verification.
 
 Why no OTP: it defends against exactly one attack — A entering B's number to check in on B's behalf — whose entire consequence is a distorted attendance ranking. See §6 (identity assurance NFR) for the accepted risk and its ceiling.
 
-**F3. Staff roster check-in (`/staff` — the one surface that is a PWA).** Staff opens today's roster (filter by program), taps names present. Each tap writes to an IndexedDB outbox with a `client_event_id`, the UI ticks immediately, and the batch POSTs when connectivity returns (§6 offline NFR). Covers kids' classes and no-phone members.
+**F3. Staff roster check-in (`/staff` — the one surface that is a PWA).** Staff opens today's roster (filter by program — the filter reads `member_program`, not the scanned QR, per D7), taps names present. Each tap writes to an IndexedDB outbox with a `client_event_id`, the UI ticks immediately, and the batch POSTs when connectivity returns (§6 offline NFR). This is the check-in mode for kids' classes.
+
+**Here the teacher taps a name and never touches a phone number.** Worth stating because §6 fixes one phone number per member (D8), and that could otherwise read as a problem for kids' classes: it is not. Phone numbers matter only at import (F1) and at member self-scan (F2). A class of thirty children is checked in by name.
 
 **Full offline capability is a separate, sequenced piece of work, not part of the first cut of F3.** The outbox above survives a network that drops *while the page is open*; it does not survive a reload. Making `/staff` genuinely offline-capable adds: `@angular/pwa` (manifest + service worker + `ngsw-config.json`), caching today's roster into IndexedDB rather than memory, a no-network boot path, an explicit `SwUpdate` "new version available, reload" bar instead of silent swaps mid-class, and **an iOS install-instruction screen** (see §6). Splitting it out lets staff use roster check-in before offline lands; shipping the outbox alone was rejected as the worst of both worlds, since it *feels* offline-capable and then fails on reload (`DECISIONS.md`, mechanism 3). The three limits that remain even when this is done are in §6 — they are deliberate, not defects.
 
-**F4. New member / trial registration.** Unknown phone scanning QR → registration form (name, phone, program, consent checkbox) → lands in owner's "trial pipeline" list with follow-up status (contacted / converted / lost). Converting a lead into a member happens in **F11**. This is also where an owner's own test scan lands before they import a roster (F1).
+**F4. New member / trial registration — free tier.** Unknown phone scanning QR → registration form (name, phone, program, consent checkbox) → lands in owner's "trial pipeline" list with follow-up status (contacted / converted / lost). Converting a lead into a member happens in **F11**. This is also where an owner's own test scan lands before they import a roster (F1) — which is the second reason it cannot sit behind a paywall: gating it would break onboarding, and onboarding is the north-star *(`DECISIONS.md` D6)*.
 
 **F5. Entitlements (membership cards/packages).**
 `{ type: TIME_BASED | SESSION_PACK | COURSE_TERM | TRIAL | DROP_IN; scope: program(s) | whole org; valid window; session quota; consume policy }`.
-Owner creates plan templates here; **assigning, renewing and freezing a specific member's card happens in F11**. Expiry warnings surfaced at check-in and in owner dashboard.
+The `scope` field references real `program` rows *(D7)*; an org that skipped the program step has org-wide scope only. Owner creates plan templates here; **assigning, renewing and freezing a specific member's card happens in F11**.
+
+**Expiry warning, split across two features so neither claims the other's work:** the **warning shown to the member and staff at the moment of check-in** ("card expires in 3 days", "2 sessions left") is part of F5 — it is computed from the entitlement being consumed. The **list of soon-to-expire cards** the owner reviews proactively is a report and belongs to **F7**. Same underlying data, two different surfaces, delivered in different milestones (PLAN M2 and M3).
 
 **F6. Notifications — live feed free, Zalo is Pro.** *(`DECISIONS.md` D1; Grill Q6)*
 
@@ -107,7 +117,7 @@ Owner creates plan templates here; **assigning, renewing and freezing a specific
   Surcharges: +100đ per CTA button beyond the first, +200đ for an image. Billed per **successfully delivered** message. **There is no free quota.** For comparison, SMS Brandname is 600–1.000đ/message. From 01/01/2026 Zalo renamed ZCA → **ZBS Account** and merged the types under "ZBS Template Message".
 - **Never:** unofficial Zalo group APIs. Official APIs only, in every tier.
 
-**F7. Reports, rankings & data ownership.** Monthly attendance ranking per program/location (the gig's "khen thưởng" list), attendance history per member, expiring-cards list, trial conversion. **CSV export at any tier, including free** (0đ, no external quota). **Near-real-time one-way mirror into the customer's own Google Sheet** (their Drive, their property; monthly archive tabs) is a **Pro** feature — gated on API quota risk at multi-customer scale (§10.2), not on cost. ToS guarantee: cancel anytime, the Sheet and every export stay with the customer. Architecture stance (from the "bridge-only" review): the operational DB is ours — speed, transactions, race-safe dedupe; the customer's Sheet is the always-fresh visible copy. Never the reverse (Grill Q9).
+**F7. Reports, rankings & data ownership.** Monthly attendance ranking per program/location (the gig's "khen thưởng" list — ranked per `program`, not per QR code, which is why D7 made `program` a table), attendance history per member, expiring-cards list *(the proactive list; the at-check-in warning is F5)*, trial conversion. **Rankings and every report listed here are free tier** *(`DECISIONS.md` D6)* — the ranking is the exact job the original gig hired a freelancer to do, and D2's "the only consequence of check-in fraud is a distorted ranking" is empty at the tier most users are on if the ranking isn't there. **CSV export at any tier, including free** (0đ, no external quota). **Near-real-time one-way mirror into the customer's own Google Sheet** (their Drive, their property; monthly archive tabs) is a **Pro** feature — gated on API quota risk at multi-customer scale (§10.2), not on cost. ToS guarantee: cancel anytime, the Sheet and every export stay with the customer. Architecture stance (from the "bridge-only" review): the operational DB is ours — speed, transactions, race-safe dedupe; the customer's Sheet is the always-fresh visible copy. Never the reverse (Grill Q9).
 
 **Write-direction contract — what happens when the owner edits the Sheet.** "One-way" has to say what the other way does, or owners will discover it by losing an afternoon's edits:
 
@@ -157,6 +167,8 @@ Why each of the four is mandatory rather than nice-to-have:
 
 Also here, for completeness of the roster lifecycle: **mark a member inactive** — the only exit path, since import never deletes (F1) — and **add a single member by hand**, for the owner who has one new person and no file.
 
+**Every mutation here is written to an audit log, and so is every import (F1).** *(`DECISIONS.md` D10)* Since D2 the roster is identity data: editing it changes who may walk through the door, so assigning or renewing a card, correcting a phone number, revoking a device token and marking someone inactive all leave a trace — `(org_id, actor, action, entity, human-readable summary, timestamp)`, readable by the owner without tooling. This is v1, not "grow later": with several people sharing `/admin` under different roles (F8), *"who changed my number"* and *"who ended my membership"* need an answer rather than a guess. **Correcting a phone number additionally rejects the change if that number already belongs to another member** — the identity key is unique per org (§6, D8).
+
 **The four ways into the roster, after F11 exists** — deliberately non-overlapping, and F4 carries the common case of a single newcomer:
 
 | Situation | Path | Owner typing |
@@ -168,7 +180,16 @@ Also here, for completeness of the roster lifecycle: **mark a member inactive** 
 
 ### Out of scope — v1 (Grill Q15)
 
-Class scheduling/booking/capacity · payment processing & tuition collection · payroll/PT commissions · belt/grade tracking · homework/lesson reports · hardware (turnstiles, fingerprint) · native iOS/Android apps · unofficial Zalo group posting · multi-language UI (VN-only; EN later) · **SMS/ZNS OTP for members** (Pro upgrade, see F2) · **Zalo as a required dependency** — no flow in the core product may block, degrade, or wait on the customer having a verified OA · **two-way Google Sheet sync** and **managing the roster by typing into the Sheet** (F7) — the roster is authentication data since D2, and it will not live in a file that anyone holding the link can edit with no audit trail; the app is the system of record, the Sheet is a mirror.
+Class scheduling/booking/capacity · payment processing & tuition collection · payroll/PT commissions · belt/grade tracking · homework/lesson reports · hardware (turnstiles, fingerprint) · native iOS/Android apps · unofficial Zalo group posting · multi-language UI (VN-only; EN later) · **members without a phone number** (§6, D8) · **a 6-digit offline fallback code at `/q`** (F2, D9) · **member OTP at the free tier** — note that member OTP itself is *in* v1, as a Pro feature (F2, F6); what is out of scope is putting a metered message in the free tier · **Zalo as a required dependency** — no flow in the core product may block, degrade, or wait on the customer having a verified OA · **two-way Google Sheet sync** and **managing the roster by typing into the Sheet** (F7).
+
+That last one gets its reasons spelled out, in order of strength, because the roster is identity data since D2 — a Sheet is a fine place to *read* it and a bad place to *keep* it:
+
+1. **No permissions.** Anyone with the link can edit. The app has roles (F8) and RLS (§6). And editing the roster is not a reporting mistake — **adding your own phone number to the Sheet is free membership**, since F2 admits whoever matches the roster.
+2. **No data constraints.** A Sheet has no `UNIQUE (org_id, phone_normalized)` (D8), no phone normalization, and no preview-before-write step (F1). Two rows with the same number, or a number with a stray space, are silently accepted and then break check-in.
+3. **Deletion is unrecoverable.** Selecting rows and pressing delete is exactly the failure that the "import never deletes" rule (F1) was written to close. Reopening it through the side door defeats the rule.
+4. **No audit trail worth the name.** Sheets version history exists but is weak and not scoped per-record; the app writes an audit log on every roster mutation (F11, D10).
+
+The app is the system of record, the Sheet is a mirror.
 
 ## 5. Vertical fit matrix (v1 core only)
 
@@ -194,6 +215,9 @@ Same core, four config values — and the notification channel is a tier setting
   2. **The cached roster can be stale.** A roster cached at 8am does not contain a member added at 5pm, and there is no way to learn that offline. The workaround is the owner correcting it afterwards in F11. **Not solved in v1.**
   3. **iOS never offers to install.** Chrome/Android show an install prompt on their own; Safari requires Share → scroll → *"Add to Home Screen"*, and nobody discovers that unaided. → An illustrated instruction screen, shown when Safari-on-iPhone is detected, is part of F3's offline work. Skipping it makes the whole offline effort useless for roughly half the users.
   - Two operational notes: a service worker only runs over **HTTPS** (or `localhost`), and its scope is its own path — registering under `/staff/` leaves `/q` and `/admin` untouched, which is what we want.
+- **One phone number = one member — the fourth accepted limit.** *(`DECISIONS.md` D8)* `UNIQUE (org_id, phone_normalized)` on `member`. The phone number has been the identity key since D2: it keys the F1 import upsert, the F2 lookup at `/q`, and the F11 correction path. Letting one number point at several people forces a new branch into all three — the import wouldn't know whom it is updating, `/q` wouldn't know whom to return. Two consequences, written down so they are not filed as defects:
+  1. **A parent with two children needs two numbers.** The second is usually already available (the other parent's). Rare, and the owner resolves it in F11 without waiting for a feature.
+  2. **Members with no phone number are not supported.** This does *not* affect kids' classes — see F3: the teacher taps names and never touches a number. The escape route, if a real customer ever complains: make the upsert key *(phone + normalized name)* and add a *"which one are you?"* step at `/q`. Not built pre-emptively.
 - **Identity assurance is soft by design in v1.** Member identity rests on a roster match only; there is no OTP *(F2, `DECISIONS.md` D2)*.
   - **Accepted risk:** A enters B's number and checks in on B's behalf.
   - **Consequence ceiling:** a distorted monthly attendance ranking. No money moves and no sensitive data is exposed — the screen shows only "12 sessions left".
@@ -203,18 +227,24 @@ Same core, four config values — and the notification channel is a tier setting
 
 ## 7. Business model
 
-**The free tier has a variable cost of 0đ.** No SMS, no ZNS, no member OTP; owner/staff magic-link email rides a provider's free tier (F10); the live feed is SSE from our own server (F6); CSV export touches no metered API (F7). The only cost of a free org is a slice of one Postgres and one app process — already paid for. **So an unlimited number of free orgs never produces a loss**, and the `≤50 active members` cap below exists as a **monetization boundary, not a cost boundary**. *(`DECISIONS.md` D1)*
+**The free tier has a variable cost of 0đ per org.** No SMS, no ZNS, no member OTP; owner/staff magic-link email rides a provider's free tier (F10); the live feed is SSE from our own server (F6); CSV export touches no metered API (F7). The only cost of a free org is a slice of one Postgres and one app process — already paid for. The `≤50 active members` cap below is therefore a **monetization boundary, not a cost boundary**. *(`DECISIONS.md` D1)*
+
+**Per-org marginal cost is 0đ; the aggregate is 0đ only up to a ceiling, and the ceiling is the email provider.** The earlier phrasing — *"an unlimited number of free orgs never produces a loss"* — was right about unit price and wrong about quotas. Transactional-email free tiers are capped: Resend gives ~3,000 emails/month with a ~100/day ceiling, Brevo ~300/day. At ~2–3 magic links per org per month that is ~1,000 orgs against the monthly cap, but **the daily cap binds first and sign-ins are bursty** (owners sign in on the same weekday evenings), so the practical safe headroom is on the order of **a few hundred free orgs**. Past that, the first paid line item appears — a paid email plan in the tens of USD/month, funded by the paying orgs that arrive long before that many free ones. The number needs measuring rather than guessing (§10.2).
 
 | Tier | Price | Includes |
 |---|---|---|
-| Free | 0đ | 1 location, ≤50 active members, self-scan + roster, live dashboard feed, CSV export |
-| Pro | ~199k VND/location/month | Unlimited members, rankings, trial pipeline, one-way Google Sheets mirror, member OTP, **Zalo OA integration (requires the customer's own verified OA → their GPKD)** |
-| Business | ~499k VND/month | Multi-location dashboard, roles, API access, priority support |
+| Free | 0đ | 1 location, ≤50 active members, self-scan + roster, live dashboard feed, **monthly attendance rankings & all reports (F7)**, **trial pipeline (F4)**, CSV export |
+| Pro | ~199k VND/location/month | **Unlimited members** (the cap lifts), **additional locations + roles (F8)**, one-way Google Sheets mirror, **member OTP → needs the customer's GPKD**, **Zalo OA integration → needs the customer's GPKD** |
+| Business | ~499k VND/month | Cross-location dashboard, API access, priority support |
 | Credits | pass-through | ZNS wallet for parent alerts, billed at the F6 rates (120–300đ/message + surcharges) |
+
+**Rankings and the trial pipeline are free, deliberately** *(`DECISIONS.md` D6)*. A free tier without the monthly ranking is not a reduced version of this product, it is a different product — the ranking is the job the original gig was hiring for (§1). And F4 carries the most common way a member enters the roster (§4, "the four ways in"), so paywalling it caps a free roster at whatever fits in an imported file. The `≤50 members` cap is a clean enough boundary on its own: it grows with the value the customer is getting.
 
 Anchor: 12 months of Pro ≈ half a one-off freelancer build (5–6M). Free tier = growth engine in FB owner groups. Annual plan: pay 10 months, get 12.
 
-**Upgrade journey — and the trap inside it.** Free → Pro activates instantly for everything *except* Zalo. Zalo is a separate, assisted, multi-day step: the customer must obtain or produce a GPKD, verify their OA, and register an app before a single message can be sent. Two consequences: (1) sell Pro on rankings, unlimited members, and Sheets sync — features that switch on immediately — and treat Zalo as a bonus that arrives later; (2) **never make anything in the core loop depend on it** (§4 out of scope). Note that the Sheets line above is a **one-way mirror** — read there, edit in the app (F7).
+**Upgrade journey — and the trap inside it.** Free → Pro activates instantly for everything *except two things: Zalo and member OTP.* Both are blocked behind the same door, and it is worth naming both rather than only Zalo: **member OTP is delivered as a ZNS authentication message (300đ), which also requires the customer's own verified OA, which requires their GPKD** (F6). So the multi-day assisted step — obtain or produce a GPKD, verify the OA, register an app — gates a *pair* of Pro features, not one.
+
+Two consequences: (1) sell Pro on the things that switch on the instant they pay — **unlimited members, extra locations with roles, and the Sheets mirror**; treat Zalo and OTP as bonuses that arrive later. (Rankings and the trial pipeline are no longer part of the pitch: they are free, per D6.) (2) **Never make anything in the core loop depend on either** (§4 out of scope). Note that the Sheets line above is a **one-way mirror** — read there, edit in the app (F7).
 
 **Collection mechanics (VN reality):** Stage 1 (<20 customers) — VietQR bank transfer with org code in the memo, manual admin confirmation, renewal reminders. Stage 2 — PayOS/SePay webhook auto-activates on payment (Stripe is unavailable to VN merchants). Dunning: 7-day grace → soft-lock Pro features only; **check-in and customer data are never locked** (no data hostage — reputation in FB groups is the growth channel). Legal: register a household business (HKD) or LLC for invoicing — many centers require VAT invoices; hire a bookkeeping service (~300–500k/month).
 
@@ -252,6 +282,7 @@ Full reasoning and the five verification sources are in `DECISIONS.md`. The v1.1
 1. **Google Sheets API quota at multi-customer scale** — measure real write rates; write in batches per customer Sheet (gates F7's Sheet mirror to Pro).
 2. **Brand name & domain** — "CheckinHub" is a placeholder.
 3. **Indoor GPS accuracy at a real storefront** — determines the radius threshold for the F9 soft-check layer.
+4. **The email free-tier ceiling — how many free orgs fit inside it** (§7). Needs the real number, not the estimate: measure magic links per org per month during the pilot, and measure the *daily peak*, since the daily cap (Resend ~100/day, Brevo ~300/day) binds before the monthly one. Also worth knowing before it matters: whether one paid email plan (tens of USD/month) is the right answer or whether magic-link sessions should simply live longer, which reduces the send rate at no cost.
 
 ## 11. Changelog
 
@@ -270,3 +301,19 @@ The v1.1 text is preserved in git: `git show 4d227dc:PRD.md`. The reasoning, cos
 ### v2.1 — changes from v2.0
 
 **v2.1 (2026-07-25)** — patched the six roster-as-identity gaps D2 opened, all traceable to one root cause: D2 turned the roster from reporting data into identity data, but F1/F5/F7 were still written as if it were only there to be looked at. Member management is now its own feature (**F11**, spanning jobs that belong to F2/F4/F5); import is an upsert on phone that never deletes and previews before applying (F1); the Google Sheet write-direction contract is explicit — protected ranges, read there, edit in the app (F7); two-way Sheet sync and Sheet-as-roster are out of scope; "PWA" now names only `/staff` and full offline is sequenced separately from F3 (F2, F3); and the three accepted offline limits are written down so they are not later reported as bugs (§6).
+
+### v2.2 — changes from v2.1
+
+**v2.2 (2026-07-26)** applies D6–D10 plus the wording defects found by the PRD ↔ PLAN cross-check. Nothing here is a new decision; the reasoning is in `DECISIONS.md`.
+
+| Change | Where | Decision |
+|---|---|---|
+| Monthly rankings and the trial pipeline moved from Pro to **Free**. Pro now sells on: unlimited members, extra locations + roles, Sheets mirror, member OTP, Zalo | §7 table, F4, F7 | **D6** |
+| Upgrade journey: instant activation *except Zalo* → **except Zalo *and* member OTP** — both need the customer's GPKD, because OTP is a ZNS message | §7 | cross-check **G** |
+| *"Unlimited free orgs never produce a loss"* corrected: per-org cost is 0đ, but the email provider's free tier caps the aggregate at roughly a few hundred free orgs | §7, §10.2 #4 | cross-check **J** |
+| `program` (bộ môn) is a first-class entity, many-to-many with members, optional and skippable; optional import column; new programs listed in the F1 preview | F1, F3, F5, F7 | **D7** |
+| One phone number = one member, `UNIQUE (org_id, phone_normalized)`. *"No-phone members"* removed from F3; the two accepted consequences written down; F11 rejects a duplicate number | §6, F3, F11 | **D8** |
+| The 6-digit offline fallback code at `/q` is **dropped** — with no service worker there is no page to display it on. No network → a staff member checks you in via `/staff` | F2, out of scope | **D9** |
+| Expiry warning split explicitly: **at check-in → F5**, **the proactive list → F7** | F5, F7 | cross-check **M** |
+| Member OTP is no longer listed as out of scope — it is a Pro feature *inside* v1; only "OTP at the free tier" is out | out of scope | cross-check **E** |
+| Every roster mutation and every import writes an **audit log**, in v1. The Sheet-as-roster rejection was rewritten to lead with **no permissions** (editing the Sheet = free membership), then no data constraints, then unrecoverable deletion; audit trail is the fourth reason, not the first | F1, F11, out of scope | **D10** |
