@@ -408,7 +408,7 @@ stories:
     ac:
       - "Gán một gói cho hội viên, gia hạn, đóng băng (tạm dừng) — cả ba từ trang chi tiết hội viên"
       - "Mỗi thao tác ghi audit_log"
-      - "Đóng băng làm gì với cửa sổ hiệu lực → chốt và ghi vào DECISIONS.md nếu docs chưa nói"
+      - "QUYẾT ĐỊNH CẦN CHỐT: đóng băng thẻ thì cửa sổ hiệu lực xử lý thế nào (dừng đếm rồi cộng bù? giữ nguyên ngày hết hạn?) — chốt trong story này và ghi vào DECISIONS.md"
 
   - id: M2-S05
     title: "Dedupe race-safe: unique index + ON CONFLICT + trừ session một transaction (cơ chế 1)"
@@ -492,7 +492,7 @@ stories:
     issue: 30
     ac:
       - "Check-in ngoài giờ mở cửa của scan point bị TỪ CHỐI (đây là chặn cứng duy nhất trong sản phẩm)"
-      - "Chốt và ghi vào DECISIONS.md: định dạng lưu giờ mở cửa, timezone (Asia/Ho_Chi_Minh), qua-nửa-đêm xử lý thế nào, ngày nghỉ/lễ có không"
+      - "QUYẾT ĐỊNH CẦN CHỐT: định dạng lưu giờ mở cửa, timezone (Asia/Ho_Chi_Minh), qua-nửa-đêm xử lý thế nào, ngày nghỉ/lễ có không — chốt trong story này và ghi vào DECISIONS.md"
       - "Thông báo từ chối nói rõ giờ mở cửa, không phải 'lỗi'"
       - "Vì đây là thứ duy nhất khoá được một hội viên hợp lệ ra ngoài → có test cho biên giờ"
 
