@@ -30,7 +30,7 @@ epics:
     title: Design partner + spike còn lại
     refs: ["PLAN.md § M0"]
     exit: "Có một design partner đã cam kết; bán kính GPS đã có số; domain đã mua; đã chốt nhà cung cấp email"
-    issue: null
+    issue: 59
 
   - id: M1
     title: Walking skeleton — toàn bộ happy path onboarding + check-in free tier
@@ -38,13 +38,13 @@ epics:
     exit: |
       1. Demo end-to-end trên điện thoại thật ở một cái cửa thật (self-scan; roster mode là M2)
       2. Import lại file danh sách kỳ trước không mất một ai
-    issue: null
+    issue: 60
 
   - id: M2
     title: Entitlement, dedupe, roster mode, quản lý hội viên
     refs: ["PLAN.md § M2"]
     exit: "Toàn bộ workflow của gig FB gốc chạy được, TRỪ báo cáo tháng, và không có Zalo ở bất cứ đâu"
-    issue: null
+    issue: 61
 
   - id: M3
     title: Offline mức 2 cho /staff + toàn bộ report free
@@ -52,13 +52,13 @@ epics:
     exit: |
       1. Bật airplane mode → reload trang → app vẫn mở, vẫn ghi được điểm danh → nối mạng sync đủ
       2. Design partner #0 đang dùng thật
-    issue: null
+    issue: 62
 
   - id: M4
     title: Billing, PDPL, Zalo (Pro), pilot
     refs: ["PLAN.md § M4"]
     exit: "Có khách hàng trả tiền đầu tiên"
-    issue: null
+    issue: 63
 
 stories:
 
@@ -73,7 +73,7 @@ stories:
     labels: [non-code]
     needs: []
     estimate: 1d
-    issue: null
+    issue: 1
     ac:
       - "Đã thống nhất bằng văn bản (chat cũng được) với chủ gig FB gốc: trả 5–6M hoặc pilot miễn phí"
       - "Đã ghi lại yêu cầu thật của họ vào một file/issue, không phải suy diễn từ PRD"
@@ -86,7 +86,7 @@ stories:
     labels: [non-code, spike]
     needs: []
     estimate: 0.5d
-    issue: null
+    issue: 2
     ac:
       - "Đo ở ≥2 vị trí thật trong nhà (một tầng trệt, một sâu trong nhà/tầng hầm nếu có), ≥5 mẫu mỗi vị trí"
       - "Ghi lại sai số quan sát được và tỉ lệ browser từ chối/không trả về vị trí"
@@ -100,7 +100,7 @@ stories:
     labels: [non-code, infra]
     needs: []
     estimate: 0.5d
-    issue: null
+    issue: 3
     ac:
       - "Đã whois tay checkino.vn / checkino.com / checkino.app và ghi lại cái nào còn trống"
       - "Đã mua ít nhất một domain và trỏ được nameserver"
@@ -113,7 +113,7 @@ stories:
     labels: [non-code, infra]
     needs: [M0-S03]
     estimate: 0.5d
-    issue: null
+    issue: 4
     ac:
       - "Đã chốt Resend hoặc Brevo, ghi lý do vào DECISIONS.md kèm con số cap ngày (100/ngày vs 300/ngày) — cap NGÀY là cái chặn trước, không phải cap tháng"
       - "Sender domain đã verify (SPF + DKIM), gửi thử một mail vào Gmail không vào spam"
@@ -130,7 +130,7 @@ stories:
     labels: [backend, frontend, infra]
     needs: []
     estimate: 1.5d
-    issue: null
+    issue: 5
     ac:
       - "Cây thư mục đúng như DECISIONS.md § D5: backend/ + frontend/ + docker-compose.yml + Dockerfile ở root"
       - "Package Java tạo sẵn 9 module rỗng com.checkino.{org,member,entitlement,checkin,trial,report,notification,auth,shared}"
@@ -146,7 +146,7 @@ stories:
     labels: [db, backend]
     needs: [M1-S01]
     estimate: 1.5d
-    issue: null
+    issue: 6
     ac:
       - "Bảng: org, staff_user, scan_point (program_id NULL được), program, member_program, member, member_device, audit_log"
       - "`UNIQUE (org_id, phone_normalized)` trên member (D8)"
@@ -162,7 +162,7 @@ stories:
     labels: [db, backend, mechanism-2]
     needs: [M1-S02]
     estimate: 1d
-    issue: null
+    issue: 7
     ac:
       - "RLS bật + policy org_isolation trên MỌI bảng có org_id"
       - "Interceptor trong com.checkino.shared set `SET LOCAL app.org_id` ở đầu mỗi transaction"
@@ -176,7 +176,7 @@ stories:
     labels: [backend, test, mechanism-2]
     needs: [M1-S03]
     estimate: 1d
-    issue: null
+    issue: 8
     ac:
       - "Test dùng token org A gọi vào dữ liệu org B trên MỌI endpoint đang có → assert 403 hoặc rỗng"
       - "Test tự phát hiện endpoint mới chưa được phủ (quét controller/route), fail khi thiếu"
@@ -191,7 +191,7 @@ stories:
     labels: [backend, auth]
     needs: [M1-S04, M0-S04]
     estimate: 1.5d
-    issue: null
+    issue: 9
     ac:
       - "Nhập email → nhận link một lần → click → có session cookie; không mật khẩu, không OTP SMS"
       - "Link hết hạn được và dùng một lần (dùng lần hai bị từ chối)"
@@ -205,7 +205,7 @@ stories:
     labels: [backend, auth]
     needs: [M1-S05]
     estimate: 0.5d
-    issue: null
+    issue: 10
     ac:
       - "Ba role tồn tại, staff_user gắn org (+ location cho Manager)"
       - "CHỈ là bộ khung: enforce nhiều-cơ-sở và giới hạn theo role là M4-S10 — đừng xây quá"
@@ -218,7 +218,7 @@ stories:
     labels: [backend, frontend]
     needs: [M1-S06]
     estimate: 1d
-    issue: null
+    issue: 11
     ac:
       - "Thứ tự wizard cố định: org → scan point → (program) → roster → QR poster. Thứ tự này chịu lực, đừng đổi"
       - "scan_point sinh `code` ngẫu nhiên không đoán được, dùng cho URL /q/{code}"
@@ -231,7 +231,7 @@ stories:
     labels: [backend, frontend]
     needs: [M1-S07]
     estimate: 0.5d
-    issue: null
+    issue: 12
     ac:
       - "Bỏ qua được bằng một cú click → mọi thứ chạy phạm vi toàn org, không chặn wizard (D7)"
       - "Bỏ qua rồi vẫn onboarding xong được, không có màn hình nào đòi program"
@@ -244,7 +244,7 @@ stories:
     labels: [backend, frontend]
     needs: [M1-S08]
     estimate: 2d
-    issue: null
+    issue: 13
     ac:
       - "Chuẩn hoá SĐT VN thành một dạng duy nhất (0xx / +84xx / có khoảng trắng / có dấu chấm → cùng một khoá) — có unit test bảng đầu vào"
       - "Preview TRƯỚC khi ghi: 'x mới, y cập nhật, z không đổi' + liệt kê dòng; ghi chỉ khi bấm xác nhận"
@@ -261,7 +261,7 @@ stories:
     labels: [backend]
     needs: [M1-S09]
     estimate: 0.5d
-    issue: null
+    issue: 14
     ac:
       - "Mỗi lần chạy import ghi một dòng audit_log, `summary` chứa số liệu diff dạng người đọc được"
       - "Chủ đọc được audit_log không cần công cụ (có màn hình hoặc ít nhất một endpoint trả JSON dễ đọc)"
@@ -273,7 +273,7 @@ stories:
     labels: [backend]
     needs: [M1-S07]
     estimate: 1d
-    issue: null
+    issue: 15
     ac:
       - "Tải được PDF A4, QR đủ lớn để quét từ ~50cm, có tên cơ sở/bộ môn dạng chữ"
       - "QR chỉ chứa URL /q/{code} dạng text thuần — không phải QR động, không cần app đọc riêng"
@@ -287,7 +287,7 @@ stories:
     labels: [backend, frontend]
     needs: [M1-S09]
     estimate: 2d
-    issue: null
+    issue: 16
     ac:
       - "Server-render bằng Thymeleaf, KHÔNG phải SPA, KHÔNG manifest, KHÔNG service worker (D4 + § 1.1)"
       - "Nhập SĐT → có trong danh sách → bind device token NGAY, không OTP (D2)"
@@ -305,7 +305,7 @@ stories:
     labels: [backend, frontend]
     needs: [M1-S12]
     estimate: 0.5d
-    issue: null
+    issue: 17
     ac:
       - "SĐT không có trong danh sách → form (tên, SĐT, bộ môn, checkbox đồng ý) → ghi vào lead"
       - "Đây là chỗ hạ cánh của cú scan thử của chính chủ — không được trông như lỗi"
@@ -318,7 +318,7 @@ stories:
     labels: [backend, frontend]
     needs: [M1-S12]
     estimate: 1d
-    issue: null
+    issue: 18
     ac:
       - "SseEmitter từ server của mình, chi phí biến đổi 0đ, không dịch vụ realtime bên thứ ba"
       - "Check-in mới hiện lên dashboard trong vài giây mà không cần refresh"
@@ -332,7 +332,7 @@ stories:
     labels: [infra]
     needs: [M1-S01, M0-S03]
     estimate: 1d
-    issue: null
+    issue: 19
     ac:
       - "Fly.io hoặc một VPS + docker compose + Caddy. Không Kubernetes"
       - "HTTPS thật trên domain đã mua — cần cho demo ở cửa thật, và service worker ở M3 bắt buộc phải có HTTPS"
@@ -347,7 +347,7 @@ stories:
     labels: [test, non-code]
     needs: [M1-S10, M1-S11, M1-S12, M1-S13, M1-S14, M1-S15]
     estimate: 0.5d
-    issue: null
+    issue: 20
     ac:
       - "Demo end-to-end trên điện thoại thật, ở một cái cửa thật, in poster thật, quét thật"
       - "Bấm đồng hồ: từ lúc đăng ký tới lúc check-in thành công lần đầu < 10 phút, không ai giúp"
@@ -365,7 +365,7 @@ stories:
     labels: [backend, frontend]
     needs: [M1-S09]
     estimate: 1.5d
-    issue: null
+    issue: 21
     ac:
       - "Tìm theo tên/SĐT, lọc theo bộ môn/trạng thái; trang chi tiết một hội viên"
       - "Làm TRƯỚC F5 và F4 (PLAN.md § M2 nói rõ: xét về tính dùng được thì F11 đi trước) — không có nó thì không có chỗ nào để bấm"
@@ -377,7 +377,7 @@ stories:
     labels: [backend]
     needs: [M2-S01, M1-S10]
     estimate: 0.5d
-    issue: null
+    issue: 22
     ac:
       - "Một interface duy nhất `AuditLog.record(...)` trong com.checkino.shared, các module gọi qua nó"
       - "MỌI handler ghi dữ liệu định danh đều gọi — một dòng mỗi handler"
@@ -390,7 +390,7 @@ stories:
     labels: [db, backend]
     needs: [M1-S02]
     estimate: 1.5d
-    issue: null
+    issue: 23
     ac:
       - "Shape: type (TIME_BASED|SESSION_PACK|COURSE_TERM|TRIAL|DROP_IN), scope (program(s) | toàn org), cửa sổ hiệu lực, session quota, consume policy"
       - "consume policy ONCE_PER_DAY|PER_VISIT|PER_CLASS là DỮ LIỆU, không hardcode theo vertical"
@@ -404,7 +404,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S03, M2-S02]
     estimate: 1d
-    issue: null
+    issue: 24
     ac:
       - "Gán một gói cho hội viên, gia hạn, đóng băng (tạm dừng) — cả ba từ trang chi tiết hội viên"
       - "Mỗi thao tác ghi audit_log"
@@ -417,7 +417,7 @@ stories:
     labels: [db, backend, mechanism-1]
     needs: [M2-S03]
     estimate: 1.5d
-    issue: null
+    issue: 25
     ac:
       - "`UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)` + `INSERT ... ON CONFLICT DO NOTHING RETURNING id`; không có row trả về = đã điểm danh rồi"
       - "TUYỆT ĐỐI không kiểm bằng `if (!exists)` ở tầng app"
@@ -432,7 +432,7 @@ stories:
     labels: [db, backend, mechanism-3]
     needs: [M2-S05]
     estimate: 0.5d
-    issue: null
+    issue: 26
     ac:
       - "Unique index trên client_event_id của checkin_event"
       - "POST lại cùng client_event_id → 200, không tạo event thứ hai, không lỗi cho client"
@@ -446,7 +446,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S05]
     estimate: 0.5d
-    issue: null
+    issue: 27
     ac:
       - "/q hiện 'còn 12 buổi' hoặc 'hết hạn ngày dd/mm' sau khi check-in"
       - "Cảnh báo tại lúc check-in: 'thẻ hết hạn sau 3 ngày', 'còn 2 buổi'"
@@ -459,7 +459,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S02]
     estimate: 1.5d
-    issue: null
+    issue: 28
     ac:
       - "Sửa SĐT: TỪ CHỐI nếu số mới đã thuộc hội viên khác trong org (D8) — lỗi rõ ràng, không nuốt"
       - "Thu hồi device token của một hội viên (máy mới/mất máy/máy dùng chung, và để xoá cờ F9)"
@@ -475,7 +475,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S01, M1-S13]
     estimate: 1d
-    issue: null
+    issue: 29
     ac:
       - "Danh sách lead với trạng thái contacted / converted / lost, đổi được"
       - "Convert = một cú bấm tạo member từ lead (không phải gõ lại), ghi audit_log"
@@ -489,7 +489,7 @@ stories:
     labels: [backend]
     needs: [M2-S05, M1-S07]
     estimate: 1d
-    issue: null
+    issue: 30
     ac:
       - "Check-in ngoài giờ mở cửa của scan point bị TỪ CHỐI (đây là chặn cứng duy nhất trong sản phẩm)"
       - "Chốt và ghi vào DECISIONS.md: định dạng lưu giờ mở cửa, timezone (Asia/Ho_Chi_Minh), qua-nửa-đêm xử lý thế nào, ngày nghỉ/lễ có không"
@@ -503,7 +503,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S05, M0-S02]
     estimate: 1d
-    issue: null
+    issue: 31
     ac:
       - "Ngoài bán kính (số từ M0-S02) hoặc từ chối quyền → VẪN GHI, gắn cờ 'vị trí chưa xác minh'"
       - "KHÔNG chặn cứng trong mọi trường hợp"
@@ -516,7 +516,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S11]
     estimate: 1.5d
-    issue: null
+    issue: 32
     ac:
       - "Năm cờ: một thiết bị nhiều số / một số nhiều thiết bị / di chuyển bất khả thi / chuỗi ngày vô lý (sát mốc thưởng) / vị trí chưa xác minh"
       - "QUYẾT ĐỊNH CẦN CHỐT: 'di chuyển bất khả thi' và 'chuỗi vô lý' là tính toán liên-event/lịch sử, cột cờ trên checkin_event KHÔNG đủ. Chốt chỗ lưu + chạy lúc nào (realtime hay job) và ghi vào DECISIONS.md"
@@ -530,7 +530,7 @@ stories:
     labels: [frontend, mechanism-3]
     needs: [M2-S06]
     estimate: 2d
-    issue: null
+    issue: 33
     ac:
       - "Danh sách hôm nay, lọc theo bộ môn ĐỌC TỪ member_program — không đọc từ QR đã quét (D7)"
       - "Cô giáo tap theo TÊN, không bao giờ thấy hay gõ số điện thoại (D8)"
@@ -545,7 +545,7 @@ stories:
     labels: [backend, frontend, legal]
     needs: [M1-S09]
     estimate: 1d
-    issue: null
+    issue: 34
     ac:
       - "Checkbox đồng ý ở form trial (F4) và ở đường import (chủ xác nhận có cơ sở thu thập)"
       - "Trang chính sách bảo mật công khai, nêu region đang chạy (từ M1-S15) và việc chuyển dữ liệu qua biên giới nếu có"
@@ -563,7 +563,7 @@ stories:
     labels: [frontend, mechanism-3]
     needs: [M2-S13]
     estimate: 0.5d
-    issue: null
+    issue: 35
     ac:
       - "manifest + service worker CHỈ cho /staff. /q không có gì cả, /admin chỉ manifest cho icon"
       - "ngsw-config.json: assetGroups installMode prefetch cho shell, dataGroups cho API"
@@ -577,7 +577,7 @@ stories:
     labels: [frontend, mechanism-3]
     needs: [M3-S01]
     estimate: 0.5d
-    issue: null
+    issue: 36
     ac:
       - "Roster nằm trong IndexedDB, không phải trong memory — F5 lúc offline không mất danh sách"
       - "Boot không mạng: app mở được, hiện roster đã cache, tap vẫn vào outbox"
@@ -591,7 +591,7 @@ stories:
     labels: [frontend, mechanism-3]
     needs: [M3-S01]
     estimate: 0.5d
-    issue: null
+    issue: 37
     ac:
       - "Dùng SwUpdate.versionUpdates → hiện thanh thông báo, người dùng tự bấm tải lại"
       - "TUYỆT ĐỐI không tự đổi bản trong im lặng — sẽ mất các tap còn trong memory giữa giờ học"
@@ -604,7 +604,7 @@ stories:
     labels: [frontend]
     needs: [M3-S01]
     estimate: 0.5d
-    issue: null
+    issue: 38
     ac:
       - "Nhận diện Safari trên iPhone → hiện màn hình hướng dẫn có hình (Share → Add to Home Screen)"
       - "iOS không bao giờ tự mời cài — đây là giới hạn đã chấp nhận, và màn hình này KHÔNG phải tuỳ chọn (PLAN § 6 tính riêng ~½ ngày cho nó)"
@@ -616,7 +616,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S05]
     estimate: 1d
-    issue: null
+    issue: 39
     ac:
       - "Xếp hạng theo tháng, nhóm theo program và theo location"
       - "FREE TIER (D6) — đây chính là việc mà gig gốc thuê làm, và D2 (bỏ OTP) chỉ đứng được khi cái này tồn tại"
@@ -629,7 +629,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S05]
     estimate: 0.5d
-    issue: null
+    issue: 40
     ac:
       - "Từ trang chi tiết hội viên xem được lịch sử điểm danh, có phân trang"
       - "Phụ huynh xem được lịch sử của con ở free tier (thông báo 'con đã tới' bằng Zalo mới là Pro)"
@@ -641,7 +641,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S03]
     estimate: 0.5d
-    issue: null
+    issue: 41
     ac:
       - "Danh sách hội viên có thẻ sắp hết hạn / gần hết buổi, ngưỡng đặt được"
       - "Khác với cảnh báo tại lúc check-in (M2-S07): cái này chủ động, chủ mở ra xem"
@@ -653,7 +653,7 @@ stories:
     labels: [backend, frontend]
     needs: [M2-S09]
     estimate: 0.5d
-    issue: null
+    issue: 42
     ac:
       - "Tỉ lệ lead → converted theo tháng/bộ môn"
 
@@ -664,7 +664,7 @@ stories:
     labels: [backend]
     needs: [M3-S05, M3-S06]
     estimate: 0.5d
-    issue: null
+    issue: 43
     ac:
       - "Export CSV được: roster, lịch sử điểm danh, xếp hạng, thẻ, lead"
       - "Free tier cũng export được (D6) — cam kết 'huỷ lúc nào cũng được, dữ liệu vẫn là của bạn'"
@@ -677,7 +677,7 @@ stories:
     labels: [backend, pro, blocked]
     needs: [M3-S09]
     estimate: 2d
-    issue: null
+    issue: 44
     ac:
       - "Ghi một chiều vào Sheet trong Drive của KHÁCH, tab lưu trữ theo tháng, ghi theo batch"
       - "Tab do app ghi là protected range + dòng cảnh báo ghim: 'Tab này do app ghi. Sửa tay sẽ bị ghi đè.'"
@@ -692,7 +692,7 @@ stories:
     labels: [test, non-code]
     needs: [M3-S02, M3-S03, M3-S04, M3-S05, M3-S09]
     estimate: 0.5d
-    issue: null
+    issue: 45
     ac:
       - "Bật airplane mode → RELOAD trang → app vẫn mở, vẫn tap điểm danh được → nối mạng → sync đủ, không mất tap nào, không nhân đôi"
       - "Làm trên iPhone thật và Android thật, không phải devtools offline mode"
@@ -709,7 +709,7 @@ stories:
     labels: [backend]
     needs: [M2-S01]
     estimate: 1d
-    issue: null
+    issue: 46
     ac:
       - "Đếm hội viên active và chặn vượt 50 ở free tier; chặn cơ sở thứ hai"
       - "QUYẾT ĐỊNH CẦN CHỐT: import preview khi đang ở/sắp vượt cap thì hành vi là gì (chặn cả lượt? nhận tới đủ 50? báo và bắt chọn?) — ghi vào DECISIONS.md"
@@ -723,7 +723,7 @@ stories:
     labels: [backend, frontend]
     needs: [M4-S01]
     estimate: 1.5d
-    issue: null
+    issue: 47
     ac:
       - "Trang nâng cấp hiện VietQR + mã org để ghi vào memo chuyển khoản"
       - "Admin xác nhận tay → mở Pro. Đây là MỘT bước người, và chỉ một (PLAN § 7)"
@@ -737,7 +737,7 @@ stories:
     labels: [backend]
     needs: [M4-S02]
     estimate: 1.5d
-    issue: null
+    issue: 48
     ac:
       - "Webhook khớp giao dịch theo mã org trong memo → tự mở Pro, bỏ bước tay"
       - "Webhook idempotent (nhận lại cùng event không cộng tiền hai lần)"
@@ -750,7 +750,7 @@ stories:
     labels: [backend]
     needs: [M4-S02]
     estimate: 0.5d
-    issue: null
+    issue: 49
     ac:
       - "Quá hạn → 7 ngày ân hạn → khoá mềm tính năng Pro"
       - "CHECK-IN VÀ DỮ LIỆU KHÁCH KHÔNG BAO GIỜ BỊ KHOÁ. Export vẫn chạy"
@@ -763,7 +763,7 @@ stories:
     labels: [backend, frontend, legal]
     needs: [M2-S14]
     estimate: 1.5d
-    issue: null
+    issue: 50
     ac:
       - "Đường yêu cầu xoá dữ liệu, thực thi được và có audit_log"
       - "Đồng ý của phụ huynh cho hội viên vị thành niên (Luật 91/2025/QH15, Nghị định 356/2025)"
@@ -777,7 +777,7 @@ stories:
     labels: [backend, pro]
     needs: [M4-S02]
     estimate: 2d
-    issue: null
+    issue: 51
     ac:
       - "Luồng khách tự nối OA của CHÍNH HỌ + app đã đăng ký trên developers.zalo.me"
       - "Cửa chặn nói rõ ngay từ đầu: OA xác thực cần GPKD của khách — giấy tờ của họ, không phải việc support của mình"
@@ -792,7 +792,7 @@ stories:
     labels: [backend, pro]
     needs: [M4-S06]
     estimate: 1d
-    issue: null
+    issue: 52
     ac:
       - "Digest ngày: số check-in, lead mới, thẻ sắp hết hạn"
       - "Tin nhắn OA theo sự kiện cho hội viên đã follow OA"
@@ -805,7 +805,7 @@ stories:
     labels: [backend, db, pro]
     needs: [M4-S06]
     estimate: 2d
-    issue: null
+    issue: 53
     ac:
       - "Bảng credit_wallet + ledger (nhóm 'grow later' của PLAN § 3.1)"
       - "ZNS 'con đã tới' trừ từ ví trả trước, giá pass-through, tính theo tin GIAO THÀNH CÔNG"
@@ -819,7 +819,7 @@ stories:
     labels: [backend, pro]
     needs: [M4-S06]
     estimate: 1d
-    issue: null
+    issue: 54
     ac:
       - "Bật được theo org: /q gửi OTP ZNS trước khi bind device token"
       - "Cùng cửa GPKD với Zalo → hai tính năng Pro này mở cùng lúc (PRD § 7 'upgrade trap')"
@@ -832,7 +832,7 @@ stories:
     labels: [backend, frontend, pro]
     needs: [M4-S02, M1-S06]
     estimate: 2d
-    issue: null
+    issue: 55
     ac:
       - "Pro: nhiều cơ sở; Manager chỉ thấy cơ sở của mình, Staff chỉ thấy roster"
       - "Business: dashboard xuyên cơ sở"
@@ -846,7 +846,7 @@ stories:
     labels: [infra]
     needs: [M1-S15]
     estimate: 0.5d
-    issue: null
+    issue: 56
     ac:
       - "Status page công khai (dịch vụ miễn phí cũng được)"
       - "Restore thử backup vào một DB trắng và verify số liệu — lần thứ hai, trước khi có khách trả tiền"
@@ -858,7 +858,7 @@ stories:
     labels: [backend]
     needs: [M4-S02]
     estimate: 1d
-    issue: null
+    issue: 57
     ac:
       - "Đo được thời gian từ signup → check-in đầu tiên; báo cáo được tỉ lệ <10 phút (mục tiêu ≥40%)"
       - "Đo p95 round-trip check-in (mục tiêu <2s trên 4G)"
@@ -872,7 +872,7 @@ stories:
     labels: [non-code]
     needs: [M4-S02, M4-S12, M3-S11]
     estimate: 3d
-    issue: null
+    issue: 58
     ac:
       - "Case study từ design partner #0 có số liệu thật, đã đăng vào các group FB chủ trung tâm"
       - "Onboard 5–10 trung tâm, trong đó ≥1 không phải thể thao (ngoại ngữ/gia sư)"

@@ -79,6 +79,33 @@ epics.each do |e|
      "-f description=#{Shellwords.escape(e['title'])} --silent"
 end
 
+# ── đối chiếu với issue đã có trên GitHub ────────────────────────────
+# Nguồn idempotency chính là field `issue:` trong YAML. Nhưng nếu lần chạy trước lỗi giữa
+# đường (issue đã tạo, YAML chưa kịp ghi) thì phải nhận lại được, không thì tạo trùng.
+# Nhận lại bằng tiền tố `[<id>]` trong title.
+existing_issues = {}
+page = 1
+loop do
+  batch = gh_json("repos/#{REPO}/issues?state=all&per_page=100&page=#{page}") or break
+  break if batch.empty?
+  batch.each do |i|
+    next if i['pull_request']
+    if (m = i['title'].match(/\A\[(?:EPIC )?([A-Z0-9-]+)\]/))
+      existing_issues[m[1]] = i['number']
+    end
+  end
+  page += 1
+end
+recovered = 0
+(epics + stories).each do |x|
+  n = existing_issues[x['id']]
+  if n && x['issue'] != n
+    x['issue'] = n
+    recovered += 1
+  end
+end
+puts "✓ nhận lại #{recovered} issue đã tồn tại trên GitHub theo title" if recovered > 0
+
 # ── render body ──────────────────────────────────────────────────────
 HEADER = lambda do |id|
   "<!-- Sinh ra từ docs/STORIES.yml (#{id}). Sửa ở YAML rồi chạy /sync-issues — " \
@@ -133,13 +160,15 @@ end
 def upsert(repo, item, title, body, labels, milestone)
   require 'tempfile'
   f = Tempfile.new('body'); f.write(body); f.flush
-  lbl = labels.map { |l| "--label #{Shellwords.escape(l)}" }.join(' ')
   if item['issue']
+    # `gh issue edit` dùng --add-label, KHÔNG phải --label (khác `gh issue create`).
+    lbl = labels.map { |l| "--add-label #{Shellwords.escape(l)}" }.join(' ')
     puts "~ ##{item['issue']} #{title}"
     sh "gh issue edit #{item['issue']} --repo #{repo} --title #{Shellwords.escape(title)} " \
        "--body-file #{f.path} #{lbl} --milestone #{Shellwords.escape(milestone)}"
     item['issue']
   else
+    lbl = labels.map { |l| "--label #{Shellwords.escape(l)}" }.join(' ')
     puts "+ #{title}"
     return nil if DRY
     url = sh "gh issue create --repo #{repo} --title #{Shellwords.escape(title)} " \
