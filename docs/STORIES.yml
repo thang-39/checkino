@@ -1,0 +1,900 @@
+# Checkino — backlog thi hành
+#
+# ĐÂY LÀ NGUỒN SỰ THẬT DUY NHẤT Ở MỨC VIỆC.
+# Không có file nào khác được chứa chia việc / acceptance criteria / thứ tự phụ thuộc.
+#
+# Phân tầng tài liệu (chi tiết ở README.md):
+#   DECISIONS.md      = tại sao            → thắng mọi tranh chấp
+#   PRD.md            = sản phẩm làm gì    → thắng về hành vi sản phẩm
+#   PLAN.md           = stack + milestone  → thắng về ý định milestone
+#   docs/STORIES.yml  = việc phải làm      → thắng về chia việc  ← file này
+#   GitHub issues     = trạng thái         → render một chiều từ file này, KHÔNG phải nguồn
+#
+# Quy tắc:
+#   - `refs` TRỎ tới mục docs, không sao lại nội dung. Trỏ bằng tên mục, không bằng số dòng.
+#   - `ac` (acceptance criteria) là nội dung MỚI, không có ở docs. Phải kiểm chứng được bằng
+#     một lệnh chạy hoặc một test — không phải mô tả lại scope.
+#   - Story > 2 ngày part-time thì tách.
+#   - Phát hiện quyết định còn thiếu khi làm → ghi ngược vào DECISIONS.md, không quyết ngầm.
+#   - `issue: null` → chưa sync. `/sync-issues` điền số vào đây, nên chạy lại là update.
+#   - Thêm story mới → dùng skill `write-story`, đừng viết tay tuỳ ý.
+
+meta:
+  version: 1
+  updated: 2026-07-28
+  repo: thang-39/checkino
+  # Tổng effort ước lượng: xem mục `note_effort` ở cuối file.
+
+epics:
+  - id: M0
+    title: Design partner + spike còn lại
+    refs: ["PLAN.md § M0"]
+    exit: "Có một design partner đã cam kết; bán kính GPS đã có số; domain đã mua; đã chốt nhà cung cấp email"
+    issue: null
+
+  - id: M1
+    title: Walking skeleton — toàn bộ happy path onboarding + check-in free tier
+    refs: ["PLAN.md § M1", "PRD.md § 4 In scope — v1"]
+    exit: |
+      1. Demo end-to-end trên điện thoại thật ở một cái cửa thật (self-scan; roster mode là M2)
+      2. Import lại file danh sách kỳ trước không mất một ai
+    issue: null
+
+  - id: M2
+    title: Entitlement, dedupe, roster mode, quản lý hội viên
+    refs: ["PLAN.md § M2"]
+    exit: "Toàn bộ workflow của gig FB gốc chạy được, TRỪ báo cáo tháng, và không có Zalo ở bất cứ đâu"
+    issue: null
+
+  - id: M3
+    title: Offline mức 2 cho /staff + toàn bộ report free
+    refs: ["PLAN.md § M3"]
+    exit: |
+      1. Bật airplane mode → reload trang → app vẫn mở, vẫn ghi được điểm danh → nối mạng sync đủ
+      2. Design partner #0 đang dùng thật
+    issue: null
+
+  - id: M4
+    title: Billing, PDPL, Zalo (Pro), pilot
+    refs: ["PLAN.md § M4"]
+    exit: "Có khách hàng trả tiền đầu tiên"
+    issue: null
+
+stories:
+
+  # ══════════════════════════════════════════════════════════════════
+  # M0 — Design partner + spike
+  # ══════════════════════════════════════════════════════════════════
+
+  - id: M0-S01
+    title: "Chốt design partner #0"
+    epic: M0
+    refs: ["PLAN.md § M0", "PLAN.md § 5 Go-to-market"]
+    labels: [non-code]
+    needs: []
+    estimate: 1d
+    issue: null
+    ac:
+      - "Đã thống nhất bằng văn bản (chat cũng được) với chủ gig FB gốc: trả 5–6M hoặc pilot miễn phí"
+      - "Đã ghi lại yêu cầu thật của họ vào một file/issue, không phải suy diễn từ PRD"
+      - "Đã thống nhất sẽ cho testimonial + số liệu để làm case study"
+
+  - id: M0-S02
+    title: "Spike: đo độ chính xác geolocation trong nhà tại cửa hàng thật"
+    epic: M0
+    refs: ["PLAN.md § M0", "PRD.md § 4 F9", "PRD.md § 10.2"]
+    labels: [non-code, spike]
+    needs: []
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Đo ở ≥2 vị trí thật trong nhà (một tầng trệt, một sâu trong nhà/tầng hầm nếu có), ≥5 mẫu mỗi vị trí"
+      - "Ghi lại sai số quan sát được và tỉ lệ browser từ chối/không trả về vị trí"
+      - "Chốt một con số bán kính cho F9 lớp 2 và ghi vào DECISIONS.md"
+      - "Nếu sai số trong nhà lớn đến mức vô dụng → đề xuất cắt hẳn F9 lớp 2 (PLAN.md § 6 cho phép cắt, và phải cắt TRƯỚC khi làm spike thì mới không lãng phí — nên nếu đã làm tới đây thì kết luận phải rõ)"
+
+  - id: M0-S03
+    title: "Whois + mua domain checkino"
+    epic: M0
+    refs: ["DECISIONS.md § D11", "PRD.md § 10.2"]
+    labels: [non-code, infra]
+    needs: []
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Đã whois tay checkino.vn / checkino.com / checkino.app và ghi lại cái nào còn trống"
+      - "Đã mua ít nhất một domain và trỏ được nameserver"
+      - "Nếu cả ba đã bị lấy → mở lại D11 trong DECISIONS.md, không tự chọn tên khác trong im lặng"
+
+  - id: M0-S04
+    title: "Chốt nhà cung cấp email + xác thực sender domain"
+    epic: M0
+    refs: ["PLAN.md § 2.1", "PRD.md § 7", "PRD.md § 10.2"]
+    labels: [non-code, infra]
+    needs: [M0-S03]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Đã chốt Resend hoặc Brevo, ghi lý do vào DECISIONS.md kèm con số cap ngày (100/ngày vs 300/ngày) — cap NGÀY là cái chặn trước, không phải cap tháng"
+      - "Sender domain đã verify (SPF + DKIM), gửi thử một mail vào Gmail không vào spam"
+      - "Đã ghi lại free-tier limit thực tế của gói đã chọn để sau này đo ceiling"
+
+  # ══════════════════════════════════════════════════════════════════
+  # M1 — Walking skeleton
+  # ══════════════════════════════════════════════════════════════════
+
+  - id: M1-S01
+    title: "Scaffold monorepo: backend Spring Boot + Postgres + Flyway, frontend Angular 20"
+    epic: M1
+    refs: ["DECISIONS.md § D5", "PLAN.md § 2.1", "PLAN.md § 2.4", "PLAN.md § 3.3"]
+    labels: [backend, frontend, infra]
+    needs: []
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Cây thư mục đúng như DECISIONS.md § D5: backend/ + frontend/ + docker-compose.yml + Dockerfile ở root"
+      - "Package Java tạo sẵn 9 module rỗng com.checkino.{org,member,entitlement,checkin,trial,report,notification,auth,shared}"
+      - "`docker compose up` lên được Postgres 16; app boot, Flyway chạy migration rỗng thành công"
+      - "Script build: `ng build` → copy vào backend/src/main/resources/static/app/ → `mvn package` ra một jar duy nhất"
+      - "Controller fallback trả index.html cho route client (`/admin/members` load trực tiếp không 404)"
+      - "Chạy `/init` sau khi xong để CLAUDE.md có lệnh build/test/run thật"
+
+  - id: M1-S02
+    title: "Migration V1: schema lõi + audit_log"
+    epic: M1
+    refs: ["PLAN.md § 3.1", "DECISIONS.md § D7", "DECISIONS.md § D8", "DECISIONS.md § D10"]
+    labels: [db, backend]
+    needs: [M1-S01]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Bảng: org, staff_user, scan_point (program_id NULL được), program, member_program, member, member_device, audit_log"
+      - "`UNIQUE (org_id, phone_normalized)` trên member (D8)"
+      - "audit_log có đủ cột (id, org_id, actor_staff_user_id, action, entity_type, entity_id, summary, created_at) — dựng ở M1, không phải grow-later (D10)"
+      - "Có bảng entitlement, checkin_event, lead, notification_outbox ở dạng tối thiểu (cột đầy đủ ở M2)"
+      - "GHI CHÚ trong migration: notification_outbox không có ai ghi/đọc tới M4 — đừng xây sweep sớm"
+      - "`mvn flyway:migrate` chạy sạch trên DB trắng; migration là immutable, sửa thì thêm file mới"
+
+  - id: M1-S03
+    title: "RLS + interceptor SET LOCAL app.org_id (cơ chế 2, lớp 1)"
+    epic: M1
+    refs: ["DECISIONS.md § Ba cơ chế — 2. Cô lập đa tenant", "PRD.md § 6", "PLAN.md § 3.2"]
+    labels: [db, backend, mechanism-2]
+    needs: [M1-S02]
+    estimate: 1d
+    issue: null
+    ac:
+      - "RLS bật + policy org_isolation trên MỌI bảng có org_id"
+      - "Interceptor trong com.checkino.shared set `SET LOCAL app.org_id` ở đầu mỗi transaction"
+      - "Query khi CHƯA set app.org_id trả về rỗng — không phải trả toàn bộ, không phải nổ exception"
+      - "DB user của app không có BYPASSRLS"
+
+  - id: M1-S04
+    title: "Bộ test cô lập cross-tenant + quy tắc CI (cơ chế 2, lớp 2)"
+    epic: M1
+    refs: ["DECISIONS.md § Ba cơ chế — 2. Cô lập đa tenant", "PRD.md § 6", "PLAN.md § 6"]
+    labels: [backend, test, mechanism-2]
+    needs: [M1-S03]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Test dùng token org A gọi vào dữ liệu org B trên MỌI endpoint đang có → assert 403 hoặc rỗng"
+      - "Test tự phát hiện endpoint mới chưa được phủ (quét controller/route), fail khi thiếu"
+      - "Chạy trong CI, không phải chạy tay"
+      - "Ghi vào CLAUDE.md: 'endpoint mới không có test cross-tenant là chưa done'"
+      - "Story này làm TRƯỚC mọi feature — không phải làm sau (DECISIONS.md nói rõ)"
+
+  - id: M1-S05
+    title: "F10 — đăng nhập magic link cho chủ/nhân viên"
+    epic: M1
+    refs: ["PRD.md § 4 F10", "DECISIONS.md § D3"]
+    labels: [backend, auth]
+    needs: [M1-S04, M0-S04]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Nhập email → nhận link một lần → click → có session cookie; không mật khẩu, không OTP SMS"
+      - "Link hết hạn được và dùng một lần (dùng lần hai bị từ chối)"
+      - "Session cookie httpOnly + secure; TTL đủ dài để không phải gửi mail liên tục (liên quan cap ngày ở M0-S04)"
+      - "Hội viên KHÔNG dùng đường này (D3) — không có form email nào ở /q"
+
+  - id: M1-S06
+    title: "F8 — bộ khung phân quyền Owner/Manager/Staff"
+    epic: M1
+    refs: ["PRD.md § 4 F8", "PLAN.md § 4 Feature-to-milestone map"]
+    labels: [backend, auth]
+    needs: [M1-S05]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Ba role tồn tại, staff_user gắn org (+ location cho Manager)"
+      - "CHỈ là bộ khung: enforce nhiều-cơ-sở và giới hạn theo role là M4-S10 — đừng xây quá"
+      - "Có test: Staff không gọi được endpoint chỉ dành cho Owner"
+
+  - id: M1-S07
+    title: "F1 wizard bước 1–2: tạo org + scan point"
+    epic: M1
+    refs: ["PRD.md § 4 F1"]
+    labels: [backend, frontend]
+    needs: [M1-S06]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Thứ tự wizard cố định: org → scan point → (program) → roster → QR poster. Thứ tự này chịu lực, đừng đổi"
+      - "scan_point sinh `code` ngẫu nhiên không đoán được, dùng cho URL /q/{code}"
+      - "scan_point có giờ mở cửa (nhập ở đây, enforce ở M2-S10) — kèm spec timezone rõ ràng"
+
+  - id: M1-S08
+    title: "F1 wizard bước 3: program (bỏ qua được)"
+    epic: M1
+    refs: ["DECISIONS.md § D7", "PRD.md § 4 F1"]
+    labels: [backend, frontend]
+    needs: [M1-S07]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Bỏ qua được bằng một cú click → mọi thứ chạy phạm vi toàn org, không chặn wizard (D7)"
+      - "Bỏ qua rồi vẫn onboarding xong được, không có màn hình nào đòi program"
+      - "Có test đường 'bỏ qua' — đây là đường mặc định, phải xanh"
+
+  - id: M1-S09
+    title: "F1 — chuẩn hoá SĐT + import roster upsert có preview"
+    epic: M1
+    refs: ["PRD.md § 4 F1", "DECISIONS.md § D8", "PRD.md § Out of scope — v1"]
+    labels: [backend, frontend]
+    needs: [M1-S08]
+    estimate: 2d
+    issue: null
+    ac:
+      - "Chuẩn hoá SĐT VN thành một dạng duy nhất (0xx / +84xx / có khoảng trắng / có dấu chấm → cùng một khoá) — có unit test bảng đầu vào"
+      - "Preview TRƯỚC khi ghi: 'x mới, y cập nhật, z không đổi' + liệt kê dòng; ghi chỉ khi bấm xác nhận"
+      - "Upsert theo phone_normalized. KHÔNG BAO GIỜ xoá: hội viên vắng mặt trong file để nguyên"
+      - "Dòng lỗi (SĐT không parse được, trùng trong cùng file) được liệt kê ra và bỏ qua — không im lặng bỏ"
+      - "Tên program mới hiện trong preview ('sẽ tạo 2 bộ môn mới: Boxing, Yoga'), chỉ tạo khi xác nhận (D7)"
+      - "QUYẾT ĐỊNH CẦN CHỐT: PRD § 4 F1 hứa 'CSV hoặc paste từ Excel' rồi không nhắc lại. Chốt trong story này là một chế độ hay hai, và ghi vào DECISIONS.md"
+      - "Wizard nói rõ import là BẮT BUỘC — danh sách rỗng thì không ai check-in được, và cú scan thử của chính chủ sẽ rơi vào form trial khiến họ tưởng app hỏng"
+
+  - id: M1-S10
+    title: "F1 — ghi audit_log cho mỗi lần import"
+    epic: M1
+    refs: ["DECISIONS.md § D10", "PRD.md § 4 F11"]
+    labels: [backend]
+    needs: [M1-S09]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Mỗi lần chạy import ghi một dòng audit_log, `summary` chứa số liệu diff dạng người đọc được"
+      - "Chủ đọc được audit_log không cần công cụ (có màn hình hoặc ít nhất một endpoint trả JSON dễ đọc)"
+
+  - id: M1-S11
+    title: "F1 — QR poster PDF in được, theo cơ sở và theo bộ môn"
+    epic: M1
+    refs: ["PRD.md § 4 F1", "PLAN.md § M1"]
+    labels: [backend]
+    needs: [M1-S07]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Tải được PDF A4, QR đủ lớn để quét từ ~50cm, có tên cơ sở/bộ môn dạng chữ"
+      - "QR chỉ chứa URL /q/{code} dạng text thuần — không phải QR động, không cần app đọc riêng"
+      - "Sinh được một poster cho mỗi scan point (và mỗi program nếu có)"
+      - "In thử thật một tờ và quét thử bằng camera mặc định của điện thoại"
+
+  - id: M1-S12
+    title: "F2 — /q/{code} Thymeleaf: nhập SĐT → khớp → bind device token → ghi check-in"
+    epic: M1
+    refs: ["PRD.md § 4 F2", "DECISIONS.md § D2", "DECISIONS.md § D3", "DECISIONS.md § D9", "PLAN.md § 1.2"]
+    labels: [backend, frontend]
+    needs: [M1-S09]
+    estimate: 2d
+    issue: null
+    ac:
+      - "Server-render bằng Thymeleaf, KHÔNG phải SPA, KHÔNG manifest, KHÔNG service worker (D4 + § 1.1)"
+      - "Nhập SĐT → có trong danh sách → bind device token NGAY, không OTP (D2)"
+      - "member_device: chỉ lưu hash token, cookie httpOnly TTL 1 năm, tối đa 3 thiết bị/hội viên, quá thì đẩy cái cũ nhất ra"
+      - "Lần scan sau trên cùng thiết bị nhận ra ngay, không phải nhập lại SĐT"
+      - "Có link 'Không phải bạn? Đổi số' cho máy dùng chung"
+      - "KHÔNG có mã 6 số fallback (D9) — mất mạng thì /q không mở được, nên chẳng có mã nào để hiện"
+      - "Round-trip check-in < 2s trên 4G (PRD § 6) — đo thật một lần, không đoán"
+      - "Việc trừ session và dedupe race-safe là M2-S05; ở đây chỉ cần ghi được event"
+
+  - id: M1-S13
+    title: "F4 tối thiểu — số lạ dẫn tới form đăng ký thử"
+    epic: M1
+    refs: ["PRD.md § 4 F4", "DECISIONS.md § D6"]
+    labels: [backend, frontend]
+    needs: [M1-S12]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "SĐT không có trong danh sách → form (tên, SĐT, bộ môn, checkbox đồng ý) → ghi vào lead"
+      - "Đây là chỗ hạ cánh của cú scan thử của chính chủ — không được trông như lỗi"
+      - "Free tier (D6), không paywall. Pipeline contacted/converted/lost là M2-S09"
+
+  - id: M1-S14
+    title: "F6 free tier — live feed check-in trên dashboard chủ (SSE)"
+    epic: M1
+    refs: ["PRD.md § 4 F6", "DECISIONS.md § D1", "PLAN.md § 2.1"]
+    labels: [backend, frontend]
+    needs: [M1-S12]
+    estimate: 1d
+    issue: null
+    ac:
+      - "SseEmitter từ server của mình, chi phí biến đổi 0đ, không dịch vụ realtime bên thứ ba"
+      - "Check-in mới hiện lên dashboard trong vài giây mà không cần refresh"
+      - "Free tier không gửi tin nhắn cho ai cả — đây là toàn bộ 'notify' của free tier"
+      - "SSE có scope theo org (đi qua RLS, không rò sang org khác) — thêm case vào M1-S04"
+
+  - id: M1-S15
+    title: "Deploy HTTPS + backup ngày"
+    epic: M1
+    refs: ["PLAN.md § 2.1", "PRD.md § 6 Availability"]
+    labels: [infra]
+    needs: [M1-S01, M0-S03]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Fly.io hoặc một VPS + docker compose + Caddy. Không Kubernetes"
+      - "HTTPS thật trên domain đã mua — cần cho demo ở cửa thật, và service worker ở M3 bắt buộc phải có HTTPS"
+      - "pg_dump tự động hàng ngày, có retention, và ĐÃ RESTORE THỬ một lần thành công"
+      - "Ghi lại region đang chạy để nêu trong privacy policy (M2-S14)"
+      - "PRD § 6 yêu cầu backup ngày nhưng PLAN không gán milestone nào — story này lấp chỗ đó"
+
+  - id: M1-S16
+    title: "Xác minh exit criteria M1"
+    epic: M1
+    refs: ["PLAN.md § M1"]
+    labels: [test, non-code]
+    needs: [M1-S10, M1-S11, M1-S12, M1-S13, M1-S14, M1-S15]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Demo end-to-end trên điện thoại thật, ở một cái cửa thật, in poster thật, quét thật"
+      - "Bấm đồng hồ: từ lúc đăng ký tới lúc check-in thành công lần đầu < 10 phút, không ai giúp"
+      - "Import lại file danh sách của kỳ trước → không mất một hội viên nào (kiểm bằng đếm trước/sau)"
+      - "Không xanh thì không mở M2 — ghi lại cái gì hỏng"
+
+  # ══════════════════════════════════════════════════════════════════
+  # M2 — Entitlement, dedupe, roster mode, quản lý hội viên
+  # ══════════════════════════════════════════════════════════════════
+
+  - id: M2-S01
+    title: "F11 — danh sách hội viên tìm/lọc được + trang chi tiết"
+    epic: M2
+    refs: ["PRD.md § 4 F11", "PLAN.md § M2"]
+    labels: [backend, frontend]
+    needs: [M1-S09]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Tìm theo tên/SĐT, lọc theo bộ môn/trạng thái; trang chi tiết một hội viên"
+      - "Làm TRƯỚC F5 và F4 (PLAN.md § M2 nói rõ: xét về tính dùng được thì F11 đi trước) — không có nó thì không có chỗ nào để bấm"
+
+  - id: M2-S02
+    title: "AuditLog.record trong shared/ + gắn vào mọi mutation"
+    epic: M2
+    refs: ["DECISIONS.md § D10", "PLAN.md § 3.3", "PRD.md § 4 F11"]
+    labels: [backend]
+    needs: [M2-S01, M1-S10]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Một interface duy nhất `AuditLog.record(...)` trong com.checkino.shared, các module gọi qua nó"
+      - "MỌI handler ghi dữ liệu định danh đều gọi — một dòng mỗi handler"
+      - "Có test: gọi endpoint sửa hội viên → đúng một dòng audit_log mới, summary người đọc hiểu"
+
+  - id: M2-S03
+    title: "F5 — model entitlement + consume policy"
+    epic: M2
+    refs: ["PRD.md § 4 F5", "PLAN.md § 3.1", "PLAN.md § 3.2", "DECISIONS.md § D7"]
+    labels: [db, backend]
+    needs: [M1-S02]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Shape: type (TIME_BASED|SESSION_PACK|COURSE_TERM|TRIAL|DROP_IN), scope (program(s) | toàn org), cửa sổ hiệu lực, session quota, consume policy"
+      - "consume policy ONCE_PER_DAY|PER_VISIT|PER_CLASS là DỮ LIỆU, không hardcode theo vertical"
+      - "scope trỏ tới bảng program thật (D7); org bỏ qua bộ môn thì chỉ có scope toàn org"
+      - "Story này là template gói; gán/gia hạn cho một hội viên cụ thể là M2-S04"
+
+  - id: M2-S04
+    title: "F11 — gán / gia hạn / đóng băng thẻ của một hội viên"
+    epic: M2
+    refs: ["PRD.md § 4 F11", "PRD.md § 4 F5"]
+    labels: [backend, frontend]
+    needs: [M2-S03, M2-S02]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Gán một gói cho hội viên, gia hạn, đóng băng (tạm dừng) — cả ba từ trang chi tiết hội viên"
+      - "Mỗi thao tác ghi audit_log"
+      - "Đóng băng làm gì với cửa sổ hiệu lực → chốt và ghi vào DECISIONS.md nếu docs chưa nói"
+
+  - id: M2-S05
+    title: "Dedupe race-safe: unique index + ON CONFLICT + trừ session một transaction (cơ chế 1)"
+    epic: M2
+    refs: ["DECISIONS.md § Ba cơ chế — 1. Dedupe race-safe", "PLAN.md § 3.2", "PRD.md § 6"]
+    labels: [db, backend, mechanism-1]
+    needs: [M2-S03]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "`UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)` + `INSERT ... ON CONFLICT DO NOTHING RETURNING id`; không có row trả về = đã điểm danh rồi"
+      - "TUYỆT ĐỐI không kiểm bằng `if (!exists)` ở tầng app"
+      - "dedupe_bucket dẫn xuất từ consume policy: ONCE_PER_DAY → ngày (Asia/Ho_Chi_Minh); PER_VISIT → UUID ngẫu nhiên; PER_CLASS → 'ngày#slot'"
+      - "Insert + trừ session trong MỘT transaction; `UPDATE ... WHERE sessions_used < session_quota`, affected rows = 0 → rollback"
+      - "Test Testcontainers bắn N request đồng thời cùng member+scan point → đúng 1 event, session trừ đúng 1"
+
+  - id: M2-S06
+    title: "Unique index client_event_id — idempotency phía server (cơ chế 3, nửa server)"
+    epic: M2
+    refs: ["DECISIONS.md § Ba cơ chế — 3. Roster offline", "PLAN.md § 3.1"]
+    labels: [db, backend, mechanism-3]
+    needs: [M2-S05]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Unique index trên client_event_id của checkin_event"
+      - "POST lại cùng client_event_id → 200, không tạo event thứ hai, không lỗi cho client"
+      - "Test gửi cùng batch hai lần → số event không đổi"
+      - "PLAN có cột client_event_id từ M1 nhưng không có story nào tạo index này — story này lấp chỗ đó"
+
+  - id: M2-S07
+    title: "F5 — hiện hiệu lực còn lại + cảnh báo hết hạn tại lúc check-in"
+    epic: M2
+    refs: ["PRD.md § 4 F5", "PRD.md § 4 F2"]
+    labels: [backend, frontend]
+    needs: [M2-S05]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "/q hiện 'còn 12 buổi' hoặc 'hết hạn ngày dd/mm' sau khi check-in"
+      - "Cảnh báo tại lúc check-in: 'thẻ hết hạn sau 3 ngày', 'còn 2 buổi'"
+      - "Danh sách CHỦ ĐỘNG các thẻ sắp hết hạn là M3-S07, không phải story này"
+
+  - id: M2-S08
+    title: "F11 — sửa SĐT sai, thu hồi device token, mark inactive, thêm tay, sửa bộ môn"
+    epic: M2
+    refs: ["PRD.md § 4 F11", "DECISIONS.md § D8", "DECISIONS.md § D3"]
+    labels: [backend, frontend]
+    needs: [M2-S02]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Sửa SĐT: TỪ CHỐI nếu số mới đã thuộc hội viên khác trong org (D8) — lỗi rõ ràng, không nuốt"
+      - "Thu hồi device token của một hội viên (máy mới/mất máy/máy dùng chung, và để xoá cờ F9)"
+      - "Mark inactive — đây là đường ra DUY NHẤT, vì import không bao giờ xoá"
+      - "Thêm một hội viên bằng tay"
+      - "Sửa member_program của một hội viên"
+      - "Cả năm thao tác ghi audit_log"
+
+  - id: M2-S09
+    title: "F4 — trial pipeline + chuyển lead thành hội viên"
+    epic: M2
+    refs: ["PRD.md § 4 F4", "DECISIONS.md § D6"]
+    labels: [backend, frontend]
+    needs: [M2-S01, M1-S13]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Danh sách lead với trạng thái contacted / converted / lost, đổi được"
+      - "Convert = một cú bấm tạo member từ lead (không phải gõ lại), ghi audit_log"
+      - "Convert phải tôn trọng UNIQUE (org_id, phone_normalized) — trùng thì báo rõ"
+      - "Free tier (D6)"
+
+  - id: M2-S10
+    title: "F9 lớp 1 — chặn cứng theo giờ mở cửa (+ chốt spec timezone)"
+    epic: M2
+    refs: ["PRD.md § 4 F9", "PLAN.md § M2"]
+    labels: [backend]
+    needs: [M2-S05, M1-S07]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Check-in ngoài giờ mở cửa của scan point bị TỪ CHỐI (đây là chặn cứng duy nhất trong sản phẩm)"
+      - "Chốt và ghi vào DECISIONS.md: định dạng lưu giờ mở cửa, timezone (Asia/Ho_Chi_Minh), qua-nửa-đêm xử lý thế nào, ngày nghỉ/lễ có không"
+      - "Thông báo từ chối nói rõ giờ mở cửa, không phải 'lỗi'"
+      - "Vì đây là thứ duy nhất khoá được một hội viên hợp lệ ra ngoài → có test cho biên giờ"
+
+  - id: M2-S11
+    title: "F9 lớp 2 — GPS soft-check, không chặn"
+    epic: M2
+    refs: ["PRD.md § 4 F9", "PLAN.md § 6"]
+    labels: [backend, frontend]
+    needs: [M2-S05, M0-S02]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Ngoài bán kính (số từ M0-S02) hoặc từ chối quyền → VẪN GHI, gắn cờ 'vị trí chưa xác minh'"
+      - "KHÔNG chặn cứng trong mọi trường hợp"
+      - "Nếu M0-S02 kết luận GPS trong nhà vô dụng → đóng story này là 'cắt' theo PLAN § 6, không làm nửa vời"
+
+  - id: M2-S12
+    title: "F9 lớp 3 — năm cờ bất thường + danh sách review"
+    epic: M2
+    refs: ["PRD.md § 4 F9", "PRD.md § 8"]
+    labels: [backend, frontend]
+    needs: [M2-S11]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Năm cờ: một thiết bị nhiều số / một số nhiều thiết bị / di chuyển bất khả thi / chuỗi ngày vô lý (sát mốc thưởng) / vị trí chưa xác minh"
+      - "QUYẾT ĐỊNH CẦN CHỐT: 'di chuyển bất khả thi' và 'chuỗi vô lý' là tính toán liên-event/lịch sử, cột cờ trên checkin_event KHÔNG đủ. Chốt chỗ lưu + chạy lúc nào (realtime hay job) và ghi vào DECISIONS.md"
+      - "Danh sách review để chủ duyệt nhanh trước khi phát thưởng tháng"
+      - "Gắn cờ, KHÔNG chặn (PRD § 6: rủi ro định danh là chấp nhận có ý thức)"
+
+  - id: M2-S13
+    title: "F3 — /staff Angular: danh sách hôm nay + lọc bộ môn + outbox IndexedDB"
+    epic: M2
+    refs: ["PRD.md § 4 F3", "DECISIONS.md § Ba cơ chế — 3. Roster offline", "DECISIONS.md § D7", "DECISIONS.md § D8"]
+    labels: [frontend, mechanism-3]
+    needs: [M2-S06]
+    estimate: 2d
+    issue: null
+    ac:
+      - "Danh sách hôm nay, lọc theo bộ môn ĐỌC TỪ member_program — không đọc từ QR đã quét (D7)"
+      - "Cô giáo tap theo TÊN, không bao giờ thấy hay gõ số điện thoại (D8)"
+      - "Tap → tick lạc quan ngay + đẩy vào outbox IndexedDB với client_event_id (uuid)"
+      - "Nối mạng → batch POST; server dedupe theo unique index ở M2-S06"
+      - "CHƯA có service worker ở story này — mất mạng rồi F5 là app chết, và đó là lý do M3 tồn tại. Đừng hứa offline ở đây"
+
+  - id: M2-S14
+    title: "PDPL tối thiểu — checkbox đồng ý + trang chính sách bảo mật"
+    epic: M2
+    refs: ["PRD.md § 6 (Privacy/PDPL)", "PRD.md § 4 F4"]
+    labels: [backend, frontend, legal]
+    needs: [M1-S09]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Checkbox đồng ý ở form trial (F4) và ở đường import (chủ xác nhận có cơ sở thu thập)"
+      - "Trang chính sách bảo mật công khai, nêu region đang chạy (từ M1-S15) và việc chuyển dữ liệu qua biên giới nếu có"
+      - "LÝ DO KÉO VỀ M2: PRD § 6 (Luật 91/2025/QH15) đòi consent tại lúc đăng ký, nhưng PLAN đặt trang PDPL ở M4 — trong khi F4 thu dữ liệu trẻ con từ M2 và design partner dùng thật từ M3. Không thể để trống tới M4"
+      - "Deletion request + parental consent đầy đủ vẫn ở M4-S05"
+
+  # ══════════════════════════════════════════════════════════════════
+  # M3 — Offline mức 2 + report
+  # ══════════════════════════════════════════════════════════════════
+
+  - id: M3-S01
+    title: "ng add @angular/pwa + ngsw-config.json, scope /staff/"
+    epic: M3
+    refs: ["DECISIONS.md § Ba cơ chế — 3. Roster offline", "PLAN.md § 1.1", "PLAN.md § M3"]
+    labels: [frontend, mechanism-3]
+    needs: [M2-S13]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "manifest + service worker CHỈ cho /staff. /q không có gì cả, /admin chỉ manifest cho icon"
+      - "ngsw-config.json: assetGroups installMode prefetch cho shell, dataGroups cho API"
+      - "Scope service worker giới hạn ở /staff/ để không đụng /q và /admin"
+      - "display: standalone; cài được trên Android thật"
+
+  - id: M3-S02
+    title: "Danh sách roster vào IndexedDB + đường boot không mạng"
+    epic: M3
+    refs: ["DECISIONS.md § Ba cơ chế — 3. Roster offline", "PRD.md § 6"]
+    labels: [frontend, mechanism-3]
+    needs: [M3-S01]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Roster nằm trong IndexedDB, không phải trong memory — F5 lúc offline không mất danh sách"
+      - "Boot không mạng: app mở được, hiện roster đã cache, tap vẫn vào outbox"
+      - "Giới hạn đã chấp nhận, phải hiện cho người dùng thấy: danh sách cache có thể cũ (v1 không giải quyết), lần chạy đầu bắt buộc phải có mạng"
+      - "Onboarding nói rõ: 'mở app một lần ở nơi có mạng, trước giờ lên lớp'"
+
+  - id: M3-S03
+    title: "SwUpdate — thanh 'có bản mới, tải lại' hiện rõ"
+    epic: M3
+    refs: ["DECISIONS.md § Ba cơ chế — 3. Roster offline", "PLAN.md § M3"]
+    labels: [frontend, mechanism-3]
+    needs: [M3-S01]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Dùng SwUpdate.versionUpdates → hiện thanh thông báo, người dùng tự bấm tải lại"
+      - "TUYỆT ĐỐI không tự đổi bản trong im lặng — sẽ mất các tap còn trong memory giữa giờ học"
+      - "Thử thật: deploy bản mới trong lúc đang mở app → thấy thanh, không thấy mất dữ liệu"
+
+  - id: M3-S04
+    title: "Màn hình hướng dẫn cài trên iOS"
+    epic: M3
+    refs: ["PRD.md § 6", "PLAN.md § 6"]
+    labels: [frontend]
+    needs: [M3-S01]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Nhận diện Safari trên iPhone → hiện màn hình hướng dẫn có hình (Share → Add to Home Screen)"
+      - "iOS không bao giờ tự mời cài — đây là giới hạn đã chấp nhận, và màn hình này KHÔNG phải tuỳ chọn (PLAN § 6 tính riêng ~½ ngày cho nó)"
+
+  - id: M3-S05
+    title: "F7 — xếp hạng điểm danh tháng theo bộ môn và cơ sở"
+    epic: M3
+    refs: ["PRD.md § 4 F7", "DECISIONS.md § D6"]
+    labels: [backend, frontend]
+    needs: [M2-S05]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Xếp hạng theo tháng, nhóm theo program và theo location"
+      - "FREE TIER (D6) — đây chính là việc mà gig gốc thuê làm, và D2 (bỏ OTP) chỉ đứng được khi cái này tồn tại"
+      - "Chủ xem được và duyệt cùng danh sách cờ bất thường (M2-S12) trước khi phát thưởng"
+
+  - id: M3-S06
+    title: "F7 — lịch sử điểm danh theo từng hội viên"
+    epic: M3
+    refs: ["PRD.md § 4 F7"]
+    labels: [backend, frontend]
+    needs: [M2-S05]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Từ trang chi tiết hội viên xem được lịch sử điểm danh, có phân trang"
+      - "Phụ huynh xem được lịch sử của con ở free tier (thông báo 'con đã tới' bằng Zalo mới là Pro)"
+
+  - id: M3-S07
+    title: "F7 — danh sách chủ động các thẻ sắp hết hạn"
+    epic: M3
+    refs: ["PRD.md § 4 F7", "PRD.md § 4 F5"]
+    labels: [backend, frontend]
+    needs: [M2-S03]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Danh sách hội viên có thẻ sắp hết hạn / gần hết buổi, ngưỡng đặt được"
+      - "Khác với cảnh báo tại lúc check-in (M2-S07): cái này chủ động, chủ mở ra xem"
+
+  - id: M3-S08
+    title: "F7 — báo cáo chuyển đổi trial"
+    epic: M3
+    refs: ["PRD.md § 4 F7", "PRD.md § 4 F4"]
+    labels: [backend, frontend]
+    needs: [M2-S09]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Tỉ lệ lead → converted theo tháng/bộ môn"
+
+  - id: M3-S09
+    title: "F7 — CSV export mọi báo cáo, ở mọi tier kể cả free"
+    epic: M3
+    refs: ["PRD.md § 4 F7", "DECISIONS.md § D6"]
+    labels: [backend]
+    needs: [M3-S05, M3-S06]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Export CSV được: roster, lịch sử điểm danh, xếp hạng, thẻ, lead"
+      - "Free tier cũng export được (D6) — cam kết 'huỷ lúc nào cũng được, dữ liệu vẫn là của bạn'"
+      - "CSV mở bằng Excel tiếng Việt không lỗi font (BOM / encoding — thử thật)"
+
+  - id: M3-S10
+    title: "F7 Pro — mirror một chiều sang Google Sheet của khách"
+    epic: M3
+    refs: ["PRD.md § 4 F7", "PRD.md § 10.2", "PRD.md § Out of scope — v1"]
+    labels: [backend, pro, blocked]
+    needs: [M3-S09]
+    estimate: 2d
+    issue: null
+    ac:
+      - "Ghi một chiều vào Sheet trong Drive của KHÁCH, tab lưu trữ theo tháng, ghi theo batch"
+      - "Tab do app ghi là protected range + dòng cảnh báo ghim: 'Tab này do app ghi. Sửa tay sẽ bị ghi đè.'"
+      - "KHÔNG có đường Sheets API đi vào, không scope OAuth thêm, không reconciliation. Sửa tay bị ghi đè — đó là hành vi đã đặc tả, không phải bug"
+      - "BỊ CHẶN bởi câu hỏi mở PRD § 10.2 #1: quota Google Sheets API ở quy mô nhiều khách. Trả lời câu đó TRƯỚC khi code"
+      - "Đây là mục #1 trong danh sách cắt của PLAN § 6 nếu trễ tiến độ"
+
+  - id: M3-S11
+    title: "Xác minh exit criteria M3"
+    epic: M3
+    refs: ["PLAN.md § M3", "PLAN.md § 7"]
+    labels: [test, non-code]
+    needs: [M3-S02, M3-S03, M3-S04, M3-S05, M3-S09]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Bật airplane mode → RELOAD trang → app vẫn mở, vẫn tap điểm danh được → nối mạng → sync đủ, không mất tap nào, không nhân đôi"
+      - "Làm trên iPhone thật và Android thật, không phải devtools offline mode"
+      - "Design partner #0 đang dùng thật cho một lớp thật"
+
+  # ══════════════════════════════════════════════════════════════════
+  # M4 — Billing, PDPL đầy đủ, Zalo (Pro), pilot
+  # ══════════════════════════════════════════════════════════════════
+
+  - id: M4-S01
+    title: "Enforce giới hạn free tier (≤50 hội viên active, 1 cơ sở)"
+    epic: M4
+    refs: ["PRD.md § 7", "PRD.md § 4 F1"]
+    labels: [backend]
+    needs: [M2-S01]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Đếm hội viên active và chặn vượt 50 ở free tier; chặn cơ sở thứ hai"
+      - "QUYẾT ĐỊNH CẦN CHỐT: import preview khi đang ở/sắp vượt cap thì hành vi là gì (chặn cả lượt? nhận tới đủ 50? báo và bắt chọn?) — ghi vào DECISIONS.md"
+      - "Vì import không bao giờ xoá và chỉ có mark-inactive bằng tay (M2-S08), số hội viên active do chủ tự quản → thông báo phải chỉ đúng đường 'mark inactive' hoặc 'nâng cấp'"
+      - "LÀM RÕ: M1–M3 ship free tier KHÔNG giới hạn. Đây là ranh giới thu tiền, không phải ranh giới chi phí"
+
+  - id: M4-S02
+    title: "Billing Free/Pro — VietQR + mã org trong memo + xác nhận tay"
+    epic: M4
+    refs: ["PRD.md § 7", "PLAN.md § 7"]
+    labels: [backend, frontend]
+    needs: [M4-S01]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Trang nâng cấp hiện VietQR + mã org để ghi vào memo chuyển khoản"
+      - "Admin xác nhận tay → mở Pro. Đây là MỘT bước người, và chỉ một (PLAN § 7)"
+      - "Nhắc gia hạn tự động qua email"
+      - "Gói năm: trả 10 tháng được 12"
+
+  - id: M4-S03
+    title: "Webhook PayOS/SePay tự kích hoạt"
+    epic: M4
+    refs: ["PRD.md § 7"]
+    labels: [backend]
+    needs: [M4-S02]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Webhook khớp giao dịch theo mã org trong memo → tự mở Pro, bỏ bước tay"
+      - "Webhook idempotent (nhận lại cùng event không cộng tiền hai lần)"
+      - "Stripe không dùng được cho merchant VN — đừng thử"
+
+  - id: M4-S04
+    title: "Dunning — 7 ngày ân hạn rồi soft-lock CHỈ tính năng Pro"
+    epic: M4
+    refs: ["PRD.md § 7", "PLAN.md § 7"]
+    labels: [backend]
+    needs: [M4-S02]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Quá hạn → 7 ngày ân hạn → khoá mềm tính năng Pro"
+      - "CHECK-IN VÀ DỮ LIỆU KHÁCH KHÔNG BAO GIỜ BỊ KHOÁ. Export vẫn chạy"
+      - "Có test: org quá hạn vẫn check-in được, vẫn export CSV được"
+
+  - id: M4-S05
+    title: "PDPL đầy đủ — yêu cầu xoá dữ liệu + đồng ý của phụ huynh + công bố chuyển biên giới"
+    epic: M4
+    refs: ["PRD.md § 6"]
+    labels: [backend, frontend, legal]
+    needs: [M2-S14]
+    estimate: 1.5d
+    issue: null
+    ac:
+      - "Đường yêu cầu xoá dữ liệu, thực thi được và có audit_log"
+      - "Đồng ý của phụ huynh cho hội viên vị thành niên (Luật 91/2025/QH15, Nghị định 356/2025)"
+      - "Công bố việc chuyển dữ liệu qua biên giới nếu region không ở VN"
+      - "Đường thoát residency vẫn còn: logic ở tầng app, pg_dump sang Postgres region VN được (PLAN § 2.5)"
+
+  - id: M4-S06
+    title: "Zalo OA connect + drain notification_outbox"
+    epic: M4
+    refs: ["DECISIONS.md § D1", "PRD.md § 4 F6", "PLAN.md § 2.4"]
+    labels: [backend, pro]
+    needs: [M4-S02]
+    estimate: 2d
+    issue: null
+    ac:
+      - "Luồng khách tự nối OA của CHÍNH HỌ + app đã đăng ký trên developers.zalo.me"
+      - "Cửa chặn nói rõ ngay từ đầu: OA xác thực cần GPKD của khách — giấy tờ của họ, không phải việc support của mình"
+      - "@Scheduled sweep drain notification_outbox — KHÔNG tách service riêng (D5)"
+      - "Không có gì trong luồng lõi phụ thuộc/chờ/xuống cấp vì thiếu OA (D1)"
+      - "TUYỆT ĐỐI không dùng API group Zalo không chính thức, ở mọi tier"
+
+  - id: M4-S07
+    title: "Zalo — digest hàng ngày cho chủ + tin nhắn OA cho hội viên"
+    epic: M4
+    refs: ["PRD.md § 4 F6"]
+    labels: [backend, pro]
+    needs: [M4-S06]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Digest ngày: số check-in, lead mới, thẻ sắp hết hạn"
+      - "Tin nhắn OA theo sự kiện cho hội viên đã follow OA"
+      - "Chỉ Pro. Free tier vẫn tuyệt đối không gửi tin cho ai"
+
+  - id: M4-S08
+    title: "ZNS parent alert + ví credit + ledger"
+    epic: M4
+    refs: ["PRD.md § 4 F6", "DECISIONS.md § Dữ kiện 1"]
+    labels: [backend, db, pro]
+    needs: [M4-S06]
+    estimate: 2d
+    issue: null
+    ac:
+      - "Bảng credit_wallet + ledger (nhóm 'grow later' của PLAN § 3.1)"
+      - "ZNS 'con đã tới' trừ từ ví trả trước, giá pass-through, tính theo tin GIAO THÀNH CÔNG"
+      - "Bảng giá tham chiếu DECISIONS.md § Dữ kiện 1 (auth 300đ, administrative 120đ, other 200đ, +100đ mỗi CTA, +200đ ảnh; không có free quota)"
+      - "Ví cạn → dừng gửi, không âm, không chặn check-in"
+
+  - id: M4-S09
+    title: "Member OTP (tính năng Pro)"
+    epic: M4
+    refs: ["DECISIONS.md § D2", "PRD.md § 4 F2", "PRD.md § 10.1"]
+    labels: [backend, pro]
+    needs: [M4-S06]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Bật được theo org: /q gửi OTP ZNS trước khi bind device token"
+      - "Cùng cửa GPKD với Zalo → hai tính năng Pro này mở cùng lúc (PRD § 7 'upgrade trap')"
+      - "Free tier vẫn là bind ngay không OTP (D2), không xuống cấp"
+
+  - id: M4-S10
+    title: "F8 Pro — nhiều cơ sở + enforce phân quyền; Business cross-location dashboard"
+    epic: M4
+    refs: ["PRD.md § 4 F8", "PRD.md § 7"]
+    labels: [backend, frontend, pro]
+    needs: [M4-S02, M1-S06]
+    estimate: 2d
+    issue: null
+    ac:
+      - "Pro: nhiều cơ sở; Manager chỉ thấy cơ sở của mình, Staff chỉ thấy roster"
+      - "Business: dashboard xuyên cơ sở"
+      - "Mọi endpoint mới đều có test cross-tenant (quy tắc từ M1-S04) VÀ test cross-location"
+      - "API access + priority support của gói Business chưa có story — nếu bán thì phải mở story mới, đừng ship lời hứa suông"
+
+  - id: M4-S11
+    title: "Status page + kiểm chứng restore backup"
+    epic: M4
+    refs: ["PRD.md § 6 Availability"]
+    labels: [infra]
+    needs: [M1-S15]
+    estimate: 0.5d
+    issue: null
+    ac:
+      - "Status page công khai (dịch vụ miễn phí cũng được)"
+      - "Restore thử backup vào một DB trắng và verify số liệu — lần thứ hai, trước khi có khách trả tiền"
+
+  - id: M4-S12
+    title: "Đo đạc: activation funnel + <2s/4G + tỉ lệ check-in thành công ≥99%"
+    epic: M4
+    refs: ["PRD.md § 8", "PRD.md § 6"]
+    labels: [backend]
+    needs: [M4-S02]
+    estimate: 1d
+    issue: null
+    ac:
+      - "Đo được thời gian từ signup → check-in đầu tiên; báo cáo được tỉ lệ <10 phút (mục tiêu ≥40%)"
+      - "Đo p95 round-trip check-in (mục tiêu <2s trên 4G)"
+      - "Đo tỉ lệ check-in thành công (mục tiêu ≥99%) và tỉ lệ check-in bị gắn cờ (mục tiêu <2%/tháng — đây cũng là ngưỡng xét lại quyết định bỏ OTP ở PRD § 6)"
+      - "PRD có bốn mục tiêu số nhưng không milestone nào đo — story này lấp chỗ đó"
+
+  - id: M4-S13
+    title: "Pilot 5–10 trung tâm, ≥1 ngoài thể thao"
+    epic: M4
+    refs: ["PLAN.md § 5", "PRD.md § 8"]
+    labels: [non-code]
+    needs: [M4-S02, M4-S12, M3-S11]
+    estimate: 3d
+    issue: null
+    ac:
+      - "Case study từ design partner #0 có số liệu thật, đã đăng vào các group FB chủ trung tâm"
+      - "Onboard 5–10 trung tâm, trong đó ≥1 không phải thể thao (ngoại ngữ/gia sư)"
+      - "Đã tiếp cận 2–3 freelancer AppSheet làm affiliate (họ giữ phí setup, mình giữ subscription)"
+      - "EXIT M4: có khách hàng trả tiền đầu tiên"
+
+# ══════════════════════════════════════════════════════════════════
+
+note_effort: |
+  Tổng ước lượng: M0 2.5d · M1 17d · M2 16d · M3 7.5d · M4 18.5d (tổng 61.5d).
+  M0→M3 = 43 ngày part-time. Ở 15–20h/tuần (~2–2.5 ngày-người/tuần) là 17–21 TUẦN,
+  không phải 8 tuần như PLAN.md § 4 nêu. PLAN chỉ ước lượng đúng hai hạng mục
+  (audit_log ~½–1d, offline mức 2 ~2–3d) rồi suy ra tổng.
+  Không nên ép số xuống. Hai lựa chọn thật: nhận mốc ~4–5 tháng tới hết M3,
+  hoặc dùng danh sách cắt ở PLAN.md § 6 (① M3-S10 Sheet mirror ② M2-S11 GPS)
+  — cắt cả hai chỉ giảm ~3 ngày, nên chủ yếu là phải nhận mốc.
+
+note_gaps: |
+  Các quyết định CÒN THIẾU, đã gắn vào story để không quyết ngầm trong code:
+  - M1-S09  CSV hay còn cả paste-từ-Excel (PRD hứa hai, sau đó chỉ nói một)
+  - M2-S04  đóng băng thẻ thì cửa sổ hiệu lực xử lý thế nào
+  - M2-S10  định dạng + timezone + qua-nửa-đêm của giờ mở cửa
+  - M2-S12  chỗ lưu và thời điểm tính hai cờ liên-event
+  - M4-S01  hành vi của import preview khi đã đầy cap
+  Mỗi story trên phải ghi kết quả ngược vào DECISIONS.md khi làm.

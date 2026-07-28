@@ -5,17 +5,52 @@ SaaS điểm danh QR + quản lý thẻ hội viên cho các trung tâm nhỏ �
 
 ## Trạng thái
 
-**Chưa có code.** Project hiện chỉ có tài liệu. Đợt viết lại PRD/PLAN lên v2 **đã xong** —
-việc tiếp theo là khởi tạo monorepo (Bước 6 trong [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md)).
+**Chưa có code.** Backlog đã dựng: 5 epic, 58 story ở [`docs/STORIES.yml`](docs/STORIES.yml),
+render thành GitHub issues. Việc tiếp theo: `M1-S01` khởi tạo monorepo.
 
-## Đọc trước khi làm bất cứ việc gì
+Muốn biết làm gì tiếp → chạy **`/next`**. Đừng tự suy ra từ tài liệu.
 
-**[`DECISIONS.md`](DECISIONS.md)** — sổ quyết định kiến trúc & sản phẩm, kèm lý do và số liệu
-kiểm chứng. Đây là nguồn sự thật. `PRD.md` (v2.3), `PLAN.md` (v2.2) và `GRILL-LOG.md` đã đồng bộ
-**đủ D1–D11**. Khi hai bên mâu thuẫn thì `DECISIONS.md` thắng.
+## Tài liệu nằm ở đâu, và cái nào thắng
 
-[`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) — kế hoạch thi hành việc cập nhật đó,
-kèm bảng tiến độ. Cập nhật bảng tiến độ sau mỗi bước.
+| Tầng | File | Chứa gì | Thắng khi lệch |
+|---|---|---|---|
+| Tại sao | [`DECISIONS.md`](DECISIONS.md) | D1–D11 + Ba cơ chế + SQL mẫu | **Luôn thắng** |
+| Sản phẩm làm gì | `PRD.md` (v2.3) | F1–F11, NFR, tier, metric | Hành vi sản phẩm |
+| Stack & hình dáng | `PLAN.md` (v2.2) | stack, schema, M0–M4, DoD, danh sách cắt | Ý định milestone |
+| **Việc phải làm** | [`docs/STORIES.yml`](docs/STORIES.yml) | acceptance criteria + thứ tự phụ thuộc | **Chia việc** |
+| Trạng thái | GitHub issues | open/closed, comment, PR | Không phải nguồn |
+
+Quy tắc chống rối — **tuân thủ, đừng lách:**
+
+- **Chi tiết mức việc CHỈ nằm ở `docs/STORIES.yml`.** Không thêm checklist vào PRD/PLAN nữa.
+- **Story TRỎ tới docs, không sao lại nội dung.** Story chỉ tự sinh ra hai thứ chưa có ở đâu:
+  acceptance criteria và thứ tự phụ thuộc. Ngoại lệ duy nhất được nhắc lại: câu **cấm** ngắn.
+- **Issue là bản render một chiều** từ `STORIES.yml`. Sửa body issue trên GitHub sẽ bị ghi đè.
+- Thêm/sửa story → dùng skill **`write-story`**, rồi `/sync-issues`.
+- Đang code mà phát hiện quyết định còn thiếu → **ghi vào `DECISIONS.md`**, không quyết ngầm
+  trong code hay trong acceptance criteria.
+
+`docs/archive/` là tài liệu đã hết vai trò (`GRILL-LOG.md`, `plan-v2-rewrite.md`) — giữ làm
+lịch sử, không đọc để làm việc.
+
+## Lệnh
+
+| Lệnh | Làm gì |
+|---|---|
+| `/next` | Nên làm story nào tiếp, kèm lý do |
+| `/plan <N>` | Lập plan thi hành cho issue #N, comment lên issue |
+| `/work <N>` | Branch, code, test, PR |
+| `/status` | Bảng tiến độ theo epic |
+| `/sync-issues` | Đẩy `docs/STORIES.yml` lên GitHub issues |
+
+GitHub: `thang-39/checkino`. Account **work** là mặc định của `gh` trên máy này — 404 ở mọi
+lệnh nghĩa là cần `gh auth switch -u thang-39`. Remote dùng ssh alias `github.com-personal`.
+
+## Mốc thời gian — đừng lặp lại con số 8 tuần
+
+`PLAN.md § 4` nêu ~8 tuần tới hết M3. Backlog cộng lại là **43 ngày-người part-time**
+(M0→M3), tức **17–21 tuần** ở 15–20h/tuần. `PLAN.md` chỉ ước lượng hai hạng mục rồi suy ra
+tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi ra tuần.
 
 ## Mười một quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
 

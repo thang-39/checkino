@@ -6,7 +6,7 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 | | |
 |---|---|
 | Cập nhật lần cuối | 2026-07-26 (D11: chốt tên thương hiệu **Checkino** — brand, repo, package dùng chung một tên; hết placeholder CheckinHub/manage-pwa) |
-| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D11, không còn mục lệch.** `PRD.md` **v2.3** · `PLAN.md` **v2.2** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/plan-v2-rewrite.md`](docs/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
+| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D11, không còn mục lệch.** `PRD.md` **v2.3** · `PLAN.md` **v2.2** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/archive/plan-v2-rewrite.md`](docs/archive/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
 
 ---
 
