@@ -61,10 +61,12 @@ tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi r
   khớp thì bind device token ngay. ZNS không có free tier (300đ/tin xác thực).
 - **D3** — Tách hai nhu cầu auth: chủ/nhân viên dùng **email magic link**; hội viên dùng
   **device token** (cookie httpOnly, TTL 1 năm). Email cho hội viên là sai thị trường.
-- **D4** — Stack **Spring Boot 3.5 + Postgres 16 + Angular 20**. Riêng `/q/{code}`
-  server-render bằng Thymeleaf, không phải SPA. Đã lật ngược Next.js + Supabase. **Đã xét lại
-  React ngày 25/07 và giữ Angular** — muốn mở lại câu hỏi này phải nêu được một ràng buộc kỹ
-  thuật, không phải một cảm giác. Angular build ra file tĩnh cho Spring Boot serve, **không SSR**.
+- **D4** — Stack **Spring Boot 4.1 + Java 25 + Postgres 18 + Angular 22** (bump 29/07/2026).
+  Riêng `/q/{code}` server-render bằng Thymeleaf, không phải SPA. Đã lật ngược Next.js +
+  Supabase. **Đã xét lại React ngày 25/07 và giữ Angular** — muốn mở lại câu hỏi này phải nêu
+  được một ràng buộc kỹ thuật, không phải một cảm giác. Angular build ra file tĩnh cho Spring
+  Boot serve, **không SSR**. Hai ripple đừng quên: Boot 4.1 kéo **Testcontainers 2.0.5** (major,
+  API khác 1.x) và Angular 22 đòi **Node ≥ 22.22.3** (ràng buộc lúc build, pin ở `.tool-versions`).
 - **D5** — **Monorepo + modular monolith, một tiến trình.** Microservices không nằm trên bàn:
   nó phá cả ba cơ chế dưới, vì cả ba dựa vào một database + một transaction.
 
