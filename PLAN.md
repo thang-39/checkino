@@ -83,13 +83,13 @@ Business-tier customer demands it; default never.
 
 ## 2. Stack & architecture
 
-### 2.1 Stack — Spring Boot 3.5 + Postgres 16 + Angular 20 *(D4)*
+### 2.1 Stack — Spring Boot 4.1 + Postgres 18 + Angular 22 *(D4)*
 
 | Layer | Technology |
 |---|---|
-| Backend | Spring Boot 3.5 + Postgres 16 + Flyway |
+| Backend | Spring Boot 4.1 + Java 25 LTS + Postgres 18 + Flyway |
 | `/q/{code}` — member page | **Thymeleaf server-render** + a few dozen lines of JS |
-| `/staff` + `/admin` | **Angular 20**, built to static files, served by Spring Boot |
+| `/staff` + `/admin` | **Angular 22**, built to static files, served by Spring Boot |
 | `/staff` specifically | **Full PWA**: `@angular/pwa` + service worker + IndexedDB *(mechanism 3)* |
 | Realtime | `SseEmitter` — server-sent events for the live dashboard (~30 lines) |
 | Email | Resend or Brevo free tier — magic link for owner/staff (F10) |
@@ -99,6 +99,12 @@ Business-tier customer demands it; default never.
 into the jar; Spring Boot serves them from `static/app/`. This needs one small piece of glue: a
 **controller fallback returning `index.html`** for client-side routes such as `/admin/members`,
 so a deep link or a refresh doesn't 404.
+
+Angular 22 requires Node `^22.22.3 || ^24.15.0 || >=26`. That is a **build-time** constraint
+only — it does not weaken the line above. The repo pins it in `.tool-versions` at the root,
+next to Java 25 and Maven. Boot 4.1 also pulls Spring Framework 7, Hibernate 7.4.1, Flyway
+12.4.0 and **Testcontainers 2.0.5 — a major bump whose API differs from 1.x**, which matters
+for the cross-tenant test suite in §3.2 *(`DECISIONS.md` D4, bump note 2026-07-29)*.
 
 ### 2.2 Why Next.js + Supabase was reversed
 
@@ -156,14 +162,14 @@ Two words that get conflated are actually independent axes: *repo* (monorepo ↔
 
 ```
 checkino/
-├── backend/                        # Spring Boot 3.5
+├── backend/                        # Spring Boot 4.1 + Java 25
 │   ├── src/main/java/com/checkino/...
 │   ├── src/main/resources/
 │   │   ├── templates/q/            # Thymeleaf — /q/{code}
 │   │   ├── db/migration/           # Flyway
 │   │   └── static/app/             # ← Angular bundle copied in at build time
 │   └── pom.xml
-├── frontend/                       # Angular 20 → /staff + /admin
+├── frontend/                       # Angular 22 → /staff + /admin
 │   ├── src/
 │   ├── ngsw-config.json            # service worker config (the /staff PWA)
 │   └── angular.json
@@ -328,7 +334,7 @@ by a week number.
 ### M1 — Walking skeleton (Weeks 1–3)
 
 - Monorepo scaffold: `backend/` Spring Boot + Postgres + Flyway + docker compose; `frontend/`
-  Angular 20 building into `static/app/` + the `index.html` controller fallback *(D5)*.
+  Angular 22 building into `static/app/` + the `index.html` controller fallback *(D5)*.
 - Schema `org` / `scan_point` / `program` / `member_program` / `member` (with
   `UNIQUE (org_id, phone_normalized)` — D8) + `audit_log` + RLS + **the cross-tenant isolation test
   suite** *(mechanism 2 — first, not last)*. `audit_log` is part of the founding schema, not a later

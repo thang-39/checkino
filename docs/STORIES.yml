@@ -124,7 +124,7 @@ stories:
   # ══════════════════════════════════════════════════════════════════
 
   - id: M1-S01
-    title: "Scaffold monorepo: backend Spring Boot + Postgres + Flyway, frontend Angular 20"
+    title: "Scaffold monorepo: backend Spring Boot + Postgres + Flyway, frontend Angular 22"
     epic: M1
     refs: ["DECISIONS.md § D5", "PLAN.md § 2.1", "PLAN.md § 2.4", "PLAN.md § 3.3"]
     labels: [backend, frontend, infra]
@@ -132,9 +132,10 @@ stories:
     estimate: 1.5d
     issue: 5
     ac:
+      - "`.tool-versions` ở root pin java temurin-25.x + nodejs 22.23.1; `node -v` khớp engine của Angular 22 (`^22.22.3 || ^24.15.0 || >=26`) TRƯỚC khi chạy `ng new`"
       - "Cây thư mục đúng như DECISIONS.md § D5: backend/ + frontend/ + docker-compose.yml + Dockerfile ở root"
       - "Package Java tạo sẵn 9 module rỗng com.checkino.{org,member,entitlement,checkin,trial,report,notification,auth,shared}"
-      - "`docker compose up` lên được Postgres 16; app boot, Flyway chạy migration rỗng thành công"
+      - "`docker compose up` lên được Postgres 18; app boot, Flyway chạy migration rỗng thành công"
       - "Script build: `ng build` → copy vào backend/src/main/resources/static/app/ → `mvn package` ra một jar duy nhất"
       - "Controller fallback trả index.html cho route client (`/admin/members` load trực tiếp không 404)"
       - "Chạy `/init` sau khi xong để CLAUDE.md có lệnh build/test/run thật"

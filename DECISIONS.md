@@ -138,18 +138,44 @@ có mã nào để hiện; đường thoát là nhân viên điểm danh hộ qu
 
 ---
 
-## D4 — Stack: Spring Boot 3.5 + Postgres 16 + Angular 20
+## D4 — Stack: Spring Boot 4.1 + Postgres 18 + Angular 22
 
 **Quyết định.** Quay lại stack Java. Lật ngược quyết định "Next.js + Supabase" ghi ở
 `PLAN.md` §2 (2026-07-19), vốn đã lật `GRILL-LOG.md` Q14 trước đó.
 
 | Lớp | Công nghệ |
 |---|---|
-| Backend | Spring Boot 3.5 + Postgres 16 + Flyway |
+| Backend | Spring Boot 4.1 + Java 25 LTS + Postgres 18 + Flyway |
 | `/q/{code}` — trang hội viên | **Thymeleaf server-render** + vài chục dòng JS |
-| `/staff` + `/admin` | **Angular 20**, build ra file tĩnh, Spring Boot serve |
+| `/staff` + `/admin` | **Angular 22**, build ra file tĩnh, Spring Boot serve |
 | `/staff` — riêng | **PWA đầy đủ**: `@angular/pwa` + service worker + IndexedDB (xem cơ chế 3) |
 | Deploy | Fly.io hoặc 1 VPS + docker compose + Caddy — **không k8s** |
+
+> **Bump version — 2026-07-29.** Chốt trước khi viết dòng code đầu tiên (`M1-S01`), nên
+> không tốn gì ngoài sửa tài liệu. Số lấy từ Maven Central / npm registry, không từ trí nhớ.
+>
+> | | Cũ | Mới | Xác minh bằng |
+> |---|---|---|---|
+> | Spring Boot | 3.5 | **4.1.0** | `<release>` trong `maven-metadata.xml` |
+> | Java | (chưa ghi) | **25 LTS** | `temurin-25.0.4+7.0.LTS`; baseline Boot 4.1 chỉ đòi 17 |
+> | Postgres | 16 | **18** | `postgres:18-alpine` |
+> | Angular | 20 | **22.0.9** | `dist-tags.latest`; 20.3.32 nay là `v20-lts` |
+>
+> **Ripple kéo theo từ Boot 4.1.0** (đọc từ `spring-boot-dependencies-4.1.0.pom`):
+> Spring Framework **7**, Hibernate **7.4.1**, Flyway **12.4.0**, Testcontainers **2.0.5**,
+> driver Postgres 42.7.11.
+>
+> ⚠️ **Testcontainers 2.0.5 là bump major từ 1.x — API khác.** Đây là ripple đáng để ý nhất,
+> vì cơ chế 2 (bộ test cô lập cross-tenant, `M1-S04`) và test dedupe đồng thời ở M2 đều dựng
+> trên nó. Phần lớn snippet `@Container` / `@ServiceConnection` trên mạng còn là 1.x — đừng
+> copy.
+>
+> ⚠️ **Angular 22 đòi Node `^22.22.3 || ^24.15.0 || >=26`.** Đây là ràng buộc **lúc build**,
+> không phải runtime: `PLAN.md § 2.1` vẫn cấm Node runtime ở production, bump này không lật
+> điều đó. Repo pin bằng `.tool-versions` ở root.
+>
+> Lập luận "giữ Angular thay vì React" dưới đây **không phụ thuộc version** và vẫn đứng —
+> `@angular/pwa@22.0.9` vẫn tồn tại, nên lý do #3 nguyên vẹn.
 
 > **Đã xét lại React và giữ nguyên Angular — 2026-07-25.**
 >
@@ -242,14 +268,14 @@ Hai chữ hay bị gộp — chúng là hai trục độc lập: *repo* (monorep
 
 ```
 checkino/
-├── backend/                        # Spring Boot 3.5
+├── backend/                        # Spring Boot 4.1 + Java 25
 │   ├── src/main/java/com/checkino/...
 │   ├── src/main/resources/
 │   │   ├── templates/q/            # Thymeleaf — /q/{code}
 │   │   ├── db/migration/           # Flyway
 │   │   └── static/app/             # ← bundle Angular copy vào lúc build
 │   └── pom.xml
-├── frontend/                       # Angular 20 → /staff + /admin
+├── frontend/                       # Angular 22 → /staff + /admin
 │   ├── src/
 │   ├── ngsw-config.json            # cấu hình service worker (PWA cho /staff)
 │   └── angular.json
