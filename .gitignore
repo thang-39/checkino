@@ -18,6 +18,9 @@ hs_err_pid*
 node_modules/
 dist/
 .angular/
+
+# Bundle Angular copy vào lúc build — output, không phải source (scripts/build.sh)
+backend/src/main/resources/static/app/
 npm-debug.log*
 yarn-error.log*
 .pnpm-debug.log*

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>4.1.0</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.checkino</groupId>
+  <artifactId>checkino</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>checkino</name>
+  <description>SaaS điểm danh QR + quản lý thẻ hội viên</description>
+
+  <properties>
+    <java.version>25</java.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <!-- /q/{code} server-render, không phải SPA (PLAN.md § 1.2) -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+    <!--
+      Schema do Flyway làm chủ, Hibernate chỉ validate.
+
+      Phải là starter, KHÔNG phải flyway-core trần: Boot 4 modularise autoconfiguration, nên
+      chỉ có flyway-core trên classpath thì Flyway KHÔNG được wire và migration im lặng không
+      chạy — không có lỗi nào để mà thấy. Cùng một cái bẫy áp cho mọi tích hợp khác của Boot 4.
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-flyway</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+      Boot 4 tách test slice ra từng module: @WebMvcTest KHÔNG còn trong
+      spring-boot-starter-test / spring-boot-test-autoconfigure nữa, và package cũng đổi
+      (org.springframework.boot.test.autoconfigure.web.servlet → org.springframework.boot.webmvc.test.autoconfigure).
+      Slice test sau này (@DataJpaTest → spring-boot-starter-data-jpa-test, ...) cũng cần
+      starter riêng tương ứng.
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webmvc-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-testcontainers</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+      Testcontainers 2.x đã đổi tên artifact: postgresql → testcontainers-postgresql,
+      junit-jupiter → testcontainers-junit-jupiter. Toạ độ 1.x không còn tồn tại ở 2.0.5.
+      (DECISIONS.md § D4, khối "Bump version — 2026-07-29")
+    -->
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-postgresql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers-junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

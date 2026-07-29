@@ -1,0 +1,2 @@
+# Thư mục migration cố ý để rỗng ở M1-S01.
+# V1__core_schema.sql là việc của M1-S02 (issue #6) — tạo trước ở đây sẽ đụng nhau.

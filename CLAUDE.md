@@ -5,10 +5,36 @@ SaaS điểm danh QR + quản lý thẻ hội viên cho các trung tâm nhỏ �
 
 ## Trạng thái
 
-**Chưa có code.** Backlog đã dựng: 5 epic, 58 story ở [`docs/STORIES.yml`](docs/STORIES.yml),
-render thành GitHub issues. Việc tiếp theo: `M1-S01` khởi tạo monorepo.
+Monorepo đã dựng (`M1-S01`): backend Spring Boot 4.1 + frontend Angular 22, chưa có bảng
+nghiệp vụ nào. Backlog: 5 epic, 58 story ở [`docs/STORIES.yml`](docs/STORIES.yml), render
+thành GitHub issues.
 
 Muốn biết làm gì tiếp → chạy **`/next`**. Đừng tự suy ra từ tài liệu.
+
+## Lệnh build / test / run
+
+Toolchain pin ở [`.tool-versions`](.tool-versions) — Java 25, Node 22.23.1, Maven 3.9.3.
+Node **phải** ≥ 22.22.3, nếu không Angular 22 từ chối chạy.
+
+```bash
+./scripts/build.sh          # ng build → copy vào static/app/ → mvn package → MỘT jar
+mvn -f backend/pom.xml test # test backend (Testcontainers → cần Docker chạy)
+npx ng test --watch=false   # test frontend, trong frontend/ (Vitest + jsdom, không cần Chrome)
+docker compose up -d db     # chỉ Postgres 18
+docker compose up -d --build  # cả stack
+java -jar backend/target/checkino-*.jar
+```
+
+Chạy `mvn` với sandbox **tắt** ngay từ lần đầu, và export `TESTCONTAINERS_RYUK_DISABLED=true`.
+
+Hai cái bẫy môi trường trên máy dev hiện tại:
+
+- **Port 5432 và 8080 có thể đã bị project khác chiếm.** Compose đọc `DB_PORT` / `PORT` —
+  copy [`.env.example`](.env.example) sang `.env` để đổi (5433 / 8081).
+- **TLS interception của công ty.** `docker build` fail vì Maven trong container không có CA
+  của công ty (`PKIX path building failed`). `docker pull` thì qua được vì daemon có CA.
+  Trên máy host thì `mvn` chạy được nhờ `JAVA_TOOL_OPTIONS` trỏ truststore vào JDK 17 —
+  **đừng xoá temurin-17 khỏi asdf.** Image build được ở CI không có MITM.
 
 ## Tài liệu nằm ở đâu, và cái nào thắng
 
