@@ -170,6 +170,27 @@ có mã nào để hiện; đường thoát là nhân viên điểm danh hộ qu
 > trên nó. Phần lớn snippet `@Container` / `@ServiceConnection` trên mạng còn là 1.x — đừng
 > copy.
 >
+> ⚠️ **Boot 4 modularise autoconfiguration — mỗi tích hợp cần starter riêng.** Phát hiện lúc
+> làm `M1-S01`, và là cái bẫy im lặng nhất trong cả bump này:
+>
+> | Cách viết cũ (Boot 3) | Boot 4 |
+> |---|---|
+> | `org.flywaydb:flyway-core` | `spring-boot-starter-flyway` |
+> | `@WebMvcTest` từ `spring-boot-starter-test` | thêm `spring-boot-starter-webmvc-test` |
+> | `org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest` | `org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest` |
+> | `org.testcontainers:postgresql` | `org.testcontainers:testcontainers-postgresql` |
+> | `org.testcontainers:junit-jupiter` | `org.testcontainers:testcontainers-junit-jupiter` |
+>
+> Cái Flyway là nguy hiểm nhất: chỉ có `flyway-core` trần thì Flyway **không được wire và
+> migration im lặng không chạy** — app vẫn boot xanh, không có lỗi nào để thấy. `M1-S01` có
+> một test chốt việc Flyway được wire, chính vì lý do này. Slice test sau (`@DataJpaTest` →
+> `spring-boot-starter-data-jpa-test`) cũng theo cùng khuôn.
+>
+> ⚠️ **Postgres 18 đổi quy ước data directory.** Volume phải mount ở `/var/lib/postgresql`,
+> **không** phải `/var/lib/postgresql/data` như 16/17 — mount kiểu cũ làm container thoát ngay
+> với exit 1. Lý do: image đặt dữ liệu vào thư mục con theo major version để
+> `pg_upgrade --link` chạy được.
+>
 > ⚠️ **Angular 22 đòi Node `^22.22.3 || ^24.15.0 || >=26`.** Đây là ràng buộc **lúc build**,
 > không phải runtime: `PLAN.md § 2.1` vẫn cấm Node runtime ở production, bump này không lật
 > điều đó. Repo pin bằng `.tool-versions` ở root.

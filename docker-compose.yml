@@ -1,0 +1,37 @@
+# Caddy chưa có ở đây — deploy HTTPS là M1-S15 (issue #19).
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-checkino}
+      POSTGRES_USER: ${DB_USER:-checkino}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-checkino}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      # Postgres 18 đổi quy ước: mount ở /var/lib/postgresql (không phải .../data), để image
+      # tự đặt dữ liệu vào thư mục con theo major version và pg_upgrade --link chạy được.
+      # Mount kiểu cũ làm container thoát ngay với exit 1.
+      - checkino-db:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-checkino} -d ${DB_NAME:-checkino}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-checkino}
+      DB_USER: ${DB_USER:-checkino}
+      DB_PASSWORD: ${DB_PASSWORD:-checkino}
+    ports:
+      - "${PORT:-8080}:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  checkino-db:
