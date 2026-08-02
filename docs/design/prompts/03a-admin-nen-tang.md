@@ -22,6 +22,37 @@ phải dưới 10 phút.** Mọi màn trong lượt này phục vụ mục tiêu
 
 Đừng thiết kế cho màn hình máy tính rồi thu nhỏ. Điện thoại là chính.
 
+## B0b. Ba slot đầu màn áp cho `/admin` thế nào
+
+`00` § A1b chốt: header = nơi chốn · nhãn nhỏ = tên người · hero = câu trạng thái. Trên `/admin`
+có **hai chỗ luật đó không tự áp được**, xử lý đúng như dưới đây, đừng tự nghĩ ra kiểu khác:
+
+**1 · Trong wizard chưa có tên trung tâm.** Bước 1 chính là bước tạo ra nó. Nên:
+
+| Bước | Header hiện gì |
+|---|---|
+| Bước 1 (chưa nhập tên) | logo **Checkino** + chip `BƯỚC 1/5` |
+| Bước 2–5 | logo + **tên trung tâm vừa nhập** + chip `BƯỚC 3/5` |
+
+Chip bước thay chỗ pill cơ sở. Sau khi xong wizard, header về đúng dạng chuẩn: logo + tên trung
+tâm + pill cơ sở. Đổi ngay giữa bước 1 và bước 2 là **có chủ ý** — đó là khoảnh khắc trung tâm
+bắt đầu tồn tại, và người dùng thấy tên mình vừa gõ hiện lên là một phần thưởng nhỏ.
+
+**2 · Nhãn nhỏ trên `/admin` mang tên màn, không mang tên người.** Chủ trung tâm là người đang
+cầm máy, hiện tên họ ra chẳng để làm gì. Nên nhãn nhỏ mang **tên khu vực** (`DANH SÁCH HỘI VIÊN`,
+`NHẬP DANH SÁCH`), trừ **màn chi tiết hội viên** — ở đó nhãn nhỏ mang đúng tên hội viên đó, vì
+lúc này màn đang nói về một người cụ thể.
+
+Hero vẫn là câu trạng thái 36px ở mọi màn. Ở trang chủ, hero là **con số của hôm nay**
+(ví dụ `24` kèm chữ `ĐÃ TỚI HÔM NAY`) — đó là câu trạng thái ở dạng số, giống `/staff`.
+
+**Thanh nav** (`00` § A4: thanh nổi hình viên thuốc, mục đang chọn nền `--c-sky`) nằm **dưới đáy**,
+không thay thế header. Header ở trên nói "đây là đâu", nav ở dưới nói "đi đâu tiếp". Trong wizard
+thì **không có nav** — wizard là đường một chiều, thanh tiến trình 5 bước đã đủ.
+
+Cả hai ánh xạ trên là **ngoại lệ so với `/q`**. Ghi vào báo cáo A8 nếu gặp màn nào chúng gây mâu
+thuẫn — đó chính là dữ liệu để sau này viết `docs/DESIGN.md`.
+
 ## B1. Wizard mở tài khoản — 5 bước, thứ tự cố định
 
 Thứ tự này chịu lực, không được đổi:

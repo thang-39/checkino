@@ -26,6 +26,28 @@ Hệ quả bắt buộc, ghi đè cả A4 trong file hệ thống:
 Đây là **PWA cài lên màn hình chính**, chạy toàn màn hình, và **phải dùng được khi mất mạng**.
 Mất mạng là chuyện thường: phòng tập tầng hầm, lớp học cuối hành lang.
 
+## B0b. Ba slot đầu màn áp cho `/staff` thế nào
+
+`00` § A1b đã chốt: header = nơi chốn · nhãn nhỏ = tên người · hero = câu trạng thái. Luật đó mới
+chỉ được kiểm chứng trên `/q` — một bề mặt mỗi màn chỉ có một việc. `/staff` thì màn chính là
+**danh sách dài**, nên ánh xạ cụ thể như sau, đừng tự nghĩ ra kiểu khác:
+
+| Slot | Ở `/staff` là gì |
+|---|---|
+| Header bar | logo + **tên trung tâm** + pill cơ sở. Y hệt `/q`, đứng yên mọi màn |
+| Nhãn nhỏ | **tên lớp / bộ môn** + chip giờ bên phải, ví dụ `BOXING · LỚP 18:00` |
+| Hero 36px | **số đã tới trên sĩ số**, ví dụ `12/24` kèm chữ `ĐÃ TỚI` |
+
+Hero ở đây **là** câu trạng thái, chỉ ở dạng con số — nó chính là thứ cô giáo liếc một giây để
+biết còn thiếu ai. Nó xứng đáng chiếm chỗ đó, đừng thu nhỏ để nhét thêm hàng danh sách.
+
+Nhãn nhỏ ở `/staff` mang **tên lớp** chứ không mang tên người, vì trên bề mặt này "người" là cả
+một danh sách chứ không phải một cá nhân. Đây là ngoại lệ có chủ ý so với `/q`; ghi vào báo cáo
+A8 nếu bạn thấy nó gây mâu thuẫn ở màn nào.
+
+**Không có ngoại lệ nào cho header.** Kể cả màn hướng dẫn cài iPhone, màn danh sách rỗng, màn mất
+mạng — header vẫn nguyên tên trung tâm, không đổi thành chữ hành động.
+
 ## B1. Cơ chế offline — phần khó nhất, phải thể hiện được trong UI
 
 Cách nó hoạt động:

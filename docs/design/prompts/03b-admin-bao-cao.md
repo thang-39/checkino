@@ -2,8 +2,10 @@
 
 > **Đọc trước, theo đúng thứ tự:**
 > 1. `docs/design/prompts/00-he-thong.md` — luật chung, bắt buộc
-> 2. `designs/admin.dc.html` — **file do lượt `03a` sinh ra**. Đây là thứ bạn sẽ mở rộng
-> 3. `docs/design/admin-A8.md` — báo cáo tự kiểm của lượt `03a`, để biết chỗ nào còn hở
+> 2. `docs/design/prompts/03a-admin-nen-tang.md` **§ B0b** — ánh xạ ba slot đầu màn riêng cho
+>    `/admin` (nhãn nhỏ mang tên khu vực, hero là con số, nav ở đáy). Chỉ đọc mục đó là đủ
+> 3. `designs/admin.dc.html` — **file do lượt `03a` sinh ra**. Đây là thứ bạn sẽ mở rộng
+> 4. `docs/design/admin-A8.md` — báo cáo tự kiểm của lượt `03a`, để biết chỗ nào còn hở
 >
 > **Ghi ra:** mở rộng **chính** `designs/admin.dc.html` ·
 > **Báo cáo tự kiểm:** thêm vào `docs/design/admin-A8.md`
@@ -20,7 +22,7 @@ Lượt `03a` đã dựng phần nền tảng của `/admin`: trang chủ, wizar
 sách, danh sách hội viên, chi tiết hội viên. Lượt này thêm phần **báo cáo, tiền, và các biên** —
 những màn chủ trung tâm dùng sau khi đã chạy được vài tuần.
 
-Trước khi thêm gì, hãy đọc `admin.html` và liệt kê ra: bộ token đang dùng, các class component đã
+Trước khi thêm gì, hãy đọc `admin.dc.html` và liệt kê ra: bộ token đang dùng, các class component đã
 có, object dữ liệu giả đang ở đâu, thanh điều hướng hoạt động thế nào. Rồi mới viết tiếp.
 
 ## B1. Danh sách màn phải thêm
