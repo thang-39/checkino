@@ -5,8 +5,8 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-07-26 (D11: chốt tên thương hiệu **Checkino** — brand, repo, package dùng chung một tên; hết placeholder CheckinHub/manage-pwa) |
-| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D11, không còn mục lệch.** `PRD.md` **v2.3** · `PLAN.md` **v2.2** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/archive/plan-v2-rewrite.md`](docs/archive/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
+| Cập nhật lần cuối | 2026-08-02 (D12: hướng thiết kế + hệ màu, chốt sau khi dựng xong `/q`; thêm token `--c-rust`) |
+| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D12, không còn mục lệch.** `PRD.md` **v2.3** · `PLAN.md` **v2.2** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/archive/plan-v2-rewrite.md`](docs/archive/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
 
 ---
 
@@ -564,6 +564,66 @@ chính gốc đó làm tên tự giải thích.
 **Domain — chưa xác nhận** (không kiểm được whois từ môi trường làm việc): Thang tự kiểm
 `checkino.vn` / `checkino.com` / `checkino.app` trước khi mua. Tài liệu này **không** khẳng định
 domain nào còn trống.
+
+---
+
+## D12 — Hướng thiết kế và hệ màu
+
+**Chốt 2026-08-02, sau khi dựng xong bề mặt `/q` (`designs/q.dc.html`).**
+
+Hướng thiết kế: **Bản 2 · Bảng điều khiển** (`docs/design/ban-2-operational.html`). Chữ Archivo,
+khối bo tròn lớn, màu bão hoà dùng tiết chế trên nền than.
+
+Luật thi hành đầy đủ nằm ở [`docs/design/prompts/00-he-thong.md`](docs/design/prompts/00-he-thong.md)
+— § A1 bốn tầng hộp, § A1b ba slot đầu màn, § A2 màu, § A3 chữ. Mục này chỉ ghi **quyết định và
+lý do**, không chép lại đặc tả.
+
+### Bảy token, mỗi màu một nghĩa
+
+`--c-ink` `#131413` · `--c-coral` `#F4573F` · `--c-rust` `#8E2C1B` · `--c-purple` `#6F66F0` ·
+`--c-yellow` `#F3C24A` · `--c-sage` `#C4D4C1` · `--c-sky` `#A9E5F1` (+ `--c-dim` `#9AA096` cho
+chữ phụ).
+
+**`--c-rust` là token thêm mới.** Bảng màu ban đầu không có màu nào mang nghĩa "bị chặn", nên
+vàng phải gánh cả *"sắp hết hạn"* lẫn *"đã hết hạn"* — hậu quả là hai màn khác hẳn nhau về
+nghiệp vụ lại trông na ná. Rust là san hô nung tối, cùng gia đình nên không phá bảng màu, và đủ
+tối để không vi phạm luật "màu bão hoà không bao giờ tràn kín màn hình".
+
+> **Vàng = vẫn vào được, nhưng phải xử lý sớm. Rust = hôm nay không vào được.
+> San hô không bao giờ là lỗi — nó là nhịp của hiện tại.**
+
+Kèm theo: **nền màn chỉ có ba giá trị** — than (mặc định) · sage (xong xuôi) · rust (bị chặn).
+Rust **chỉ** làm nền màn, không bao giờ làm khối.
+
+### Ba slot đầu màn
+
+Header bar = **nơi chốn** (logo + tên tổ chức + pill cơ sở), đứng yên tuyệt đối qua mọi màn.
+Nhãn nhỏ = **tên người**. Hero 36px = **câu trạng thái**.
+
+Lý do: trước khi chốt, tên tổ chức xuất hiện ở ba vị trí khác nhau tuỳ màn, và slot nhãn nhỏ khi
+thì mang tên tổ chức khi thì mang tên hội viên. Một slot mang hai nghĩa là nguồn gốc của cảm giác
+"đẹp nhưng không đồng nhất" — nó không sửa được bằng cách chỉnh lề.
+
+### Đã loại
+
+- **Phương án 1A cho màn nhập SĐT** (nền than + khối san hô chứa ô nhập). Giữ 1B: nửa dưới sáng
+  dễ đọc ngoài nắng, và tấm sáng chiếm phần dưới thì ô nhập nằm đúng tầm ngón cái.
+- **Gradient bắc cầu nhiều họ màu** (thẻ hội viên từng là vàng→san hô→đỏ). Gradient chỉ được đi
+  trong một họ; bắc cầu là trộn hai nghĩa vào một vật và vật đó hết đọc được. Thẻ hội viên mang
+  **hạn mức** → họ tím, `#9E98F6 → #6F66F0`.
+- **Xanh băng làm nút.** Nó chỉ mang nghĩa "đã chọn / đã tick". Nút chính: nền sáng → nút than;
+  nền than hoặc rust → nút kem.
+- **Dropdown chọn cơ sở ở `/q`.** Hội viên quét QR của một `scan_point` cụ thể — cơ sở đã biết
+  trước. Đa cơ sở là gói Pro ([D6](#d6--xếp-hạng-và-trial-pipeline-thuộc-free-tier)).
+- **Gạch ngang số buổi trên thẻ hết hạn.** Chip chữ `HẾT HẠN · 28/07` đã đủ. Đây là mặt còn lại
+  của luật "màu không bao giờ là tín hiệu duy nhất": khi **chữ** đã nói rồi thì tín hiệu thứ hai
+  chỉ làm rối. Kiểm bằng cách chụp màn hình ở chế độ đen trắng — đọc được là đạt.
+
+### Chưa làm
+
+`design/tokens.css`, `docs/DESIGN.md`, `docs/design/styleguide.html` và skill `/design-screen`
+viết **sau khi đủ bốn bản dựng** và sau khi gom bốn báo cáo `*-A8.md`. Mới có một bản dựng
+(`/q`); viết bây giờ gần như chắc chắn phải viết lại.
 
 ---
 

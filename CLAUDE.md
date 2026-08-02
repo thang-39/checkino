@@ -40,8 +40,9 @@ Hai cái bẫy môi trường trên máy dev hiện tại:
 
 | Tầng | File | Chứa gì | Thắng khi lệch |
 |---|---|---|---|
-| Tại sao | [`DECISIONS.md`](DECISIONS.md) | D1–D11 + Ba cơ chế + SQL mẫu | **Luôn thắng** |
+| Tại sao | [`DECISIONS.md`](DECISIONS.md) | D1–D12 + Ba cơ chế + SQL mẫu | **Luôn thắng** |
 | Sản phẩm làm gì | `PRD.md` (v2.3) | F1–F11, NFR, tier, metric | Hành vi sản phẩm |
+| Giao diện | [`docs/design/prompts/00-he-thong.md`](docs/design/prompts/00-he-thong.md) | bốn tầng hộp, ba slot đầu màn, màu, chữ | **Hình dáng UI** |
 | Stack & hình dáng | `PLAN.md` (v2.2) | stack, schema, M0–M4, DoD, danh sách cắt | Ý định milestone |
 | **Việc phải làm** | [`docs/STORIES.yml`](docs/STORIES.yml) | acceptance criteria + thứ tự phụ thuộc | **Chia việc** |
 | Trạng thái | GitHub issues | open/closed, comment, PR | Không phải nguồn |
@@ -113,6 +114,12 @@ tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi r
 - **D11** — Tên thương hiệu: **Checkino** (hết tên tạm CheckinHub). Brand = repo = package,
   một token: `checkino`, `com.checkino`. Tiêu chí, các tên đã loại và kiểm chứng va chạm
   ở `DECISIONS.md`. Domain chưa mua — cần whois tay trước.
+- **D12** — Hướng thiết kế **Bản 2 · Bảng điều khiển**, tám token màu mỗi màu một nghĩa. Ba thứ
+  dễ làm sai: **nền màn chỉ có ba giá trị** (than / sage / rust `#8E2C1B`); **header = nơi chốn,
+  nhãn nhỏ = tên người, hero 36px = trạng thái**, không slot nào kiêm hai nghĩa; **gradient chỉ
+  đi trong một họ màu**. Vàng = còn kịp, rust = bị chặn, san hô không bao giờ là lỗi. Luật đầy đủ
+  ở `docs/design/prompts/00-he-thong.md`. Bản dựng `/q` ở `designs/q.dc.html` (Claude Design —
+  cần `support.js` của runtime, mở trình duyệt thường sẽ trắng trang).
 
 **Ràng buộc xuyên suốt:** free tier phải có chi phí biến đổi = **0đ**.
 

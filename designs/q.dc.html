@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#0B0C0B; color:#F2F2EC; font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.45; }
+a { color:#A9E5F1; } a:hover { color:#F98872; }
+input::placeholder { color:currentColor; opacity:.45; }
+@keyframes ckspin { to { transform:rotate(360deg); } }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;gap:40px;padding:36px 300px 36px 36px;box-sizing:border-box">
+
+  <div style="width:390px;height:844px;flex:none;border:9px solid #080908;border-radius:42px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 44px rgba(0,0,0,.55);background:{{ phoneBg }};color:{{ phoneFg }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 22px 2px;font-size:12.5px;font-weight:700;opacity:.9;flex:none">
+      <span>{{ clock }}</span>
+      <span style="display:flex;gap:6px;align-items:center;font-size:11px;letter-spacing:.06em">4G
+        <span style="width:21px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative;display:inline-block"><span style="position:absolute;top:2px;bottom:2px;left:2px;right:6px;background:currentColor;border-radius:1px"></span></span>
+      </span>
+    </div>
+
+    <!-- 1 · enter phone / sending -->
+    <sc-if value="{{ sA1 }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></p>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.who1 }}<br>{{ t.who2 }}</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:none">
+          <div style="background:#F4573F;color:#2A0C06;border-radius:18px;padding:13px 14px"><div style="font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1">18:41</div><div style="font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;opacity:.72;margin-top:5px">{{ t.openNow }}</div></div>
+          <div style="background:#6F66F0;color:#0D0838;border-radius:18px;padding:13px 14px"><div style="font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1">24</div><div style="font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;opacity:.72;margin-top:5px">{{ t.arrived }}</div></div>
+        </div>
+        <div style="background:#C4D4C1;color:#14180F;border-radius:28px 28px 0 0;margin-top:8px;padding:22px 16px 10px;flex:1;display:flex;flex-direction:column;gap:13px;min-height:0">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7;margin:0">{{ t.phoneLabel }}</p>
+          <input value="{{ phoneVal }}" onChange="{{ onPhone }}" disabled="{{ sending }}" placeholder="0912 345 678" inputmode="tel" style="width:100%;box-sizing:border-box;min-height:52px;background:#FFFFFF;border:0;border-radius:999px;padding:0 22px;font:inherit;font-size:19px;font-weight:700;color:#14180F;opacity:{{ inputOp }}">
+          <button onClick="{{ submitPhone }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;cursor:pointer;opacity:{{ ctaOp }}">
+            <sc-if value="{{ sending }}" hint-placeholder-val="{{ false }}">{{ spinner }}</sc-if>{{ ctaLabel }}<sc-if value="{{ notSending }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></sc-if>
+          </button>
+          <p style="margin:0;font-size:13px;opacity:.68;line-height:1.45;text-align:center">{{ noteText }}</p>
+          <div style="flex:1"></div>
+          <button onClick="{{ goTrial }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:10px;min-height:44px">{{ t.trialLink }}</button>
+          <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:0 auto 4px;flex:none"></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- 4/5/6 · checked in (variants) -->
+    <sc-if value="{{ sOkAny }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Nguyễn Thị Hồng Nhung</p>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.12);line-height:1;white-space:nowrap;flex:none">18:42</span>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.checkedIn1 }}<br>{{ t.checkedIn2 }}</p>
+        </div>
+        <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:2px 2px -5px">{{ t.yourCard }}</p>
+        <div style="border-radius:24px;padding:18px;aspect-ratio:1.586;display:flex;flex-direction:column;background:linear-gradient(135deg,#9E98F6 0%,#6F66F0 100%);color:#0D0838;box-shadow:0 12px 26px rgba(13,8,56,.26)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+            <svg width="34" height="26" viewBox="0 0 32 24" fill="none"><rect x="0.75" y="0.75" width="30.5" height="22.5" rx="5" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.75)" stroke-width="1.5"></rect><path d="M1 6.5h30M1 12h30M1 17.5h30M11 1v5.5M21 1v5.5M11 17.5v5.5M21 17.5v5.5" stroke="rgba(255,255,255,.75)" stroke-width="1.2"></path></svg>
+            <div style="text-align:right">
+              <div style="font-size:14px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;font-variation-settings:'wdth' 88;line-height:1.1">Gym Thành Phát</div>
+              <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin-top:2px">Quận 7 · Boxing</div>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+          <p style="margin:0 0 5px;font-size:13px;font-weight:600;opacity:.78">Nguyễn Thị Hồng Nhung</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="min-width:0">
+              <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1;white-space:nowrap">{{ sessionsLeft }}<span style="font-size:22px;font-weight:700;opacity:.55">/24</span><small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.7">{{ t.sessionsUnit }}</small></div>
+            </div>
+            <div style="text-align:right;flex:none">
+              <sc-if value="{{ sOkExp }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.55);white-space:nowrap;margin-bottom:5px">{{ t.days3 }}</span></sc-if>
+              <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;white-space:nowrap">{{ t.expiresLabel }} · 04/08/26</div>
+              <div style="font-size:13.5px;font-weight:800;letter-spacing:.08em;margin-top:3px">0912 345 678</div>
+            </div>
+          </div>
+        </div>
+        <sc-if value="{{ sOkExp }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:rgba(0,0,0,.10)">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#F3C24A;color:#2C1F03">!</span>
+            <div><h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ t.expSoonTitle }}</h5>
+              <p style="margin:0;font-size:13px;opacity:.75;line-height:1.4">{{ t.expSoonBody }}</p></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ sOkLow }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:rgba(0,0,0,.10)">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#F3C24A;color:#2C1F03">!</span>
+            <div><h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ t.lowTitle }}</h5>
+              <p style="margin:0;font-size:13px;opacity:.75;line-height:1.4">{{ t.lowBody }}</p></div>
+          </div>
+        </sc-if>
+        <div style="flex:1"></div>
+        <button onClick="{{ goB1 }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer">{{ t.changeNum }}</button>
+        <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+      </div>
+    </sc-if>
+
+    <!-- 7 · card expired -->
+    <sc-if value="{{ sExpired }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Nguyễn Thị Hồng Nhung</p>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.expiredT1 }}<br>{{ t.expiredT2 }}</p>
+        </div>
+        <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:2px 2px -5px">{{ t.yourCard }}</p>
+        <div style="border-radius:24px;padding:18px;aspect-ratio:1.586;box-sizing:border-box;display:flex;flex-direction:column;background:#2A2D2A;border:1px solid rgba(242,242,236,.14);color:#9AA096">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+            <svg width="34" height="26" viewBox="0 0 32 24" fill="none"><rect x="0.75" y="0.75" width="30.5" height="22.5" rx="5" fill="rgba(242,242,236,.05)" stroke="rgba(154,160,150,.55)" stroke-width="1.5"></rect><path d="M1 6.5h30M1 12h30M1 17.5h30M11 1v5.5M21 1v5.5M11 17.5v5.5M21 17.5v5.5" stroke="rgba(154,160,150,.55)" stroke-width="1.2"></path></svg>
+            <div style="text-align:right">
+              <div style="font-size:14px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;font-variation-settings:'wdth' 88;line-height:1.1">Gym Thành Phát</div>
+              <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin-top:2px">Quận 7 · Boxing</div>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+          <p style="margin:0 0 5px;font-size:13px;font-weight:600;opacity:.78">Nguyễn Thị Hồng Nhung</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="min-width:0;opacity:.45">
+              <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1;white-space:nowrap">{{ sessionsLeft }}<span style="font-size:22px;font-weight:700;opacity:.55">/24</span><small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.7">{{ t.sessionsUnit }}</small></div>
+            </div>
+            <div style="text-align:right;flex:none">
+              <span style="display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:#F3C24A;color:#2C1F03;white-space:nowrap;margin-bottom:6px">{{ t.expiredChip }}</span>
+              <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;white-space:nowrap">{{ t.pack }}</div>
+              <div style="font-size:13.5px;font-weight:800;letter-spacing:.08em;margin-top:3px">0912 345 678</div>
+            </div>
+          </div>
+        </div>
+        <div style="border-radius:24px;padding:15px 16px;background:rgba(255,255,255,.10)">
+          <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.45">{{ t.expiredCta }}</p>
+        </div>
+        <div style="flex:1"></div>
+        <button onClick="{{ goB1 }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer">{{ t.changeNum }}</button>
+        <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+      </div>
+    </sc-if>
+
+    <!-- 8 · outside opening hours -->
+    <sc-if value="{{ sClosed }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></p>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.closedT1 }}<br>{{ t.closedT2 }}</p>
+        </div>
+        <div style="border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:12px;background:#1F211F">
+          <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;opacity:.7">{{ t.hoursLabel }}</span>
+          <div style="font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1">06:00–22:00</div>
+          <div style="border-radius:18px;padding:13px 14px;background:#2A2D2A">
+            <p style="margin:0;font-size:14px;line-height:1.45;opacity:.85">{{ t.closedBody }}</p>
+          </div>
+        </div>
+        <div style="flex:1"></div>
+        <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+      </div>
+    </sc-if>
+
+    <!-- 9 · trial invite -->
+    <sc-if value="{{ sTrial }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></p>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.trialT1 }}<br>{{ t.trialT2 }}</p>
+        </div>
+        <p style="margin:-6px 2px 0;font-size:13.5px;font-weight:600;opacity:.8;line-height:1.4;flex:none">{{ t.trialSub }}</p>
+        <div style="background:#C4D4C1;color:#14180F;border-radius:28px 28px 0 0;margin-top:6px;padding:18px 16px 8px;flex:1;display:flex;flex-direction:column;gap:10px;min-height:0">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7;margin:0">{{ t.nameLabel }}</p>
+          <input value="{{ trialName }}" onChange="{{ onTrialName }}" placeholder="Nguyễn Văn A" style="width:100%;box-sizing:border-box;min-height:52px;background:#FFFFFF;border:0;border-radius:999px;padding:0 22px;font:inherit;font-size:16px;font-weight:700;color:#14180F">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7;margin:2px 0 0">{{ t.phoneLabel }}</p>
+          <input value="{{ trialPhone }}" onChange="{{ onTrialPhone }}" placeholder="0912 345 678" inputmode="tel" style="width:100%;box-sizing:border-box;min-height:52px;background:#FFFFFF;border:0;border-radius:999px;padding:0 22px;font:inherit;font-size:16px;font-weight:700;color:#14180F">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7;margin:2px 0 0">{{ t.sportLabel }}</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ sports }}" as="sp" hint-placeholder-count="3">
+              <button onClick="{{ sp.pick }}" style="border:0;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;padding:11px 18px;border-radius:999px;background:{{ sp.bg }};color:{{ sp.fg }}">{{ sp.name }}</button>
+            </sc-for>
+          </div>
+          <div style="flex:1"></div>
+          <div onClick="{{ toggleConsent }}" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer">
+            <span style="width:22px;height:22px;border-radius:7px;background:{{ consentBg }};color:#052430;display:grid;place-items:center;flex:none;font-size:14px;font-weight:800">{{ consentMark }}</span>
+            <p style="margin:0;font-size:12.5px;line-height:1.4;opacity:.75">{{ t.consent }}</p>
+          </div>
+          <button onClick="{{ submitTrial }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer;opacity:{{ trialOp }}">{{ t.sendInfo }}</button>
+          <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:0 auto 4px;flex:none"></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- 10 · trial sent -->
+    <sc-if value="{{ sTrialOk }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></p>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.thanksT1 }}<br>{{ t.thanksT2 }}</p>
+        </div>
+        <div style="border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:rgba(255,255,255,.55)">
+          <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t.nextLabel }}</p>
+          <div style="border-radius:18px;padding:13px 14px;background:#FFFFFF">
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ t.thanksBody }}</p>
+          </div>
+        </div>
+        <div style="flex:1"></div>
+        <button onClick="{{ goB1 }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer">{{ t.backStart }}</button>
+        <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+      </div>
+    </sc-if>
+
+    <!-- 11 · remembered device -->
+    <sc-if value="{{ sMem }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.helloLabel }}</p>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">Nguyễn Thị<br>Hồng Nhung</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:none">
+          <div style="background:#F4573F;color:#2A0C06;border-radius:18px;padding:13px 14px"><div style="font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1">18:41</div><div style="font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;opacity:.72;margin-top:5px">{{ t.openNow }}</div></div>
+          <div style="background:#6F66F0;color:#0D0838;border-radius:18px;padding:13px 14px"><div style="font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1">24</div><div style="font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;opacity:.72;margin-top:5px">{{ t.arrived }}</div></div>
+        </div>
+        <div style="background:#C4D4C1;color:#14180F;border-radius:28px 28px 0 0;margin-top:8px;padding:22px 16px 10px;flex:1;display:flex;flex-direction:column;gap:14px;min-height:0">
+          <p style="margin:0;font-size:13.5px;font-weight:600;opacity:.75;text-align:center">{{ t.rememberNote }}</p>
+          <button onClick="{{ memCheckin }}" style="width:100%;min-height:64px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer">{{ t.checkin }}
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+          <button onClick="{{ goB1 }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px">{{ t.changeNum }}</button>
+          <div style="flex:1"></div>
+          <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:0 auto 4px;flex:none"></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- 12 · scanned again too soon -->
+    <sc-if value="{{ sAgain }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Nguyễn Thị Hồng Nhung</p>
+          <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(0,0,0,.12);line-height:1;white-space:nowrap;flex:none">18:44</span>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.alreadyT1 }}<br>{{ t.alreadyT2 }}</p>
+        </div>
+        <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:2px 2px -5px">{{ t.yourCard }}</p>
+        <div style="border-radius:24px;padding:18px;aspect-ratio:1.586;box-sizing:border-box;display:flex;flex-direction:column;background:linear-gradient(135deg,#9E98F6 0%,#6F66F0 100%);color:#0D0838;box-shadow:0 12px 26px rgba(13,8,56,.26)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+            <svg width="34" height="26" viewBox="0 0 32 24" fill="none"><rect x="0.75" y="0.75" width="30.5" height="22.5" rx="5" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.75)" stroke-width="1.5"></rect><path d="M1 6.5h30M1 12h30M1 17.5h30M11 1v5.5M21 1v5.5M11 17.5v5.5M21 17.5v5.5" stroke="rgba(255,255,255,.75)" stroke-width="1.2"></path></svg>
+            <div style="text-align:right">
+              <div style="font-size:14px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;font-variation-settings:'wdth' 88;line-height:1.1">Gym Thành Phát</div>
+              <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin-top:2px">Quận 7 · Boxing</div>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+          <p style="margin:0 0 5px;font-size:13px;font-weight:600;opacity:.78">Nguyễn Thị Hồng Nhung</p>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <div style="min-width:0">
+              <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1;white-space:nowrap">{{ sessionsLeft }}<span style="font-size:22px;font-weight:700;opacity:.55">/24</span><small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.7">{{ t.sessionsUnit }}</small></div>
+            </div>
+            <div style="text-align:right;flex:none">
+              <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;white-space:nowrap">{{ t.expiresLabel }} · 04/08/26</div>
+              <div style="font-size:13.5px;font-weight:800;letter-spacing:.08em;margin-top:3px">0912 345 678</div>
+            </div>
+          </div>
+        </div>
+        <div style="border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:rgba(255,255,255,.55)">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase">{{ t.checkedAt }}</span>
+            <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(0,0,0,.12)">Boxing</span>
+          </div>
+          <div style="font-size:48px;font-weight:800;letter-spacing:-.035em;line-height:1">18:42</div>
+          <div style="border-radius:18px;padding:13px 14px;background:#FFFFFF">
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ t.alreadyBody }}</p>
+          </div>
+        </div>
+        <div style="flex:1"></div>
+        <button onClick="{{ goB1 }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer">{{ t.backStart }}</button>
+        <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+      </div>
+    </sc-if>
+
+    <!-- 13 · offline -->
+    <sc-if value="{{ sOff }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+        <div style="display:flex;align-items:center;gap:11px;flex:none">
+          <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+          <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">Gym Thành Phát</p>
+          <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">Quận 7</span>
+        </div>
+        <div style="padding:6px 2px 2px;flex:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></p>
+          </div>
+          <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ t.offT1 }}<br>{{ t.offT2 }}</p>
+        </div>
+        <div style="border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:12px;background:#1F211F">
+          <div style="border-radius:18px;padding:13px 14px;background:#2A2D2A">
+            <p style="margin:0;font-size:14px;line-height:1.45;opacity:.85">{{ t.offBody }}</p>
+          </div>
+          <button onClick="{{ retry }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer">{{ t.retry }}</button>
+        </div>
+        <div style="display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:#1F211F">
+          <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#2A2D2A;color:#F2F2EC">!</span>
+          <div><h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ t.askStaff }}</h5>
+            <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">{{ t.askStaffBody }}</p></div>
+        </div>
+        <div style="flex:1"></div>
+        <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- fixed state-jump panel -->
+  <div style="position:fixed;top:20px;right:20px;width:248px;max-height:calc(100vh - 40px);overflow:auto;background:#1F211F;color:#F2F2EC;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.4)">
+    <div style="display:flex;gap:6px">
+      <button onClick="{{ setEn }}" style="flex:1;border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:800;letter-spacing:.08em;padding:9px 0;border-radius:999px;background:{{ enBg }};color:{{ enFg }}">EN</button>
+      <button onClick="{{ setVi }}" style="flex:1;border:0;cursor:pointer;font:inherit;font-size:12px;font-weight:800;letter-spacing:.08em;padding:9px 0;border-radius:999px;background:{{ viBg }};color:{{ viFg }}">VI</button>
+    </div>
+    <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.55;margin:6px 0 0">{{ t.navTitle }}</p>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="11">
+        <button onClick="{{ item.go }}" style="display:flex;gap:8px;align-items:baseline;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:999px;background:{{ item.bg }};color:{{ item.fg }}"><span style="font-size:10px;font-weight:800;opacity:.55;width:16px;flex:none">{{ item.num }}</span>{{ item.label }}</button>
+      </sc-for>
+    </div>
+    <p style="font-size:11px;line-height:1.5;opacity:.55;margin:6px 2px 0">{{ t.hint }}</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultLang&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;en&quot;, &quot;vi&quot;], &quot;default&quot;: &quot;en&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Language&quot;}, &quot;sessionsLeft&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 12, &quot;min&quot;: 1, &quot;max&quot;: 48, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Card data&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'a1', sending: false, lang: null, phone: '', trialName: '', trialPhone: '', trialSport: '', trialConsent: false, already: false };
+
+  static DICT = {
+    en: {
+      checkin: 'Check in', who1: 'Who are', who2: 'you?', phoneLabel: 'Phone number',
+      openNow: 'Open now', arrived: 'Arrived today',
+      noPassTitle: 'No password needed',
+      noPass: 'The number you registered with the center is enough. No password, no OTP.',
+      trialLink: 'New here? Try a class',
+      sendingBtn: 'Sending…', sendingNote: 'One moment — checking your number.',
+      doneTitle: 'Done', checkedIn1: 'Checked', checkedIn2: 'in',
+      yourCard: 'Your card', remainingLabel: 'Sessions left', pack: '24-session pack',
+      sessionsUnit: 'sessions', expiresLabel: 'Expires', days3: '3 days left',
+      expSoonTitle: 'Expiring soon', expSoonBody: 'Ask the front desk to renew your card before 04/08.',
+      lowTitle: 'Only 2 sessions left', lowBody: 'Ask the front desk about a new pack when you\u2019re ready.',
+      expiredT1: 'Card has', expiredT2: 'expired', expiredOn: 'Expired',
+      expiredChip: 'EXPIRED · 28/07',
+      expiredCta: 'Ask the front desk to renew it and you\u2019re back in.',
+      expiredBody: 'Your card expired on 28/07. Ask the front desk to renew it and you\u2019re back in.',
+      changeNum: 'Not you? Change number',
+      closedT1: 'We\u2019re', closedT2: 'closed now', hoursLabel: 'Opening hours',
+      closedBody: 'The center is open 06:00\u201322:00. Check-in isn\u2019t available right now \u2014 see you in the morning!',
+      trialTitle: 'Trial class', trialT1: 'New', trialT2: 'here?',
+      trialSub: 'Leave your info \u2014 the center will call you to set up a trial session.',
+      nameLabel: 'Your name', sportLabel: 'Discipline (optional)',
+      consent: 'I agree to let the center contact me about this trial session.',
+      sendInfo: 'Send info',
+      thanksT1: 'Thank', thanksT2: 'you!', nextLabel: 'What\u2019s next',
+      thanksBody: 'The center will call you today to set up your trial session. No commitment yet \u2014 just come try a class.',
+      backStart: 'Back to start',
+      helloLabel: 'Welcome back', rememberNote: 'One tap and you\u2019re in.',
+      alreadyT1: 'Already', alreadyT2: 'checked in', checkedAt: 'Checked in at',
+      alreadyBody: 'You already checked in at 18:42. Head on in!',
+      offT1: 'No', offT2: 'connection',
+      offBody: 'Your check-in didn\u2019t go through \u2014 the connection dropped. Try again in a spot with better signal.',
+      retry: 'Try again', askStaff: 'Or ask the staff',
+      askStaffBody: 'Staff can check you in by name from their own device.',
+      navTitle: 'States', hint: 'Member number: 0912 345 678. Any other number \u2192 trial invite.',
+      nav: ['Enter phone / Sending', 'Done \u2014 normal', 'Done \u2014 expiring soon', 'Done \u2014 2 sessions left', 'Card expired', 'Outside hours', 'Trial invite', 'Trial sent', 'Remembered device', 'Scanned again', 'Offline']
+    },
+    vi: {
+      checkin: '\u0110i\u1ec3m danh', who1: 'B\u1ea1n l\u00e0', who2: 'ai nh\u1ec9?', phoneLabel: 'S\u1ed1 \u0111i\u1ec7n tho\u1ea1i',
+      openNow: '\u0110ang m\u1edf c\u1eeda', arrived: 'Ng\u01b0\u1eddi \u0111\u00e3 t\u1edbi',
+      noPassTitle: 'Kh\u00f4ng c\u1ea7n m\u1eadt kh\u1ea9u',
+      noPass: 'S\u1ed1 b\u1ea1n \u0111\u00e3 \u0111\u0103ng k\u00fd v\u1edbi trung t\u00e2m l\u00e0 \u0111\u1ee7. Kh\u00f4ng m\u1eadt kh\u1ea9u, kh\u00f4ng m\u00e3 OTP.',
+      trialLink: 'Ch\u01b0a t\u1eebng t\u1eadp \u1edf \u0111\u00e2y? H\u1ecdc th\u1eed',
+      sendingBtn: '\u0110ang g\u1eedi\u2026', sendingNote: 'Ch\u1edd m\u1ed9t ch\u00fat \u2014 \u0111ang ki\u1ec3m tra s\u1ed1 c\u1ee7a b\u1ea1n.',
+      doneTitle: 'Xong r\u1ed3i', checkedIn1: '\u0110\u00e3 \u0111i\u1ec3m', checkedIn2: 'danh',
+      yourCard: 'Th\u1ebb c\u1ee7a b\u1ea1n', remainingLabel: 'C\u00f2n l\u1ea1i', pack: 'g\u00f3i 24 bu\u1ed5i',
+      sessionsUnit: 'bu\u1ed5i', expiresLabel: 'H\u1ebft h\u1ea1n', days3: 'c\u00f2n 3 ng\u00e0y',
+      expSoonTitle: 'S\u1eafp h\u1ebft h\u1ea1n', expSoonBody: 'Nh\u1eafc l\u1ec5 t\u00e2n gia h\u1ea1n gi\u00fap b\u1ea1n tr\u01b0\u1edbc 04/08 nh\u00e9.',
+      lowTitle: 'S\u1eafp h\u1ebft bu\u1ed5i', lowBody: 'C\u00f2n 2 bu\u1ed5i th\u00f4i. Nh\u1eafc l\u1ec5 t\u00e2n xem g\u00f3i m\u1edbi khi b\u1ea1n s\u1eb5n s\u00e0ng nh\u00e9.',
+      expiredT1: 'Th\u1ebb \u0111\u00e3', expiredT2: 'h\u1ebft h\u1ea1n', expiredOn: 'H\u1ebft h\u1ea1n',
+      expiredChip: 'H\u1ebeT H\u1ea0N \u00b7 28/07',
+      expiredCta: 'Nh\u1eafc l\u1ec5 t\u00e2n gia h\u1ea1n l\u00e0 t\u1eadp l\u1ea1i \u0111\u01b0\u1ee3c ngay.',
+      expiredBody: 'Th\u1ebb c\u1ee7a b\u1ea1n h\u1ebft h\u1ea1n ng\u00e0y 28/07. Nh\u1eafc l\u1ec5 t\u00e2n gia h\u1ea1n l\u00e0 t\u1eadp l\u1ea1i \u0111\u01b0\u1ee3c ngay.',
+      changeNum: 'Kh\u00f4ng ph\u1ea3i b\u1ea1n? \u0110\u1ed5i s\u1ed1',
+      closedT1: 'Ch\u01b0a t\u1edbi', closedT2: 'gi\u1edd m\u1edf c\u1eeda', hoursLabel: 'Gi\u1edd m\u1edf c\u1eeda',
+      closedBody: 'Trung t\u00e2m m\u1edf c\u1eeda 06:00\u201322:00. Gi\u1edd n\u00e0y ch\u01b0a \u0111i\u1ec3m danh \u0111\u01b0\u1ee3c \u2014 h\u1eb9n b\u1ea1n s\u00e1ng mai nh\u00e9!',
+      trialTitle: 'H\u1ecdc th\u1eed', trialT1: 'B\u1ea1n m\u1edbi', trialT2: 't\u1edbi \u00e0?',
+      trialSub: '\u0110\u1ec3 l\u1ea1i th\u00f4ng tin, trung t\u00e2m s\u1ebd g\u1ecdi b\u1ea1n \u0111\u1ec3 x\u1ebfp bu\u1ed5i h\u1ecdc th\u1eed.',
+      nameLabel: 'T\u00ean b\u1ea1n', sportLabel: 'B\u1ed9 m\u00f4n (tu\u1ef3 ch\u1ecdn)',
+      consent: 'T\u00f4i \u0111\u1ed3ng \u00fd \u0111\u1ec3 trung t\u00e2m li\u00ean h\u1ec7 v\u1ec1 bu\u1ed5i h\u1ecdc th\u1eed n\u00e0y.',
+      sendInfo: 'G\u1eedi th\u00f4ng tin',
+      thanksT1: 'C\u1ea3m \u01a1n', thanksT2: 'b\u1ea1n nh\u00e9!', nextLabel: 'B\u01b0\u1edbc ti\u1ebfp theo',
+      thanksBody: 'Trung t\u00e2m s\u1ebd g\u1ecdi b\u1ea1n trong h\u00f4m nay \u0111\u1ec3 x\u1ebfp bu\u1ed5i h\u1ecdc th\u1eed. Ch\u01b0a c\u1ea7n cam k\u1ebft g\u00ec \u2014 c\u1ee9 t\u1edbi t\u1eadp th\u1eed th\u00f4i.',
+      backStart: 'V\u1ec1 m\u00e0n \u0111\u1ea7u',
+      helloLabel: 'Ch\u00e0o b\u1ea1n', rememberNote: 'B\u1ea5m m\u1ed9t c\u00e1i l\u00e0 xong.',
+      alreadyT1: '\u0110i\u1ec3m danh', alreadyT2: 'r\u1ed3i m\u00e0', checkedAt: '\u0110\u00e3 \u0111i\u1ec3m danh l\u00fac',
+      alreadyBody: 'B\u1ea1n \u0111\u00e3 \u0111i\u1ec3m danh l\u00fac 18:42 r\u1ed3i. C\u1ee9 v\u00e0o t\u1eadp th\u00f4i!',
+      offT1: 'M\u1ea5t m\u1ea1ng', offT2: 'r\u1ed3i',
+      offBody: '\u0110i\u1ec3m danh ch\u01b0a g\u1eedi \u0111\u01b0\u1ee3c v\u00ec m\u1ea5t k\u1ebft n\u1ed1i. Th\u1eed l\u1ea1i \u1edf ch\u1ed7 s\u00f3ng t\u1ed1t h\u01a1n nh\u00e9.',
+      retry: 'Th\u1eed l\u1ea1i', askStaff: 'Ho\u1eb7c nh\u1edd nh\u00e2n vi\u00ean',
+      askStaffBody: 'Nh\u00e2n vi\u00ean c\u00f3 th\u1ec3 \u0111i\u1ec3m danh h\u1ed9 b\u1ea1n theo t\u00ean tr\u00ean m\u00e1y c\u1ee7a h\u1ecd.',
+      navTitle: 'Tr\u1ea1ng th\u00e1i', hint: 'S\u0110T h\u1ed9i vi\u00ean: 0912 345 678. S\u1ed1 l\u1ea1 \u2192 m\u1eddi h\u1ecdc th\u1eed.',
+      nav: ['Nh\u1eadp S\u0110T / \u0110ang g\u1eedi', 'Xong \u2014 b\u00ecnh th\u01b0\u1eddng', 'Xong \u2014 s\u1eafp h\u1ebft h\u1ea1n', 'Xong \u2014 c\u00f2n 2 bu\u1ed5i', 'Th\u1ebb h\u1ebft h\u1ea1n', 'Ngo\u00e0i gi\u1edd m\u1edf c\u1eeda', 'M\u1eddi h\u1ecdc th\u1eed', '\u0110\u00e3 g\u1eedi h\u1ecdc th\u1eed', 'Thi\u1ebft b\u1ecb \u0111\u00e3 nh\u1edb', 'Qu\u00e9t l\u1ea1i qu\u00e1 nhanh', 'M\u1ea5t m\u1ea1ng']
+    }
+  };
+
+  static SCREENS = ['a1', 'ok', 'okexp', 'oklow', 'expired', 'closed', 'trial', 'trialok', 'mem', 'again', 'off'];
+
+  show(id) { clearTimeout(this._t); this.setState({ screen: id, sending: false }); }
+
+  renderVals() {
+    const lang = this.state.lang ?? (this.props.defaultLang ?? 'en');
+    const t = Component.DICT[lang];
+    const scr = this.state.screen;
+    const digits = this.state.phone.replace(/\D/g, '');
+    const sending = this.state.sending;
+    const darkBg = scr !== 'ok' && scr !== 'okexp' && scr !== 'oklow' && scr !== 'trialok' && scr !== 'again';
+    const valid = digits.length >= 9;
+    const trialOk = this.state.trialName.trim().length > 1 && this.state.trialPhone.replace(/\D/g, '').length >= 9 && this.state.trialConsent;
+    const bgMap = { a1: '#131413', ok: '#C4D4C1', okexp: '#C4D4C1', oklow: '#C4D4C1', expired: '#8E2C1B', closed: '#131413', trial: '#131413', trialok: '#C4D4C1', mem: '#131413', again: '#C4D4C1', off: '#131413' };
+    const fgMap = { a1: '#F2F2EC', ok: '#14180F', okexp: '#14180F', oklow: '#14180F', expired: '#F2F2EC', closed: '#F2F2EC', trial: '#F2F2EC', trialok: '#14180F', mem: '#F2F2EC', again: '#14180F', off: '#F2F2EC' };
+    const clockMap = { ok: '18:42', okexp: '18:42', oklow: '18:42', again: '18:44', closed: '05:12', trialok: '18:45' };
+    const sports = ['Boxing', 'Yoga', 'Gym'].map(name => ({
+      name, bg: this.state.trialSport === name ? '#A9E5F1' : 'rgba(0,0,0,.08)',
+      fg: this.state.trialSport === name ? '#052430' : '#14180F',
+      pick: () => this.setState(s => ({ trialSport: s.trialSport === name ? '' : name }))
+    }));
+    const navItems = t.nav.map((label, i) => {
+      const id = Component.SCREENS[i];
+      const on = scr === id;
+      return { label, num: String(i + 1), bg: on ? '#A9E5F1' : 'rgba(255,255,255,.07)', fg: on ? '#052430' : '#F2F2EC', go: () => this.show(id) };
+    });
+    return {
+      t, navItems, sports,
+      phone: this.state.phone, phoneShown: this.state.phone || '0912 345 678',
+      trialName: this.state.trialName, trialPhone: this.state.trialPhone,
+      sessionsLeft: scr === 'oklow' ? 2 : (this.props.sessionsLeft ?? 12),
+      phoneBg: bgMap[scr], phoneFg: fgMap[scr], clock: clockMap[scr] || '18:41',
+      pillBg: darkBg ? 'rgba(255,255,255,.13)' : 'rgba(0,0,0,.16)',
+      sending, notSending: !sending,
+      phoneVal: this.state.phone, inputOp: sending ? 0.55 : 1,
+      ctaLabel: sending ? t.sendingBtn : t.checkin,
+      noteText: sending ? t.sendingNote : t.noPass,
+      sA1: scr === 'a1',
+      sOkAny: scr === 'ok' || scr === 'okexp' || scr === 'oklow',
+      sOkExp: scr === 'okexp', sOkLow: scr === 'oklow',
+      sExpired: scr === 'expired', sClosed: scr === 'closed',
+      sTrial: scr === 'trial', sTrialOk: scr === 'trialok',
+      sMem: scr === 'mem', sAgain: scr === 'again', sOff: scr === 'off',
+      ctaOp: sending ? 0.75 : (valid ? 1 : 0.4), trialOp: trialOk ? 1 : 0.4,
+      consentBg: this.state.trialConsent ? '#A9E5F1' : 'rgba(0,0,0,.12)',
+      consentMark: this.state.trialConsent ? '\u2713' : '',
+      enBg: lang === 'en' ? '#A9E5F1' : 'rgba(255,255,255,.08)', enFg: lang === 'en' ? '#052430' : '#F2F2EC',
+      viBg: lang === 'vi' ? '#A9E5F1' : 'rgba(255,255,255,.08)', viFg: lang === 'vi' ? '#052430' : '#F2F2EC',
+      setEn: () => this.setState({ lang: 'en' }), setVi: () => this.setState({ lang: 'vi' }),
+      onPhone: e => this.setState({ phone: e.target.value }),
+      onTrialName: e => this.setState({ trialName: e.target.value }),
+      onTrialPhone: e => this.setState({ trialPhone: e.target.value }),
+      toggleConsent: () => this.setState(s => ({ trialConsent: !s.trialConsent })),
+      spinner: React.createElement('span', { style: { width: 16, height: 16, border: '2.5px solid rgba(242,242,236,.35)', borderTopColor: '#F2F2EC', borderRadius: 999, display: 'inline-block', animation: 'ckspin .8s linear infinite' } }),
+      submitPhone: () => {
+        if (!valid || sending) return;
+        this.setState({ sending: true });
+        this._t = setTimeout(() => {
+          if (digits === '0912345678') this.setState({ screen: 'ok', sending: false });
+          else this.setState({ screen: 'trial', sending: false, trialPhone: this.state.phone });
+        }, 1100);
+      },
+      submitTrial: () => { if (trialOk) this.setState({ screen: 'trialok' }); },
+      memCheckin: () => {
+        this.setState({ sending: true });
+        this._t = setTimeout(() => {
+          this.setState(s => ({ screen: s.already ? 'again' : 'ok', sending: false, already: true }));
+        }, 900);
+      },
+      retry: () => {
+        this.setState({ sending: true });
+        this._t = setTimeout(() => this.setState({ screen: 'ok', sending: false }), 900);
+      },
+      goB1: () => this.show('a1'),
+      goTrial: () => this.show('trial')
+    };
+  }
+}
+</script>
+</body>
+</html>

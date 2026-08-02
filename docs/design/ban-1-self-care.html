@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkino — v5, theo shot self-care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TRANG SO SÁNH v5 — không phải code sản phẩm.
+
+   Dựng theo shot "Self-care Mobile App Design Concept".
+   Lấy nguyên ngôn ngữ hình của nó:
+     · khối màu pastel phẳng + mặt vẽ một nét
+     · tấm đen bo góc lớn ở nửa dưới, chữ tiêu đề to
+     · nút pill TRẮNG trên nền đen
+     · chip lưới, chip đang chọn = xanh #49CBEB
+     · thẻ đen và thẻ trắng đi cặp
+     · nút tròn xanh, thanh nav dưới có ô xanh bo tròn
+     · bo góc rất lớn (24–28px), nhiều khoảng thở
+
+   Đổi một thứ so với bản gốc: font.
+   Zona Pro là font thương mại. Be Vietnam Pro là font geometric
+   miễn phí CÓ khối `vietnamese` (đã kiểm ở fonts.google.com/metadata).
+   Outfit và Poppins bị loại: không có subset Vietnamese, chữ có dấu vỡ.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+               Roboto, Arial, sans-serif;
+  background: #D6EDF3;          /* nền xanh nhạt như phông của shot gốc */
+  color: #0B0B0B; line-height: 1.5;
+}
+[data-theme="dark"] body { background: #0B1114; color: #EAF3F6; }
+
+.page { max-width: 1320px; margin: 0 auto; padding: 30px 20px 96px; }
+
+.crumb { display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+         font-size: 13px; margin-bottom: 22px; }
+.crumb a { display: inline-block; padding: 8px 15px; border-radius: 999px;
+           background: rgba(0,0,0,0.08); color: inherit; text-decoration: none;
+           font-weight: 600; }
+.crumb a.here { background: #0B0B0B; color: #fff; }
+[data-theme="dark"] .crumb a { background: rgba(255,255,255,0.12); }
+[data-theme="dark"] .crumb a.here { background: #EAF3F6; color: #0B1114; }
+header.top { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;
+             justify-content: space-between; }
+h1 { font-size: 27px; font-weight: 800; margin: 0; letter-spacing: -0.03em; }
+.lede { max-width: 68ch; margin: 12px 0 0; font-size: 15px; opacity: 0.72; }
+.lede code { font-size: 13px; background: rgba(0,0,0,0.07); padding: 1px 6px;
+             border-radius: 5px; }
+[data-theme="dark"] .lede code { background: rgba(255,255,255,0.12); }
+.toggle { border: 0; background: #0B0B0B; color: #fff; border-radius: 999px;
+          padding: 12px 20px; font: inherit; font-size: 14px; font-weight: 600;
+          cursor: pointer; white-space: nowrap; }
+[data-theme="dark"] .toggle { background: #EAF3F6; color: #0B1114; }
+
+h2.rowtitle { font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+              text-transform: uppercase; opacity: 0.5; margin: 46px 0 4px; }
+p.rowsub { margin: 0 0 22px; font-size: 14px; opacity: 0.72; max-width: 74ch; }
+
+.grid { display: grid; gap: 26px;
+        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
+.col > h3 { margin: 0 0 4px; font-size: 16px; font-weight: 700; letter-spacing: -0.015em; }
+.col > .why { margin: 0 0 14px; font-size: 13.5px; opacity: 0.7; }
+
+/* ============================================================
+   TOKEN
+   ============================================================ */
+.ck {
+  --c-blue:     #49CBEB;   /* lấy nguyên từ bảng màu của shot gốc */
+  --c-blue-fg:  #052430;
+  --c-ink:      #0B0B0B;
+  --c-ink-fg:   #FFFFFF;
+  --c-grey:     #F4F5F6;
+  --c-white:    #FFFFFF;
+  --c-fg:       #0B0B0B;
+  --c-muted:    #82898D;
+  --c-line:     #E9EBEC;
+
+  /* pastel chỉ dùng làm nền khối minh hoạ, không dùng làm nền màn hình */
+  --c-mint:     #9FEFCB;  --c-mint-bg: #DAF7E9;
+  --c-pink:     #FBAEDA;  --c-pink-bg: #FCE3F1;
+  --c-warn-bg:  #FFF0D6;  --c-warn-fg: #7A5410;
+
+  --r-screen: 34px; --r-card: 26px; --r-tile: 20px; --r-pill: 999px;
+  --tap: 54px; --pad: 18px;
+}
+[data-theme="dark"] .ck {
+  --c-ink: #F4F5F6; --c-ink-fg: #0B0B0B;
+  --c-grey: #1A1F21; --c-white: #12171A; --c-fg: #EAF3F6;
+  --c-muted: #7E8B91; --c-line: #232A2D;
+  --c-mint-bg: #12332A; --c-pink-bg: #33202C;
+  --c-warn-bg: #33270F; --c-warn-fg: #E5B75C;
+}
+
+/* ============================================================
+   KHUNG MÁY
+   ============================================================ */
+.phone {
+  background: var(--c-white); color: var(--c-fg);
+  border: 9px solid #0B0B0B; border-radius: 42px;
+  overflow: hidden; display: flex; flex-direction: column;
+  min-height: 660px;
+  box-shadow: 0 18px 40px rgba(15, 45, 60, 0.18);
+}
+[data-theme="dark"] .phone { border-color: #05090B; }
+.phone.dark { background: var(--c-ink); color: var(--c-ink-fg); }
+
+.status { display: flex; align-items: center; justify-content: space-between;
+          padding: 12px 24px 4px; font-size: 13px; font-weight: 700; flex: none; }
+.status .bars { display: flex; gap: 4px; align-items: flex-end; opacity: 0.9; }
+.status .bars i { display: block; width: 3px; background: currentColor; border-radius: 1px; }
+.status .bars i:nth-child(1) { height: 5px; }
+.status .bars i:nth-child(2) { height: 7px; }
+.status .bars i:nth-child(3) { height: 9px; }
+.status .bars i:nth-child(4) { height: 11px; }
+.status .batt { width: 22px; height: 11px; border: 1.5px solid currentColor;
+                border-radius: 3px; position: relative; opacity: 0.9; }
+.status .batt::before { content:""; position: absolute; inset: 2px; right: 6px;
+                        background: currentColor; border-radius: 1px; }
+
+/* ---- khối minh hoạ pastel + mặt vẽ một nét ---- */
+.artblock { margin: 6px var(--pad) 0; border-radius: var(--r-card);
+            padding: 26px 0 30px; display: flex; flex-direction: column;
+            align-items: center; gap: 18px; flex: none; }
+.artblock.mint { background: var(--c-mint-bg); }
+.artblock.pink { background: var(--c-pink-bg); }
+.steps { display: flex; gap: 7px; width: 74%; }
+.steps i { flex: 1; height: 3px; border-radius: 999px; background: rgba(11,11,11,0.16); }
+.steps i.on { background: #0B0B0B; }
+[data-theme="dark"] .steps i { background: rgba(255,255,255,0.2); }
+[data-theme="dark"] .steps i.on { background: #EAF3F6; }
+.face { width: 170px; height: 170px; }
+.face circle.bg { fill: var(--c-mint); }
+.artblock.pink .face circle.bg { fill: var(--c-pink); }
+.face .ln { fill: none; stroke: #0B0B0B; stroke-width: 5.5;
+            stroke-linecap: round; stroke-linejoin: round; }
+.face .dot { fill: #0B0B0B; }
+
+/* ---- tấm đen ---- */
+.dark-sheet { background: var(--c-ink); color: var(--c-ink-fg); flex: 1;
+              border-radius: var(--r-screen) var(--r-screen) 0 0;
+              margin-top: 18px; padding: 26px var(--pad) 22px;
+              display: flex; flex-direction: column; gap: 16px; }
+.phone.dark .dark-sheet { margin-top: 0; border-radius: 0; }
+
+.h1 { margin: 0; font-size: 27px; font-weight: 700; line-height: 1.22;
+      letter-spacing: -0.03em; text-align: center; }
+.h1.left { text-align: left; }
+.h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.03em; }
+.sub { margin: 0; font-size: 14px; opacity: 0.62; }
+.sub.center { text-align: center; }
+
+.rowbtn { display: flex; align-items: center; gap: 14px; margin-top: auto; }
+.skip { font-size: 15px; font-weight: 500; opacity: 0.68; padding: 0 6px; }
+.pillbtn { flex: 1; min-height: var(--tap); border: 0; border-radius: var(--r-pill);
+           background: var(--c-white); color: var(--c-fg);
+           font: inherit; font-size: 16px; font-weight: 700; cursor: pointer;
+           display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pillbtn.blue { background: var(--c-blue); color: var(--c-blue-fg); }
+.pillbtn.ink  { background: var(--c-ink); color: var(--c-ink-fg); }
+.pillbtn svg { width: 16px; height: 16px; }
+
+/* ---- chip ---- */
+.chipgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.chipx { min-height: 50px; border-radius: var(--r-pill); display: grid;
+         place-items: center; font-size: 15px; font-weight: 500;
+         background: rgba(255,255,255,0.10); }
+.chipx.on { background: var(--c-blue); color: var(--c-blue-fg); font-weight: 600; }
+.chiprow { display: flex; gap: 9px; flex-wrap: wrap; }
+.chip { font-size: 13.5px; font-weight: 500; padding: 9px 16px;
+        border-radius: var(--r-pill); background: var(--c-grey); color: var(--c-fg); }
+.chip.on { background: var(--c-blue); color: var(--c-blue-fg); font-weight: 600; }
+.chip.dk { background: rgba(255,255,255,0.11); color: #fff; }
+
+/* ---- thân trắng ---- */
+.body { flex: 1; padding: 8px var(--pad) 0; display: flex; flex-direction: column; gap: 16px; }
+.head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.circbtn { width: 46px; height: 46px; border-radius: 999px; flex: none;
+           background: var(--c-ink); color: var(--c-ink-fg);
+           display: grid; place-items: center; position: relative; }
+.circbtn svg { width: 19px; height: 19px; }
+.circbtn .dotb { position: absolute; top: 9px; right: 10px; width: 8px; height: 8px;
+                 border-radius: 999px; background: var(--c-blue); }
+.search { display: flex; align-items: center; gap: 11px; background: var(--c-grey);
+          border-radius: var(--r-pill); padding: 15px 19px; font-size: 15px;
+          color: var(--c-muted); }
+.search svg { width: 17px; height: 17px; flex: none; }
+
+/* thẻ đen + thẻ trắng đi cặp */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.bigcard { border-radius: var(--r-card); padding: 17px; min-height: 152px;
+           display: flex; flex-direction: column; justify-content: space-between; }
+.bigcard.ink { background: var(--c-ink); color: var(--c-ink-fg); }
+.bigcard.wht { background: var(--c-grey); color: var(--c-fg); }
+.bigcard .t { font-size: 19px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+.bigcard .foot { display: flex; align-items: center; justify-content: space-between;
+                 gap: 8px; }
+.bigcard .mini { font-size: 12.5px; font-weight: 600; padding: 7px 12px;
+                 border-radius: var(--r-pill); background: rgba(0,0,0,0.06); }
+.bigcard.ink .mini { background: rgba(255,255,255,0.13); }
+.play { width: 38px; height: 38px; border-radius: 999px; flex: none;
+        background: var(--c-blue); color: var(--c-blue-fg);
+        display: grid; place-items: center; font-size: 20px; font-weight: 800; }
+.play svg { width: 15px; height: 15px; }
+
+.seehead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.seehead .lnk { font-size: 13.5px; opacity: 0.55; }
+
+/* hàng danh sách */
+.list { display: flex; flex-direction: column; gap: 10px; }
+.li { display: flex; align-items: center; gap: 13px; padding: 13px 15px;
+      background: var(--c-grey); border-radius: var(--r-card); min-height: 66px; }
+.li.blue { background: var(--c-blue); color: var(--c-blue-fg); }
+.li .who { flex: 1; min-width: 0; }
+.li .who b { display: block; font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em;
+             white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.li .who span { font-size: 13px; opacity: 0.6; }
+.tapdot { width: 40px; height: 40px; border-radius: 999px; flex: none;
+          border: 2px solid var(--c-line); display: grid; place-items: center;
+          color: var(--c-muted); background: var(--c-white); }
+.tapdot.done { background: var(--c-blue); border-color: transparent; color: var(--c-blue-fg); }
+.tapdot svg { width: 17px; height: 17px; }
+.ago { font-size: 12.5px; opacity: 0.55; white-space: nowrap; }
+
+.quote { background: var(--c-ink); color: var(--c-ink-fg); border-radius: var(--r-card);
+         padding: 16px; display: flex; gap: 13px; align-items: center; }
+.quote .qi { width: 42px; height: 42px; border-radius: 13px; flex: none;
+             background: var(--c-blue); color: var(--c-blue-fg);
+             display: grid; place-items: center; font-weight: 800; font-size: 17px; }
+.quote p { margin: 0; font-size: 14px; line-height: 1.4; }
+
+.input { width: 100%; min-height: var(--tap); background: rgba(255,255,255,0.10);
+         color: #fff; border: 0; border-radius: var(--r-pill);
+         padding: 0 22px; font: inherit; font-size: 16px; font-weight: 500; }
+.input::placeholder { color: rgba(255,255,255,0.45); }
+.input.light { background: var(--c-grey); color: var(--c-fg); }
+.input.light::placeholder { color: var(--c-muted); }
+
+/* thanh nav dưới */
+.nav { display: flex; align-items: center; justify-content: space-around;
+       padding: 10px var(--pad) 16px; flex: none; gap: 6px; }
+.nav .it { display: grid; place-items: center; gap: 3px; padding: 9px 14px;
+           border-radius: 17px; color: var(--c-muted); font-size: 11px; font-weight: 600; }
+.nav .it.on { background: var(--c-blue); color: var(--c-blue-fg); }
+.nav .it svg { width: 20px; height: 20px; }
+.homebar { width: 120px; height: 5px; border-radius: 999px; background: currentColor;
+           opacity: 0.25; margin: 4px auto 9px; flex: none; }
+
+/* ---- bảng đặc tả font + màu, giống ảnh thứ ba của shot ---- */
+.spec { background: #fff; border-radius: 28px; padding: 28px; margin-top: 26px;
+        display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+[data-theme="dark"] .spec { background: #12171A; }
+.spec h4 { margin: 0 0 14px; font-size: 13px; font-weight: 600; opacity: 0.5; }
+.fontname { font-size: 52px; font-weight: 800; letter-spacing: -0.045em; margin: 0 0 12px; }
+.alpha { font-size: 17px; font-weight: 400; line-height: 1.55; opacity: 0.8; margin: 0; }
+.alpha.viet { font-weight: 500; margin-top: 10px; }
+.swatches { display: flex; gap: 12px; flex-wrap: wrap; }
+.sw { flex: 1; min-width: 78px; }
+.sw i { display: block; height: 88px; border-radius: 20px;
+        border: 1px solid rgba(0,0,0,0.07); }
+.sw span { display: block; font-size: 12px; margin-top: 8px; opacity: 0.6; }
+
+/* ---- thư viện ảnh tham chiếu ---- */
+.refs { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.refs figure { margin: 0; background: #fff; border-radius: 22px; padding: 12px; }
+[data-theme="dark"] .refs figure { background: #12171A; }
+.refs img { display: block; width: 100%; height: auto; border-radius: 14px; }
+.refs figcaption { font-size: 12.5px; opacity: 0.72; padding: 11px 5px 3px; line-height: 1.45; }
+.refs .missing { border: 2px dashed rgba(0,0,0,0.22); border-radius: 14px;
+                 padding: 34px 18px; text-align: center; font-size: 13px; line-height: 1.5; }
+[data-theme="dark"] .refs .missing { border-color: rgba(255,255,255,0.26); }
+.refs .missing code { background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 5px; }
+[data-theme="dark"] .refs .missing code { background: rgba(255,255,255,0.14); }
+.refs .missing b { display: block; margin-bottom: 7px; }
+
+footer.note { margin-top: 46px; padding-top: 22px; border-top: 1px solid rgba(0,0,0,0.12);
+              font-size: 14px; opacity: 0.78; max-width: 80ch; }
+[data-theme="dark"] footer.note { border-color: rgba(255,255,255,0.14); }
+footer.note ul { padding-left: 20px; }
+footer.note li { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav class="crumb">
+  <a href="index.html">← Trang so sánh</a>
+  <a class="here" href="ban-1-self-care.html">Bản 1 · Pastel thân thiện</a>
+  <a href="ban-2-operational.html">Bản 2 · Bảng điều khiển</a>
+</nav>
+
+<header class="top">
+  <div>
+    <h1>Bản 1 — Pastel thân thiện</h1>
+    <p class="lede">
+      Lấy nguyên ngôn ngữ của shot bạn gửi: khối pastel phẳng có mặt vẽ một nét, tấm đen bo góc
+      lớn ở nửa dưới, nút pill trắng trên nền đen, chip đang chọn màu <code>#49CBEB</code>, thẻ đen
+      đi cặp thẻ trắng, thanh nav dưới có ô xanh bo tròn. Đổi đúng một thứ — font — và lý do nằm
+      ở cuối trang.
+    </p>
+  </div>
+  <button class="toggle" id="tg">Xem chế độ tối</button>
+</header>
+
+<h2 class="rowtitle">Bốn màn hình thật của Checkino</h2>
+<p class="rowsub">
+  Không phải bốn phương án chọn một. Đây là một ngôn ngữ áp lên bốn màn hình có thật trong backlog,
+  kể cả màn danh sách chán nhất — vì đó là chỗ ngôn ngữ Dribbble hay chết.
+</p>
+
+<div class="grid">
+
+  <!-- ===== 1. /q nhập SĐT ===== -->
+  <div class="col">
+    <h3>/q · nhập số điện thoại</h3>
+    <p class="why">Màn đầu tiên mọi hội viên gặp. Một ô nhập, một dòng chữ, một cái nút — đúng
+      như <code>DECISIONS.md</code> mục D4. <code>M1-S12</code>.</p>
+    <div class="ck">
+      <div class="phone">
+        <div class="status"><span>9:41</span>
+          <span style="display:flex;gap:6px;align-items:center">
+            <span class="bars"><i></i><i></i><i></i><i></i></span><span class="batt"></span></span>
+        </div>
+        <div class="artblock mint">
+          <div class="steps"><i class="on"></i><i></i><i></i></div>
+          <svg class="face" viewBox="0 0 200 200">
+            <circle class="bg" cx="100" cy="104" r="76"/>
+            <path class="ln" d="M104 40 c-20 -18 14 -38 25 -16 c9 18 -18 28 -37 33"/>
+            <circle class="dot" cx="74" cy="94" r="7"/>
+            <circle class="dot" cx="126" cy="94" r="7"/>
+            <path class="ln" d="M100 98 v22 q0 9 -10 10"/>
+            <path class="ln" d="M70 134 q30 30 60 0"/>
+          </svg>
+        </div>
+        <div class="dark-sheet">
+          <p class="h1">Chào bạn 👋<br>Bạn là ai nhỉ?</p>
+          <p class="sub center">Nhập số bạn đã đăng ký với trung tâm. Không mật khẩu, không mã OTP.</p>
+          <input class="input" placeholder="0912 345 678" inputmode="tel">
+          <div class="rowbtn">
+            <span class="skip">Học thử</span>
+            <button class="pillbtn">Điểm danh
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 2. /q điểm danh xong ===== -->
+  <div class="col">
+    <h3>/q · điểm danh xong</h3>
+    <p class="why">Khoảnh khắc cốt lõi của sản phẩm. Số buổi còn lại nằm ngay trong chip xanh, không
+      phải đi tìm. <code>M1-S12</code> + <code>M2-S07</code>.</p>
+    <div class="ck">
+      <div class="phone">
+        <div class="status"><span>18:42</span>
+          <span style="display:flex;gap:6px;align-items:center">
+            <span class="bars"><i></i><i></i><i></i><i></i></span><span class="batt"></span></span>
+        </div>
+        <div class="artblock pink">
+          <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i></div>
+          <svg class="face" viewBox="0 0 200 200">
+            <circle class="bg" cx="100" cy="104" r="76"/>
+            <path class="ln" d="M100 38 c-22 -14 10 -40 24 -18 c10 17 -16 30 -34 34"/>
+            <path class="ln" d="M60 86 q16 -12 32 0"/>
+            <path class="ln" d="M108 86 q16 -12 32 0"/>
+            <path class="ln" d="M100 96 v24 q0 9 -10 10"/>
+            <path class="ln" d="M68 136 q32 28 64 0"/>
+          </svg>
+        </div>
+        <div class="dark-sheet">
+          <p class="h1">Điểm danh<br>xong rồi!</p>
+          <p class="sub center">Nguyễn Thị Hồng Nhung · 18:42 Thứ Bảy 01/08</p>
+          <div class="chiprow" style="justify-content:center">
+            <span class="chip on">Còn 12 buổi</span>
+            <span class="chip dk">Hết hạn 04/08</span>
+          </div>
+          <div class="quote" style="background:rgba(255,255,255,0.09)">
+            <span class="qi">⏳</span>
+            <p>Thẻ hết hạn sau <b>3 ngày</b>. Nhắc lễ tân gia hạn giúp bạn nhé.</p>
+          </div>
+          <div class="rowbtn">
+            <button class="pillbtn" style="background:rgba(255,255,255,0.12);color:#fff">Không phải bạn? Đổi số</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 3. /staff ===== -->
+  <div class="col">
+    <h3>/staff · cô giáo điểm danh</h3>
+    <p class="why">Tap theo <b>tên</b>, không bao giờ thấy số điện thoại (D8). Chip lọc bộ môn đọc
+      từ <code>member_program</code>, không đọc từ QR (D7). <code>M2-S13</code>.</p>
+    <div class="ck">
+      <div class="phone">
+        <div class="status"><span>18:33</span>
+          <span style="display:flex;gap:6px;align-items:center">
+            <span class="bars"><i></i><i></i><i></i><i></i></span><span class="batt"></span></span>
+        </div>
+        <div class="body">
+          <div class="head">
+            <div>
+              <p class="h2">Lớp 18:30 👋</p>
+              <p class="sub">Boxing · 24 hội viên · 2 đã tới</p>
+            </div>
+            <span class="circbtn">CG</span>
+          </div>
+          <div class="chiprow">
+            <span class="chip on">Tất cả</span><span class="chip">Boxing</span>
+            <span class="chip">Yoga</span><span class="chip">Muay</span>
+          </div>
+          <div class="quote" style="background:var(--c-warn-bg);color:var(--c-warn-fg)">
+            <span class="qi" style="background:rgba(0,0,0,0.10);color:inherit">!</span>
+            <p>Danh sách lưu lúc <b>17:02</b>. Mở app khi có mạng trước giờ lên lớp.</p>
+          </div>
+          <div class="list">
+            <div class="li"><span class="who"><b>Nguyễn Thị Hồng Nhung</b><span>Boxing</span></span>
+              <span class="tapdot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="li"><span class="who"><b>Trần Quốc Bảo</b><span>Boxing</span></span>
+              <span class="tapdot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+            <div class="li"><span class="who"><b>Lê Hoàng Phương Anh</b><span>Boxing</span></span><span class="tapdot"></span></div>
+            <div class="li"><span class="who"><b>Phạm Minh Khang</b><span>Boxing</span></span><span class="tapdot"></span></div>
+          </div>
+          <div class="rowbtn" style="padding-bottom:6px">
+            <button class="pillbtn ink">2 lượt đang chờ gửi</button>
+          </div>
+        </div>
+        <div class="homebar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 4. /admin ===== -->
+  <div class="col">
+    <h3>/admin · trang chủ chủ trung tâm</h3>
+    <p class="why">Thẻ đen đi cặp thẻ xám, danh sách trực tiếp qua SSE, hàng nổi bật màu xanh.
+      <code>M1-S14</code> + <code>M2-S01</code>.</p>
+    <div class="ck">
+      <div class="phone">
+        <div class="status"><span>9:41</span>
+          <span style="display:flex;gap:6px;align-items:center">
+            <span class="bars"><i></i><i></i><i></i><i></i></span><span class="batt"></span></span>
+        </div>
+        <div class="body">
+          <div class="head">
+            <p class="h2">Chào anh Thành 👋</p>
+            <span class="circbtn"><span class="dotb"></span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            </span>
+          </div>
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span>Tìm hội viên theo tên hoặc SĐT</span>
+          </div>
+          <div class="pair">
+            <div class="bigcard ink">
+              <span class="t">Điểm danh<br>hôm nay</span>
+              <div class="foot"><span class="mini">47 lượt</span><span class="play">→</span></div>
+            </div>
+            <div class="bigcard wht">
+              <span class="t">Sắp<br>hết hạn</span>
+              <div class="foot"><span class="mini">6 thẻ</span><span class="play">→</span></div>
+            </div>
+          </div>
+          <div class="seehead">
+            <p class="h2" style="font-size:18px">Đang vào</p>
+            <span class="lnk">Xem tất cả ›</span>
+          </div>
+          <div class="list">
+            <div class="li blue"><span class="who"><b>Nguyễn Thị Hồng Nhung</b><span>Boxing · Quận 7</span></span><span class="ago">vừa xong</span></div>
+            <div class="li"><span class="who"><b>Trần Quốc Bảo</b><span>Boxing · Quận 7</span></span><span class="ago">2 phút</span></div>
+            <div class="li"><span class="who"><b>Đặng Thuỳ Linh</b><span>Yoga · Quận 7</span></span><span class="ago">6 phút</span></div>
+          </div>
+        </div>
+        <div class="nav">
+          <span class="it on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Nhà</span>
+          <span class="it"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Hội viên</span>
+          <span class="it"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-6"/></svg>Báo cáo</span>
+          <span class="it"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14.5a1.6 1.6 0 0 0-1.5-1H1a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 2.6 8a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 7 3.7h.1A1.6 1.6 0 0 0 8.1 2.2V2a2 2 0 1 1 4 0v.1A1.6 1.6 0 0 0 15 3.6h.1a1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8v.1a1.6 1.6 0 0 0 1.5 1H22a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>Cài đặt</span>
+        </div>
+        <div class="homebar"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<h2 class="rowtitle">Bảng đặc tả — giống tấm thứ ba của shot gốc</h2>
+
+<div class="ck">
+<div class="spec">
+  <div>
+    <h4>Font</h4>
+    <p class="fontname">Be Vietnam Pro</p>
+    <p class="alpha">Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm<br>Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz<br>0 1 2 3 4 5 6 7 8 9</p>
+    <p class="alpha viet">Điểm danh · Hội viên · Bộ môn · Hết hạn<br>Nguyễn Thị Hồng Nhung · Võ Thị Thanh Trúc<br>ệ ộ ữ ỡ ẫ ặ ẻ ĩ ỷ ự ườ ượ đ Đ</p>
+  </div>
+  <div>
+    <h4>Màu</h4>
+    <div class="swatches">
+      <div class="sw"><i style="background:#49CBEB"></i><span>#49cbeb</span></div>
+      <div class="sw"><i style="background:#0B0B0B"></i><span>#0b0b0b</span></div>
+      <div class="sw"><i style="background:#F4F5F6"></i><span>#f4f5f6</span></div>
+      <div class="sw"><i style="background:#FFFFFF"></i><span>#ffffff</span></div>
+    </div>
+    <h4 style="margin-top:22px">Pastel — chỉ dùng làm nền khối minh hoạ</h4>
+    <div class="swatches">
+      <div class="sw"><i style="background:#9FEFCB"></i><span>#9fefcb</span></div>
+      <div class="sw"><i style="background:#DAF7E9"></i><span>#daf7e9</span></div>
+      <div class="sw"><i style="background:#FBAEDA"></i><span>#fbaeda</span></div>
+      <div class="sw"><i style="background:#FCE3F1"></i><span>#fce3f1</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<h2 class="rowtitle">Ảnh tham chiếu gốc</h2>
+<p class="rowsub">
+  Shot gốc:
+  <a href="https://dribbble.com/shots/23278774-Self-care-Mobile-App-Design-Concept" target="_blank"
+     rel="noreferrer">Self-care Mobile App Design Concept</a>.
+  File ảnh nằm ở <code>docs/design/refs/</code>. Ô nào còn gạch đứt là ảnh chưa có trên đĩa — xem
+  hướng dẫn ngay trong ô đó.
+</p>
+<div class="refs">
+  <figure><img src="refs/ban-1-ref-1.jpg" alt="Shot gốc — lưới màn hình self-care">
+    <figcaption>Lưới màn hình: mặt cười hồng, "Hello, Paul 👋", lưới chip cảm xúc trên nền đen,
+      màn hồ sơ. Chỗ tôi lấy: khối pastel + mặt vẽ một nét, tấm đen, nút pill trắng, chip xanh.</figcaption></figure>
+  <figure><img src="refs/ban-1-ref-2.jpg" alt="Shot gốc — ba màn hình chính">
+    <figcaption>Ba màn chính phóng to. Thấy rõ thẻ đen đi cặp thẻ trắng, nút tròn xanh, thanh nav
+      có ô xanh bo tròn.</figcaption></figure>
+  <figure><img src="refs/ban-1-ref-3.jpg" alt="Shot gốc — bảng font và màu">
+    <figcaption>Bảng đặc tả của chính shot đó: font <b>Zona Pro</b> và bốn màu
+      <code>#49cbeb</code> · <code>#000000</code> · <code>#f4f5f6</code> · <code>#ffffff</code>.
+      Đây là nguồn của bảng màu bản 1; font thì đã đổi vì Zona Pro là font thương mại.</figcaption></figure>
+</div>
+
+<footer class="note">
+  <p><b>Ba điều đã đổi so với shot gốc, đều có lý do:</b></p>
+  <ul>
+    <li><b>Font: Zona Pro → Be Vietnam Pro.</b> Zona Pro là font thương mại. Tôi đã tra
+      <code>fonts.google.com/metadata</code> cho từng ứng viên miễn phí: <b>Outfit</b> chỉ có
+      <code>latin</code> + <code>latin-ext</code>, không có khối <code>vietnamese</code> — chữ
+      "ế ộ ữ" sẽ rơi về font dự phòng và lệch hẳn nét. <b>Poppins</b> cũng vậy. <b>Be Vietnam Pro</b>
+      có khối <code>vietnamese</code> riêng, 9 độ đậm, và được vẽ cho tiếng Việt nên dấu không chồng
+      lên chữ. Dòng chữ "ệ ộ ữ ỡ ẫ ặ" trong bảng trên là để bạn soi thật.</li>
+    <li><b>Font phải tự host, không gọi Google CDN.</b> Trang này đang tải từ Google cho bạn xem
+      nhanh, nhưng bản chạy thật sẽ nhúng file <code>woff2</code> vào jar: giữ chi phí biến đổi 0đ,
+      không phụ thuộc bên thứ ba, và tránh việc IP người dùng đi ra Google — có liên quan tới PDPL
+      ở <code>M2-S14</code>. Hai độ đậm subset tiếng Việt khoảng 30–40KB, vẫn dưới mốc 2s của
+      <code>/q</code>.</li>
+    <li><b>Mặt vẽ một nét là SVG tự vẽ, không mua.</b> Mỗi mặt khoảng 6 đường path, dưới 1KB, đổi
+      màu theo token. Nghĩa là thêm màn hình mới không phải thuê ai vẽ thêm — đó là lý do tôi chọn
+      cách này thay vì bộ minh hoạ mua sẵn.</li>
+  </ul>
+  <p><b>Còn thiếu, chưa làm ở bản này:</b> logo thật (D11 mới chốt tên, chưa chốt hình — wordmark
+    hiện đang là chữ thuần), và màn hình wizard onboarding 5 bước của <code>M1-S07</code>.</p>
+  <p>Bấm <b>Xem chế độ tối</b> để kiểm cả hai chế độ. Thu cửa sổ còn 360px để xem như trên điện
+    thoại thật.</p>
+</footer>
+
+</div>
+
+<script>
+  /* Ảnh tham chiếu chưa có trên đĩa → thay bằng ô hướng dẫn, không để icon ảnh vỡ */
+  document.querySelectorAll('.refs img').forEach(img => {
+    img.addEventListener('error', () => {
+      const box = document.createElement('div');
+      box.className = 'missing';
+      box.innerHTML = '<b>Chưa có ảnh này</b>Dán lại ảnh vào phiên chat, hoặc lưu tay thành ' +
+        '<code>' + img.getAttribute('src') + '</code> trong repo.';
+      img.replaceWith(box);
+    });
+  });
+
+  const tg = document.getElementById('tg');
+  tg.addEventListener('click', () => {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+    tg.textContent = dark ? 'Xem chế độ tối' : 'Xem chế độ sáng';
+  });
+</script>
+</body>
+</html>
