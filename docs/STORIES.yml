@@ -538,6 +538,9 @@ stories:
       - "Tap → tick lạc quan ngay + đẩy vào outbox IndexedDB với client_event_id (uuid)"
       - "Nối mạng → batch POST; server dedupe theo unique index ở M2-S06"
       - "CHƯA có service worker ở story này — mất mạng rồi F5 là app chết, và đó là lý do M3 tồn tại. Đừng hứa offline ở đây"
+      - "QUYẾT ĐỊNH CẦN CHỐT: cái gì quyết định 'ai cần điểm danh hôm nay'? D7 chỉ có program + scan_point, không bảng nào giữ ai học ngày nào — nên /staff hiện MỌI hội viên còn hạn, hay cần một thực thể đăng-ký-theo-ngày? Ảnh hưởng cả /admin. Chốt trong story này và ghi vào DECISIONS.md"
+      - "QUYẾT ĐỊNH CẦN CHỐT: huỷ một tick ĐÃ gửi lên server có được phép không? PRD F3 + docs/design/prompts/02-staff-co-giao.md § B0 đòi 'bấm nhầm bỏ được ngay bằng cú bấm thứ hai, không hỏi lại' — tức cần lệnh vô hiệu một checkin_event đã ghi. Chốt: có giới hạn thời gian không, ghi audit_log thế nào, báo cáo /admin đếm ra sao. Ghi vào DECISIONS.md"
+      - "QUYẾT ĐỊNH CẦN CHỐT: hội viên hết hạn / bị chặn hiện thế nào trong danh sách /staff — có hiện không, cô giáo có tick được không, và được làm gì (chỉ thấy? báo lễ tân? cho vào rồi ghi nợ?). M2-S07 chỉ phủ phía /q. Ghi vào DECISIONS.md"
 
   - id: M2-S14
     title: "PDPL tối thiểu — checkbox đồng ý + trang chính sách bảo mật"
@@ -584,6 +587,7 @@ stories:
       - "Boot không mạng: app mở được, hiện roster đã cache, tap vẫn vào outbox"
       - "Giới hạn đã chấp nhận, phải hiện cho người dùng thấy: danh sách cache có thể cũ (v1 không giải quyết), lần chạy đầu bắt buộc phải có mạng"
       - "Onboarding nói rõ: 'mở app một lần ở nơi có mạng, trước giờ lên lớp'"
+      - "QUYẾT ĐỊNH CẦN CHỐT: mốc giờ 'Danh sách lưu lúc 17:02' đo cái gì — lần tải danh sách thành công cuối, lần mở app cuối, hay lần server đổi danh sách? Ba nghĩa ra ba con số, và cô giáo dùng mốc này để đoán ai bị thiếu nên chọn sai nghĩa là làm cô giáo đoán sai. Kèm: cũ bao lâu thì cảnh báo và cảnh báo bằng gì. Ghi vào DECISIONS.md"
 
   - id: M3-S03
     title: "SwUpdate — thanh 'có bản mới, tải lại' hiện rõ"
