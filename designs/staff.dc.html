@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#0B0C0B; color:#F2F2EC; font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.45; }
+a { color:#A9E5F1; } a:hover { color:#F98872; }
+input::placeholder { color:currentColor; opacity:.45; }
+@keyframes ckspin { to { transform:rotate(360deg); } }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;gap:40px;padding:36px 300px 36px 36px;box-sizing:border-box">
+
+  <div style="width:390px;height:844px;flex:none;border:9px solid #080908;border-radius:42px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 44px rgba(0,0,0,.55);background:#131413;color:#F2F2EC">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 22px 2px;font-size:12.5px;font-weight:700;opacity:.9;flex:none">
+      <span>18:33</span>
+      <span style="display:flex;gap:6px;align-items:center;font-size:11px;letter-spacing:.06em">{{ netLabel }}
+        <span style="width:21px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative;display:inline-block"><span style="position:absolute;top:2px;bottom:2px;left:2px;right:6px;background:currentColor;border-radius:1px"></span></span>
+      </span>
+    </div>
+
+    <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+      <!-- header bar — đứng yên tuyệt đối, y hệt /q -->
+      <div style="display:flex;align-items:center;gap:11px;flex:none">
+        <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+        <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">{{ orgName }}</p>
+        <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.13);font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">{{ branchName }}</span>
+      </div>
+
+      <!-- 13 · dải có bản mới -->
+      <sc-if value="{{ hasUpdate }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:12px;background:#F3C24A;color:#2C1F03;border-radius:18px;padding:11px 12px 11px 16px;flex:none">
+          <span style="flex:1;font-size:13px;font-weight:600;line-height:1.35">{{ updText }}</span>
+          <button onClick="{{ reload }}" style="border:0;cursor:pointer;font:inherit;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:10px 15px;border-radius:999px;background:{{ reloadBg }};color:{{ reloadFg }};white-space:nowrap">{{ tReload }}</button>
+        </div>
+      </sc-if>
+
+      <!-- eyebrow + hero -->
+      <div style="padding:6px 2px 2px;flex:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ eyebrow }}</p>
+          <sc-if value="{{ chipShow }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.13);line-height:1;white-space:nowrap;flex:none">{{ chipText }}</span>
+          </sc-if>
+        </div>
+        <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ hero1 }}<br>{{ hero2 }}</p>
+      </div>
+
+      <!-- màn danh sách -->
+      <sc-if value="{{ sList }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ showChips }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;gap:8px;overflow-x:auto;flex:none;padding-bottom:2px">
+            <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+              <button onClick="{{ c.pick }}" style="border:0;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;padding:0 18px;min-height:52px;border-radius:999px;white-space:nowrap;flex:none;background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <div style="position:relative;flex:none">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);opacity:.5"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="{{ tSearchPh }}" style="width:100%;box-sizing:border-box;min-height:52px;background:#1F211F;border:0;border-radius:999px;padding:0 20px 0 44px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+        </div>
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <div onClick="{{ r.tap }}" style="flex:none;display:flex;align-items:center;gap:12px;min-height:56px;background:#1F211F;border-radius:18px;padding:8px 10px 8px 16px;cursor:pointer">
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-size:17px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span>
+                <sc-if value="{{ r.hasSub }}" hint-placeholder-val="{{ true }}"><span style="display:block;font-size:12px;font-weight:600;color:#9AA096;margin-top:1px">{{ r.sub }}</span></sc-if>
+              </span>
+              <sc-if value="{{ r.isNone }}" hint-placeholder-val="{{ true }}">
+                <span style="width:44px;height:44px;border-radius:999px;border:2px solid rgba(255,255,255,.25);flex:none;box-sizing:border-box"></span>
+              </sc-if>
+              <sc-if value="{{ r.isPending }}" hint-placeholder-val="{{ false }}">
+                <span style="width:44px;height:44px;border-radius:999px;border:2.5px dashed #F3C24A;background:rgba(243,194,74,.12);color:#F3C24A;display:grid;place-items:center;flex:none;box-sizing:border-box"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5v4.5l3 2"></path></svg></span>
+              </sc-if>
+              <sc-if value="{{ r.isSaved }}" hint-placeholder-val="{{ false }}">
+                <span style="width:44px;height:44px;border-radius:999px;background:#A9E5F1;color:#052430;display:grid;place-items:center;flex:none"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+              </sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{ emptyHint }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">{{ emptyHintText }}</p></div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ stripOffline }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:none;background:#1F211F;border-radius:18px;padding:12px 16px;display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:14px;font-weight:800;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ tOffTitle }}</span>
+            <span style="font-size:14px;font-weight:700;color:#F2F2EC">{{ offSub }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ stripQueue }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ send }}" style="flex:none;background:#F3C24A;color:#2C1F03;border-radius:999px;min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 12px 0 20px;cursor:pointer">
+            <span style="font-size:15px;font-weight:700">{{ queueText }}</span>
+            <span style="display:flex;gap:6px;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;background:rgba(0,0,0,.10);border-radius:999px;padding:10px 14px">{{ tSendNow }}
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ stripSending }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:none;background:#F3C24A;color:#2C1F03;border-radius:999px;min-height:56px;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 20px">
+            {{ spinnerY }}<span style="font-size:15px;font-weight:700">{{ sendingText }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ stripToast }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:none;background:#C4D4C1;color:#14180F;border-radius:999px;min-height:56px;display:flex;align-items:center;justify-content:center;gap:9px;padding:0 20px">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+            <span style="font-size:15px;font-weight:700">{{ tToast }}</span>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <!-- 10 · rỗng, chưa nhập ai -->
+      <sc-if value="{{ sEmptyMembers }}" hint-placeholder-val="{{ false }}">
+        <div style="border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:12px;background:#1F211F;flex:none">
+          <div style="border-radius:18px;padding:13px 14px;background:#2A2D2A">
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ tEmptyM1 }}</p>
+          </div>
+          <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">{{ tEmptyM2 }}</p>
+        </div>
+        <div style="flex:1"></div>
+      </sc-if>
+
+      <!-- 11 · rỗng, ngoài giờ lớp -->
+      <sc-if value="{{ sEmptyClass }}" hint-placeholder-val="{{ false }}">
+        <div style="border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:12px;background:#1F211F;flex:none">
+          <div style="border-radius:18px;padding:13px 14px;background:#2A2D2A">
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ tEmptyC1 }}</p>
+          </div>
+          <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">{{ tEmptyC2 }}</p>
+        </div>
+        <div style="flex:1"></div>
+      </sc-if>
+
+      <!-- 14 · hướng dẫn cài trên iPhone -->
+      <sc-if value="{{ sIos }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <div style="border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:#1F211F;flex:none">
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ tIosTitle }}</p>
+            <div style="display:flex;gap:12px;align-items:center;border-radius:18px;padding:12px 13px;background:#2A2D2A">
+              <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#F4573F;color:#2A0C06"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"></path><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"></path></svg></span>
+              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.4">{{ tIos1a }}<b>{{ tIos1b }}</b>{{ tIos1c }}</p>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;border-radius:18px;padding:12px 13px;background:#2A2D2A">
+              <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:rgba(255,255,255,.10)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"></rect><path d="M12 8.5v7M8.5 12h7"></path></svg></span>
+              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.4">{{ tIos2a }}<b>{{ tIos2b }}</b></p>
+            </div>
+            <svg viewBox="0 0 320 92" style="width:100%;height:auto;display:block">
+              <rect x="8" y="26" width="304" height="56" rx="18" fill="#2A2D2A"></rect>
+              <path d="m52 46-8 8 8 8" fill="none" stroke="#9AA096" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="m100 46 8 8-8 8" fill="none" stroke="#9AA096" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="160" cy="54" r="21" fill="#F4573F"></circle>
+              <g stroke="#2A0C06" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M160 44v13M156 47.5l4-3.5 4 3.5"></path><path d="M153 52v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"></path>
+              </g>
+              <path d="M160 24v-8M156 19l4 5 4-5" fill="none" stroke="#F4573F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 160 20)"></path>
+              <path d="M214 46h14v16h-14zM218 42h14v3" fill="none" stroke="#9AA096" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+              <rect x="262" y="46" width="16" height="16" rx="4" fill="none" stroke="#9AA096" stroke-width="2.2"></rect>
+            </svg>
+            <p style="margin:-4px 0 0;font-size:12px;color:#9AA096;text-align:center">{{ tIosCap }}</p>
+          </div>
+          <div style="display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:#1F211F;flex:none">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#F3C24A;color:#2C1F03">!</span>
+            <div><h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ tIosWarnT }}</h5>
+              <p style="margin:0;font-size:13px;opacity:.75;line-height:1.4">{{ tIosWarnB }}</p></div>
+          </div>
+          <p style="margin:0;font-size:12px;color:#9AA096;text-align:center;flex:none">{{ tIosAndroid }}</p>
+        </div>
+      </sc-if>
+
+      <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+    </div>
+  </div>
+
+  <!-- bảng nhảy nhanh giữa trạng thái -->
+  <div style="position:fixed;top:20px;right:20px;width:248px;max-height:calc(100vh - 40px);overflow:auto;background:#1F211F;color:#F2F2EC;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.4)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.55;margin:0">{{ tPanelTitle }}</p>
+      <div style="display:flex;gap:4px;flex:none">
+        <button onClick="{{ setVi }}" style="border:0;cursor:pointer;font:inherit;font-size:10.5px;font-weight:800;letter-spacing:.08em;padding:7px 11px;border-radius:999px;background:{{ viBg }};color:{{ viFg }}">VI</button>
+        <button onClick="{{ setEn }}" style="border:0;cursor:pointer;font:inherit;font-size:10.5px;font-weight:800;letter-spacing:.08em;padding:7px 11px;border-radius:999px;background:{{ enBg }};color:{{ enFg }}">EN</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="15">
+        <button onClick="{{ item.go }}" style="display:flex;gap:8px;align-items:baseline;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:999px;background:{{ item.bg }};color:{{ item.fg }}"><span style="font-size:10px;font-weight:800;opacity:.55;width:16px;flex:none">{{ item.num }}</span>{{ item.label }}</button>
+      </sc-for>
+    </div>
+    <p style="font-size:11px;line-height:1.5;opacity:.55;margin:6px 2px 0">{{ tPanelNote }}</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 920}, &quot;lang&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;vi&quot;, &quot;options&quot;: [&quot;vi&quot;, &quot;en&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Ngôn ngữ&quot;}, &quot;orgName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;TRUNG TÂM ANH NGỮ SAO MAI&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;branchName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Quận 7&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;savedAt&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;17:02&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Dữ liệu&quot;}}">
+class Component extends DCLogic {
+  static MEMBERS = [
+    { i: 1, n: 'Nguyễn Thị Hồng Nhung', s: 'Boxing' },
+    { i: 2, n: 'Trần Quốc Bảo', s: 'Boxing' },
+    { i: 3, n: 'Lê Hoàng Phương Anh', s: 'Boxing' },
+    { i: 4, n: 'Phạm Minh Khang', s: 'Boxing' },
+    { i: 12, n: 'Trịnh Thu Hà', s: 'Boxing' },
+    { i: 5, n: 'Võ Thị Thanh Trúc', s: 'Yoga' },
+    { i: 6, n: 'Đặng Thuỳ Linh', s: 'Yoga' },
+    { i: 8, n: 'Hoàng Thị Mai Chi', s: 'Yoga' },
+    { i: 10, n: 'Vũ Ngọc Ánh', s: 'Yoga' },
+    { i: 7, n: 'Bùi Anh Tuấn', s: 'Gym' },
+    { i: 9, n: 'Ngô Đức Thịnh', s: 'Gym' },
+    { i: 11, n: 'Đỗ Văn Long', s: 'Gym' }
+  ];
+
+  static T = {
+    vi: {
+      reload: 'Tải lại', searchPh: 'Tìm theo tên — gõ không dấu cũng được',
+      noMatch: 'Không thấy tên nào khớp. Thử gõ ngắn hơn.',
+      noneInSport: ['Hôm nay chưa ai đăng ký ', '. Bấm Tất cả để xem cả danh sách.'],
+      offTitle: 'Mất mạng — vẫn điểm danh được',
+      sendNow: 'Gửi ngay', toast: 'Đã lưu tất cả',
+      all: 'Tất cả', arrived: 'đã tới', today: 'HÔM NAY · 04/08', todayShort: 'HÔM NAY', savedChip: 'DANH SÁCH',
+      pendSub: 'chờ gửi', savedSub: 'đã lưu', noNet: 'Không có mạng',
+      emptyM1: 'Chưa có hội viên nào. Chủ trung tâm cần nhập danh sách trước.',
+      emptyM2: 'Nhờ chủ trung tâm vào phần quản lý, mục Hội viên, và nhập danh sách từ file.',
+      emptyC1: 'Hôm nay chưa có ai cần điểm danh.',
+      emptyC2: 'Danh sách sẽ tự hiện ở đây khi có hội viên đăng ký hôm nay.',
+      heroEmptyM: ['Chưa có', 'hội viên nào'], heroEmptyC: ['Hôm nay', 'chưa có ai'], heroIos: ['Cài lên', 'màn hình chính'],
+      iosTitle: 'Mở bằng Safari, làm 2 bước',
+      ios1a: 'Bấm nút ', ios1b: 'Chia sẻ', ios1c: ' ở thanh dưới màn hình',
+      ios2a: 'Chọn ', ios2b: '“Thêm vào MH chính”',
+      iosCap: 'Nút Chia sẻ nằm giữa thanh dưới của Safari',
+      iosWarnT: 'Mở app một lần ở nơi có mạng',
+      iosWarnB: 'Trước giờ lên lớp. Lần đầu bắt buộc phải có mạng để tải danh sách — sau đó mất mạng vẫn điểm danh được.',
+      iosAndroid: 'Trên Android, trình duyệt sẽ tự mời cài — không cần bước này.',
+      panelTitle: 'Trạng thái /staff',
+      panelNote: 'Bấm một tên để tick — bấm lại để bỏ. Dải vàng ở đáy gửi các lượt đang chờ.',
+      nav: ['Danh sách hôm nay', 'Lọc theo bộ môn', 'Không có bộ môn nào', 'Vừa tap một tên', 'Tap lại để bỏ tick', '2 lượt đang chờ gửi', 'Đang gửi', 'Gửi xong', 'Mất mạng', 'Rỗng — chưa nhập ai', 'Rỗng — chưa ai cần điểm danh', 'Tìm nhanh theo tên', 'Có bản mới', 'Cài trên iPhone', 'Bộ môn hôm nay không ai học']
+    },
+    en: {
+      reload: 'Reload', searchPh: 'Search by name',
+      noMatch: 'No names match. Try typing less.',
+      noneInSport: ['Nobody signed up for ', ' today. Tap All to see the whole list.'],
+      offTitle: 'No network — check-in still works',
+      sendNow: 'Send now', toast: 'All saved',
+      all: 'All', arrived: 'arrived', today: 'TODAY · AUG 4', todayShort: 'TODAY', savedChip: 'LIST',
+      pendSub: 'waiting', savedSub: 'saved', noNet: 'No network',
+      emptyM1: 'No members yet. The owner needs to import the list first.',
+      emptyM2: 'Ask the owner to open Manage, then Members, and import the list from a file.',
+      emptyC1: 'Nobody to check in today.',
+      emptyC2: 'The list will appear here once members are registered for today.',
+      heroEmptyM: ['No members', 'added yet'], heroEmptyC: ['Nobody to', 'check in'], heroIos: ['Add to', 'home screen'],
+      iosTitle: 'Open in Safari, 2 steps',
+      ios1a: 'Tap the ', ios1b: 'Share', ios1c: ' button in the bottom bar',
+      ios2a: 'Choose ', ios2b: '“Add to Home Screen”',
+      iosCap: 'The Share button sits mid-way along Safari’s bottom bar',
+      iosWarnT: 'Open the app once while online',
+      iosWarnB: 'Before class starts. The first open needs internet to load the list — after that, check-in works offline.',
+      iosAndroid: 'On Android the browser offers to install by itself — this step isn’t needed.',
+      panelTitle: '/staff states',
+      panelNote: 'Tap a name to tick — tap again to untick. The yellow strip at the bottom sends waiting check-ins.',
+      nav: ['Today’s list', 'Filter by sport', 'No sports set', 'Just tapped a name', 'Tap again to untick', '2 waiting to send', 'Sending', 'Sent', 'Offline', 'Empty — no members', 'Empty — nobody to check in', 'Quick name search', 'Update available', 'Install on iPhone', 'Sport with nobody today']
+    }
+  };
+
+  static presets() {
+    const sv = at => ({ k: 'saved', at });
+    const pd = at => ({ k: 'pending', at });
+    const A = () => ({ 1: sv('18:31'), 2: sv('18:32') });
+    return {
+      s1: { st: A() },
+      s2: { st: A(), sport: 'Boxing' },
+      s3: { st: A(), noSports: true },
+      s4: { st: { ...A(), 3: pd('18:33') } },
+      s5: { st: { ...A(), 3: sv('18:31') } },
+      s6: { st: { ...A(), 3: pd('18:32'), 4: pd('18:33') } },
+      s7: { st: { ...A(), 3: pd('18:32'), 4: pd('18:33') }, sending: true },
+      s8: { st: { ...A(), 3: sv('18:34'), 4: sv('18:34') }, toast: true },
+      s9: { st: { ...A(), 5: pd('18:33') }, offline: true },
+      s10: { empty: 'members' },
+      s11: { empty: 'class' },
+      s12: { st: A(), query: 'hong nhung' },
+      s13: { st: { ...A(), 3: pd('18:32'), 4: pd('18:33') }, update: true },
+      s14: { ios: true },
+      s15: { st: A(), sport: 'Kickfit' }
+    };
+  }
+
+  static IDS = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12', 's13', 's14', 's15'];
+
+  state = { lang: null, scen: 's1', st: { 1: { k: 'saved', at: '18:31' }, 2: { k: 'saved', at: '18:32' } }, sport: 'all', query: '', offline: false, update: false, sending: false, toast: false, noSports: false, empty: null, ios: false };
+
+  show(id) {
+    clearTimeout(this._t); clearTimeout(this._t2);
+    const p = Component.presets()[id];
+    this.setState({ scen: id, st: p.st ? { ...p.st } : {}, sport: p.sport || 'all', query: p.query || '', offline: !!p.offline, update: !!p.update, sending: !!p.sending, toast: !!p.toast, noSports: !!p.noSports, empty: p.empty || null, ios: !!p.ios });
+  }
+
+  norm(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase(); }
+
+  renderVals() {
+    const S = this.state;
+    const lang = S.lang ?? (this.props.lang === 'en' ? 'en' : 'vi');
+    const en = lang === 'en';
+    const L = Component.T[lang];
+    const savedAt = this.props.savedAt ?? '17:02';
+    const isList = !S.empty && !S.ios;
+    const roster = Component.MEMBERS.filter(m => S.sport === 'all' || m.s === S.sport);
+    const arrived = roster.filter(m => S.st[m.i]).length;
+    const qn = Object.values(S.st).filter(v => v.k === 'pending').length;
+    const q = this.norm(S.query.trim());
+    const shown = roster.filter(m => !q || this.norm(m.n).includes(q));
+    const rows = shown.map(m => {
+      const c = S.st[m.i];
+      const parts = [];
+      if (!S.noSports) parts.push(m.s);
+      if (c) parts.push((c.k === 'pending' ? L.pendSub : L.savedSub) + ' · ' + c.at);
+      return {
+        name: m.n, sub: parts.join(' · '), hasSub: parts.length > 0,
+        isNone: !c, isPending: !!c && c.k === 'pending', isSaved: !!c && c.k === 'saved',
+        tap: () => this.setState(s => {
+          const st = { ...s.st };
+          if (st[m.i]) delete st[m.i]; else st[m.i] = { k: 'pending', at: '18:33' };
+          return { st };
+        })
+      };
+    });
+    let hero1, hero2, eyebrow;
+    if (S.empty === 'members') { [hero1, hero2] = L.heroEmptyM; eyebrow = ''; }
+    else if (S.empty === 'class') { [hero1, hero2] = L.heroEmptyC; eyebrow = ''; }
+    else if (S.ios) { [hero1, hero2] = L.heroIos; eyebrow = ''; }
+    else { hero1 = arrived + '/' + roster.length; hero2 = L.arrived; eyebrow = S.sport !== 'all' ? S.sport.toUpperCase() + ' · ' + L.todayShort : L.today; }
+    const chips = [L.all, 'Boxing', 'Yoga', 'Gym', 'Kickfit'].map(label => {
+      const val = label === L.all ? 'all' : label;
+      const on = S.sport === val;
+      return { label, bg: on ? '#A9E5F1' : 'rgba(255,255,255,.08)', fg: on ? '#052430' : '#F2F2EC', pick: () => this.setState({ sport: val }) };
+    });
+    const navItems = L.nav.map((label, ix) => {
+      const id = Component.IDS[ix];
+      const on = S.scen === id;
+      return { label, num: String(ix + 1), bg: on ? '#A9E5F1' : 'rgba(255,255,255,.07)', fg: on ? '#052430' : '#F2F2EC', go: () => this.show(id) };
+    });
+    const langBtn = on => ({ bg: on ? '#A9E5F1' : 'rgba(255,255,255,.08)', fg: on ? '#052430' : '#F2F2EC' });
+    return {
+      orgName: this.props.orgName ?? 'TRUNG TÂM ANH NGỮ SAO MAI',
+      branchName: this.props.branchName ?? 'Quận 7',
+      netLabel: S.offline ? L.noNet : '4G',
+      hero1, hero2, eyebrow,
+      chipShow: isList, chipText: L.savedChip + ' ' + savedAt,
+      sList: isList, sEmptyMembers: S.empty === 'members', sEmptyClass: S.empty === 'class', sIos: S.ios,
+      showChips: isList && !S.noSports, chips, rows,
+      emptyHint: isList && rows.length === 0 && (q.length > 0 || S.sport !== 'all'),
+      emptyHintText: q.length > 0 ? L.noMatch : L.noneInSport[0] + S.sport + L.noneInSport[1],
+      query: S.query, onQuery: e => this.setState({ query: e.target.value }),
+      hasUpdate: S.update,
+      updText: en
+        ? (qn > 0 ? 'New version. Send the ' + qn + ' waiting check-ins first, then reload.' : 'New version — tap reload.')
+        : (qn > 0 ? 'Có bản mới. Gửi xong ' + qn + ' lượt đang chờ rồi hãy tải lại.' : 'Có bản mới — bấm tải lại.'),
+      reloadBg: '#131413', reloadFg: qn > 0 ? '#9AA096' : '#F2F2EC',
+      reload: () => { if (Object.values(this.state.st).every(v => v.k !== 'pending')) this.setState({ update: false }); },
+      stripOffline: isList && S.offline,
+      stripQueue: isList && !S.offline && !S.sending && !S.toast && qn > 0,
+      stripSending: isList && !S.offline && S.sending,
+      stripToast: isList && !S.offline && !S.sending && S.toast,
+      queueText: en ? qn + ' waiting to send' : qn + ' lượt đang chờ gửi',
+      sendingText: en ? 'Sending ' + qn + '…' : 'Đang gửi ' + qn + ' lượt…',
+      offSub: en
+        ? (qn > 0 ? qn + ' will send when back online' : 'Nothing waiting to send')
+        : (qn > 0 ? qn + ' lượt sẽ gửi khi có mạng' : 'Chưa có lượt nào chờ gửi'),
+      spinnerY: React.createElement('span', { style: { width: 16, height: 16, border: '2.5px solid rgba(44,31,3,.30)', borderTopColor: '#2C1F03', borderRadius: 999, display: 'inline-block', flex: 'none', animation: 'ckspin .8s linear infinite' } }),
+      send: () => {
+        const s = this.state;
+        if (s.offline || s.sending) return;
+        if (Object.values(s.st).every(v => v.k !== 'pending')) return;
+        this.setState({ sending: true });
+        this._t = setTimeout(() => {
+          this.setState(cur => {
+            const st = {};
+            for (const k in cur.st) st[k] = cur.st[k].k === 'pending' ? { k: 'saved', at: '18:34' } : cur.st[k];
+            return { st, sending: false, toast: true };
+          });
+          this._t2 = setTimeout(() => this.setState({ toast: false }), 1900);
+        }, 1400);
+      },
+      navItems,
+      setVi: () => this.setState({ lang: 'vi' }), setEn: () => this.setState({ lang: 'en' }),
+      viBg: langBtn(!en).bg, viFg: langBtn(!en).fg, enBg: langBtn(en).bg, enFg: langBtn(en).fg,
+      tReload: L.reload, tSearchPh: L.searchPh, tOffTitle: L.offTitle,
+      tSendNow: L.sendNow, tToast: L.toast,
+      tEmptyM1: L.emptyM1, tEmptyM2: L.emptyM2, tEmptyC1: L.emptyC1, tEmptyC2: L.emptyC2,
+      tIosTitle: L.iosTitle, tIos1a: L.ios1a, tIos1b: L.ios1b, tIos1c: L.ios1c,
+      tIos2a: L.ios2a, tIos2b: L.ios2b, tIosCap: L.iosCap,
+      tIosWarnT: L.iosWarnT, tIosWarnB: L.iosWarnB, tIosAndroid: L.iosAndroid,
+      tPanelTitle: L.panelTitle, tPanelNote: L.panelNote
+    };
+  }
+}
+</script>
+</body>
+</html>

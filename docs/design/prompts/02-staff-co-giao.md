@@ -35,15 +35,21 @@ chỉ được kiểm chứng trên `/q` — một bề mặt mỗi màn chỉ c
 | Slot | Ở `/staff` là gì |
 |---|---|
 | Header bar | logo + **tên trung tâm** + pill cơ sở. Y hệt `/q`, đứng yên mọi màn |
-| Nhãn nhỏ | **tên lớp / bộ môn** + chip giờ bên phải, ví dụ `BOXING · LỚP 18:00` |
+| Nhãn nhỏ | **bộ môn đang lọc + ngày** + chip mốc giờ lưu bên phải, ví dụ `BOXING · HÔM NAY` |
 | Hero 36px | **số đã tới trên sĩ số**, ví dụ `12/24` kèm chữ `ĐÃ TỚI` |
 
 Hero ở đây **là** câu trạng thái, chỉ ở dạng con số — nó chính là thứ cô giáo liếc một giây để
 biết còn thiếu ai. Nó xứng đáng chiếm chỗ đó, đừng thu nhỏ để nhét thêm hàng danh sách.
 
-Nhãn nhỏ ở `/staff` mang **tên lớp** chứ không mang tên người, vì trên bề mặt này "người" là cả
+Nhãn nhỏ ở `/staff` mang **bộ môn** chứ không mang tên người, vì trên bề mặt này "người" là cả
 một danh sách chứ không phải một cá nhân. Đây là ngoại lệ có chủ ý so với `/q`; ghi vào báo cáo
 A8 nếu bạn thấy nó gây mâu thuẫn ở màn nào.
+
+**Không được viết giờ lớp kiểu `LỚP 18:00`.** Checkino không có thực thể lớp / buổi / giờ lớp:
+`DECISIONS.md` D7 chỉ có `program` (bộ môn) và `scan_point`, không bảng nào giữ giờ bắt đầu.
+Viết `LỚP 18:00` là bịa ra một con số không có dữ liệu đỡ, và lúc code F3 sẽ phải bỏ. Nhãn nhỏ
+chỉ được mang **bộ môn đang lọc** và **ngày**; chip bên phải mang **mốc giờ lưu danh sách**
+(xem B1), không phải giờ lớp.
 
 **Không có ngoại lệ nào cho header.** Kể cả màn hướng dẫn cài iPhone, màn danh sách rỗng, màn mất
 mạng — header vẫn nguyên tên trung tâm, không đổi thành chữ hành động.
@@ -71,7 +77,7 @@ mạng.** Câu hướng dẫn: "Mở app một lần ở nơi có mạng, trư�
 
 | # | Trạng thái | Yêu cầu nội dung |
 |---|---|---|
-| 1 | Danh sách hôm nay | mặc định. Tiêu đề lớp + giờ, sĩ số, hàng tên với nút tick tròn bên phải |
+| 1 | Danh sách hôm nay | mặc định. Bộ môn đang lọc + ngày, sĩ số, hàng tên với nút tick tròn bên phải |
 | 2 | Lọc theo bộ môn | dãy chip, chip đang chọn nền `--c-sky`. Có chip "Tất cả" |
 | 3 | Không có bộ môn nào | trung tâm chưa khai báo → **ẩn hẳn dãy chip**, không hiện bộ lọc rỗng |
 | 4 | Vừa tap một tên | tick hiện ngay, hàng đổi trạng thái, **đếm số đã tới tăng** |
@@ -81,10 +87,19 @@ mạng.** Câu hướng dẫn: "Mở app một lần ở nơi có mạng, trư�
 | 8 | Gửi xong | dải biến mất hoặc báo "Đã lưu tất cả", mọi tick chuyển sang đã lưu |
 | 9 | Mất mạng | dải trạng thái mạng + "Danh sách lưu lúc 17:02". Vẫn tap được bình thường |
 | 10 | Danh sách rỗng — chưa nhập ai | "Chưa có hội viên nào. Chủ trung tâm cần nhập danh sách trước." |
-| 11 | Danh sách rỗng — ngoài giờ lớp | khác hẳn #10: "Hôm nay chưa có lớp nào" |
+| 11 | Danh sách rỗng — hôm nay không ai cần điểm danh | khác hẳn #10: có hội viên trong hệ thống, nhưng hôm nay chưa ai. "Hôm nay chưa có ai cần điểm danh" |
 | 12 | Tìm nhanh theo tên | ô tìm, lọc ngay khi gõ. Gõ **không dấu** vẫn ra ("hong nhung" → "Hồng Nhung") |
 | 13 | Có bản mới | dải trên cùng "Có bản mới — bấm tải lại". Xem B3 |
 | 14 | Hướng dẫn cài trên iPhone | xem B4 |
+| 15 | Chọn bộ môn mà hôm nay không ai học | khác cả #10 và #11: đây là cấp **ngày × bộ môn**. Câu: "Hôm nay chưa ai đăng ký Boxing. Bấm **Tất cả** để xem cả danh sách." Dùng đúng chỗ và đúng hình của thẻ "không thấy tên nào khớp" |
+
+Ba trạng thái rỗng #10, #11, #15 **phải nói ba câu khác nhau**, vì ba nguyên nhân khác nhau và ba
+đường thoát khác nhau: #10 = trung tâm chưa nhập ai (nhờ chủ trung tâm), #11 = hôm nay chưa ai cần
+điểm danh (chờ), #15 = bộ môn đang lọc hôm nay không ai học (bỏ lọc). Dùng chung một câu cho cả ba
+là vi phạm `00 § A5` — thông báo phải nói lý do và chỉ đường.
+
+Lưu ý khi dựng #15: câu "không thấy tên nào khớp" chỉ được hiện khi **đang gõ tìm**. Nếu buộc nó
+vào "danh sách rỗng" thì nó sẽ hiện sai nguyên nhân ở #15.
 
 ## B3. Dải "có bản mới" — cấm tự động
 

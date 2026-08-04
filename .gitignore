@@ -49,3 +49,7 @@ tmp/
 
 # Claude Code internals
 .claude/.cc-writes/
+
+# Runtime của Claude Design — file generated, do runtime cấp lúc mở .dc.html
+# (docs/design/prompts/00-he-thong.md § A7). Không sửa tay, không commit.
+designs/support.js

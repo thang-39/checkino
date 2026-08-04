@@ -622,8 +622,17 @@ thì mang tên tổ chức khi thì mang tên hội viên. Một slot mang hai n
 ### Chưa làm
 
 `design/tokens.css`, `docs/DESIGN.md`, `docs/design/styleguide.html` và skill `/design-screen`
-viết **sau khi đủ bốn bản dựng** và sau khi gom bốn báo cáo `*-A8.md`. Mới có một bản dựng
-(`/q`); viết bây giờ gần như chắc chắn phải viết lại.
+viết **sau khi đủ bốn bản dựng** và sau khi gom bốn báo cáo `*-A8.md`. Đã có hai bản dựng
+(`/q`, `/staff`) và một báo cáo (`docs/design/staff-A8.md`); viết bây giờ gần như chắc chắn phải
+viết lại.
+
+Hai luật của `00-he-thong.md` **chưa chốt được sau lượt `/staff`**, cần dựng `/admin` rồi quyết một
+lần cho cả hệ (chi tiết ở `staff-A8.md § 4.4` và `§ 4.6`):
+
+- **Hero đổi mẫu số khi đang lọc** (`2/12` → `2/5`) mà thứ duy nhất giải thích cú nhảy là nhãn nhỏ
+  10.5px opacity .62 — thành phần mờ nhất đỡ nghĩa cho thành phần to nhất.
+- **Nhãn nhỏ rỗng mang hai nghĩa**: theo `§ A1b` là "chưa biết là ai" (tạm), theo `§ B0b` ở `/staff`
+  là "không có tập nội dung để mô tả" (cấu trúc, vĩnh viễn). Cùng một khoảng trống.
 
 ---
 

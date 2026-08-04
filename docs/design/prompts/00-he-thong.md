@@ -28,8 +28,21 @@ Mỗi phần tử phải thuộc đúng một tầng, và tầng quyết định
 |---|---|---|---|---|
 | 0 · Màn hình | nền toàn màn | `--c-ink` #131413 | — | 16px hai bên |
 | 1 · Khối | một nhóm nội dung có tiêu đề | một màu khối ở § A2 — **trừ `--c-rust`**, màu đó chỉ làm nền màn | 24px | 16–17px |
+| 1b · Hàng danh sách / dải đơn | vật **lặp** (hàng tên) hoặc **dải đơn** (ô tìm, dải trạng thái) đặt **trực tiếp trên tầng 0**, không có tiêu đề | sắc nhạt của `--c-ink` (`#1F211F`) — hoặc một màu bão hoà § A2 nếu dải đó **mang nghĩa** | 18px, hoặc 999px nếu là dải/ô cao ≤ 56px | 8–16px |
 | 2 · Thẻ con | ô số / ô nhập nằm **trong** khối tầng 1 | sắc **nhạt** của **chính** màu khối cha | 18px | 13–14px |
 | 3 · Nhãn nhỏ | badge, chip, pill trong thẻ con | `rgba(255,255,255,.55)` hoặc `rgba(0,0,0,.20)` | 999px | 3px 9px |
+| 3b · Ô hình 42–44px | vật vuông/tròn chứa **đúng một** icon hoặc một chữ (logo header, tick hàng danh sách, ô icon bước hướng dẫn) | màu bão hoà bất kỳ theo nghĩa § A2, **được phép khác màu cha** | 13px (vuông) hoặc 999px (tròn) | — |
+
+Vì sao có `1b`: một danh sách 12 hàng mà mỗi hàng là khối tầng 1 (bo 24px, padding 16px) sẽ đọc ra
+như 12 khối nội dung rời rạc và mất luôn cảm giác "một danh sách" — chưa kể cao thêm ~8px mỗi hàng.
+Nhưng hàng danh sách cũng không phải thẻ con, vì tầng 2 định nghĩa là "nằm **trong** khối tầng 1".
+Hai ràng buộc để `1b` không thành cửa sau phá luật: vật tầng 1b **không được chứa khối tầng 1**
+(con của nó chỉ được là chữ, nhãn tầng 3, hoặc ô hình tầng 3b); và **dải màu bão hoà ở tầng 1b vẫn
+tính** vào hạn "tối đa hai khối màu bão hoà một màn" ở § A2.
+
+Vì sao có `3b`: nó là **nhãn**, không phải mảng — nên nó được mượn màu khác cha (một tick vàng trong
+hàng nền than là đúng), và **không tính** khi đếm hạn hai khối bão hoà. Đừng nhét nó vào tầng 3:
+tầng 3 buộc bo 999px và nền mờ, còn ô hình dùng màu đặc.
 
 Bốn điều **cấm**, không có ngoại lệ:
 
@@ -104,6 +117,9 @@ Sáu luật màu thêm:
 - **Nút chính**: nền sáng → nút than `#131413`; nền than hoặc rust → nút kem `#F2F2EC`.
   Nút phụ = chữ gạch chân, không nền. **Xanh băng không bao giờ là nút** — nó chỉ mang nghĩa
   "đã chọn / đã tick".
+- **Liên kết (`<a>`) dùng kem `#F2F2EC` + gạch chân**, không dùng xanh băng. Xanh băng đã có nghĩa
+  "đã chọn / đã tick"; cho nó thêm nghĩa "bấm được" là làm một màu mang hai nghĩa, và người dùng sẽ
+  không biết ô xanh nào bấm được ô nào không.
 
 ## A3. Chữ
 
