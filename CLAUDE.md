@@ -79,7 +79,7 @@ lệnh nghĩa là cần `gh auth switch -u thang-39`. Remote dùng ssh alias `gi
 (M0→M3), tức **17–21 tuần** ở 15–20h/tuần. `PLAN.md` chỉ ước lượng hai hạng mục rồi suy ra
 tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi ra tuần.
 
-## Mười một quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
+## Mười ba quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
 
 - **D1** — Zalo OA/ZNS là tính năng **gói Pro**, không thuộc lõi v1. Free tier chạy hoàn toàn
   không cần Zalo. Lý do: xác thực OA bắt buộc có GPKD của khách hàng, giết mục tiêu onboarding
@@ -120,6 +120,10 @@ tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi r
   đi trong một họ màu**. Vàng = còn kịp, rust = bị chặn, san hô không bao giờ là lỗi. Luật đầy đủ
   ở `docs/design/prompts/00-he-thong.md`. Bản dựng `/q` ở `designs/q.dc.html` (Claude Design —
   cần `support.js` của runtime, mở trình duyệt thường sẽ trắng trang).
+- **D13** — **`/admin` trên màn rộng là một cột `max-width:440px` căn giữa**, không bố cục lại,
+  không breakpoint nào khác. Áp cho `/staff` luôn. Rủi ro nhận rõ: nhập Excel và in poster A4 là
+  việc-của-laptop nhưng vẫn phải làm trong cột hẹp — mở lại chỉ khi pilot `M4-S13` báo về, và mở
+  bằng một lượt dựng riêng, không thêm breakpoint lẻ lúc code.
 
 **Ràng buộc xuyên suốt:** free tier phải có chi phí biến đổi = **0đ**.
 

@@ -5,8 +5,8 @@ Sổ ghi quyết định kiến trúc & sản phẩm. Mỗi mục là một quy�
 
 | | |
 |---|---|
-| Cập nhật lần cuối | 2026-08-02 (D12: hướng thiết kế + hệ màu, chốt sau khi dựng xong `/q`; thêm token `--c-rust`) |
-| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D12, không còn mục lệch.** `PRD.md` **v2.3** · `PLAN.md` **v2.2** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/archive/plan-v2-rewrite.md`](docs/archive/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
+| Cập nhật lần cuối | 2026-08-05 (D13: `/admin` trên màn rộng là một cột căn giữa, chốt sau khi dựng xong `/admin` nền tảng) |
+| Trạng thái áp dụng | ✅ **Tài liệu đã đồng bộ hết D1–D13, không còn mục lệch.** `PRD.md` **v2.3** · `PLAN.md` **v2.2** · `GRILL-LOG.md` có ghi chú superseded (Q6, Q13, Q14) + Q16, giữ nguyên phần lịch sử. Kết quả rà lại năm mục kiểm tra: [`docs/archive/plan-v2-rewrite.md`](docs/archive/plan-v2-rewrite.md) mục "Kết quả Bước 5". Việc tiếp theo là **viết code** (Bước 6 trong file đó) |
 
 ---
 
@@ -622,17 +622,85 @@ thì mang tên tổ chức khi thì mang tên hội viên. Một slot mang hai n
 ### Chưa làm
 
 `design/tokens.css`, `docs/DESIGN.md`, `docs/design/styleguide.html` và skill `/design-screen`
-viết **sau khi đủ bốn bản dựng** và sau khi gom bốn báo cáo `*-A8.md`. Đã có hai bản dựng
-(`/q`, `/staff`) và một báo cáo (`docs/design/staff-A8.md`); viết bây giờ gần như chắc chắn phải
-viết lại.
+viết **sau khi đủ bốn bản dựng** và sau khi gom bốn báo cáo `*-A8.md`. Đã có ba bản dựng
+(`/q`, `/staff`, `/admin` nền tảng) và hai báo cáo (`staff-A8.md`, `admin-A8.md` — `q-A8.md` chưa
+từng được viết dù `01-q-hoi-vien.md:7` có hứa). Viết bây giờ gần như chắc chắn phải viết lại.
 
-Hai luật của `00-he-thong.md` **chưa chốt được sau lượt `/staff`**, cần dựng `/admin` rồi quyết một
-lần cho cả hệ (chi tiết ở `staff-A8.md § 4.4` và `§ 4.6`):
+### Hai luật treo từ lượt `/staff` — **đã chốt sau lượt `/admin`**
 
-- **Hero đổi mẫu số khi đang lọc** (`2/12` → `2/5`) mà thứ duy nhất giải thích cú nhảy là nhãn nhỏ
-  10.5px opacity .62 — thành phần mờ nhất đỡ nghĩa cho thành phần to nhất.
-- **Nhãn nhỏ rỗng mang hai nghĩa**: theo `§ A1b` là "chưa biết là ai" (tạm), theo `§ B0b` ở `/staff`
-  là "không có tập nội dung để mô tả" (cấu trúc, vĩnh viễn). Cùng một khoảng trống.
+Hai luật này cố ý hoãn ở `staff-A8.md:50` để "quyết một lần cho cả hệ". Lượt `03a` đã dựng thử cả
+hai cách rồi chốt (chi tiết + bằng chứng ở `docs/design/admin-A8.md § 0a` và `§ 0b`):
+
+- **Hero không đổi theo bộ lọc.** Con số đổi vì **dữ liệu** thì lên hero; con số đổi vì người dùng
+  **vừa bấm bộ lọc** thì sống ở dòng kết quả cạnh bộ lọc, kèm đủ mẫu số. Lý do loại cách cũ: hero
+  36px nhảy mà thứ duy nhất giải thích là eyebrow 10.5px `opacity:.62` — thành phần mờ nhất đỡ
+  nghĩa cho thành phần to nhất. Đã viết vào `00-he-thong.md § A1b`.
+  **Ripple:** `designs/staff.dc.html` vẫn làm theo cách cũ, cần một lượt sửa riêng.
+- **Nhãn nhỏ rỗng chỉ có một nghĩa — "chưa biết là ai" — và nghĩa đó chỉ tồn tại ở `/q`.** Ở
+  `/staff` và `/admin` eyebrow luôn có chữ, nên nghĩa thứ hai ("không có tập nội dung để mô tả")
+  không cần tồn tại. `min-height` cố định vẫn giữ, nhưng vì lý do bố cục.
+
+Kèm theo, `00-he-thong.md § A6` được sửa: bản dựng `.dc.html` **miễn** luật khai token trên `:root`.
+Cả ba bản dựng đều vi phạm luật cũ vì định dạng này viết style nội tuyến — sửa luật cho khớp thực
+tế thay vì sửa ba file đã đóng. Token sống ở `design/tokens.css` (`admin-A8.md § 2.1`).
+
+---
+
+## D13 — `/admin` trên màn rộng là **một cột căn giữa**, không bố cục lại
+
+**Chốt 2026-08-05, sau khi dựng xong `/admin` nền tảng (`designs/admin.dc.html`, 15 màn).**
+
+### Bối cảnh — vì sao câu hỏi này chưa từng được hỏi
+
+Ba lượt dựng đầu đều mặc định điện thoại: `03a-admin-nen-tang.md:18` ghi chủ trung tâm "xem phần
+mềm này **trên điện thoại**, giữa hai ca", `:23` ra lệnh "đừng thiết kế cho màn hình máy tính rồi
+thu nhỏ", và `00-he-thong.md § A4` chỉ nói "mọi màn phải đọc được ở **360px**". Khung 390×844 trong
+các bản dựng là **mặt bàn để xem**, không phải một bố cục desktop.
+
+Nhưng cho tới trước quyết định này, cả `DECISIONS.md`, `PRD.md` lẫn `docs/STORIES.yml` **không có
+một chữ nào** về desktop, responsive hay breakpoint. Nghĩa là hình dáng trên laptop đang là một
+giả định không ai ký, và lúc code `/admin` bằng Angular thì mỗi story sẽ tự quyết một kiểu.
+
+### Quyết định
+
+Ở bề rộng **≥ 720px**, `/admin` **không bố cục lại**: một cột `max-width: 440px` căn giữa trên nền
+than `#0B0C0B`, nội dung y hệt màn điện thoại. Không breakpoint nào khác, không bố cục hai cột,
+không bảng ngang. Áp cho `/staff` luôn — cùng lý do, và `/staff` còn ít lý do lên laptop hơn.
+
+`/q` không cần luật này: nó là trang Thymeleaf một màn, quét từ điện thoại.
+
+### Lý do
+
+1. **North-star là 10 phút trên điện thoại** (`03a:20`, `PRD.md:20`). Bố cục desktop không rút ngắn
+   được 10 phút đó — nó chỉ thêm một hệ luật thứ hai phải giữ đồng bộ.
+2. **Hệ thiết kế xây quanh 360–390px.** Bốn tầng hộp, ba slot đầu màn, thanh nav nổi, vùng chạm
+   52px — tất cả đều là luật của một cột hẹp. Bố cục hai cột không kế thừa được cái nào trong đó
+   mà không phải viết lại luật.
+3. **Một người xây, part-time.** Backlog M0→M3 đã là 43 ngày-người. Hai bố cục là hai bộ lỗi hiển
+   thị, hai lượt kiểm bằng mắt, hai chỗ để lệch.
+
+### Rủi ro đang nhận, nói thẳng
+
+Hai việc trong `/admin` thật sự là **việc của laptop**, và cả hai vẫn phải làm trong cột 440px:
+
+- **Nhập danh sách từ Excel** (`M1-S09`, wizard bước 4). File `.xlsx` thường nằm trên máy tính, và
+  chọn file trên điện thoại là bước dễ bỏ cuộc nhất của cả wizard.
+- **Tải và in poster QR A4** (wizard bước 5). Máy in gần như luôn nối với máy tính.
+
+Chấp nhận cho v1 vì cả hai vẫn **làm được** trong cột hẹp — bản dựng đã có luồng dán-từ-Excel làm
+đường thoát cho việc thứ nhất, và PDF tải trên điện thoại rồi gửi sang máy in được.
+
+**Điều kiện mở lại:** nếu pilot (`M4-S13`) báo về rằng chủ trung tâm bỏ dở ở bước 4 hoặc bước 5 vì
+đang ngồi máy tính, thì mở lại bằng một **lượt dựng 03c** cho đúng hai màn đó — không sửa ngầm
+trong lúc code, không thêm breakpoint lẻ tẻ vào từng component.
+
+### Cái này **không** phải
+
+Đây không phải quyết định về PWA. `/admin` vẫn chỉ có **manifest cho icon**, không service worker —
+xem bảng ở mục `Chữ "PWA" chỉ áp cho /staff` bên dưới. Một cột căn giữa là chuyện bố cục, không đổi
+gì về cài đặt hay offline.
+
+Luật thi hành nằm ở `docs/design/prompts/00-he-thong.md § A4`.
 
 ---
 

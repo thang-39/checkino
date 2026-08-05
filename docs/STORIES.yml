@@ -902,5 +902,13 @@ note_gaps: |
   - M2-S04  đóng băng thẻ thì cửa sổ hiệu lực xử lý thế nào
   - M2-S10  định dạng + timezone + qua-nửa-đêm của giờ mở cửa
   - M2-S12  chỗ lưu và thời điểm tính hai cờ liên-event
+  - M2-S13  cái gì quyết định "ai cần điểm danh hôm nay" (lộ ra khi dựng /staff —
+            D7 chỉ có program + scan_point, không có thực thể đăng-ký-theo-ngày.
+            CHẠM VÀO SCHEMA M1-S02, quyết trước khi code M1-S02)
+  - M2-S13  huỷ một tick ĐÃ gửi server có được phép không (giới hạn giờ, audit_log,
+            /admin đếm ra sao)
+  - M2-S13  hội viên hết hạn hoặc bị chặn hiện thế nào ở /staff
+  - M3-S02  mốc giờ "Danh sách lưu lúc 17:02" đo cái gì (tải cuối / mở app cuối /
+            server đổi danh sách)
   - M4-S01  hành vi của import preview khi đã đầy cap
   Mỗi story trên phải ghi kết quả ngược vào DECISIONS.md khi làm.
