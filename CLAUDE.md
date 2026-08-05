@@ -118,8 +118,9 @@ tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi r
   dễ làm sai: **nền màn chỉ có ba giá trị** (than / sage / rust `#8E2C1B`); **header = nơi chốn,
   nhãn nhỏ = tên người, hero 36px = trạng thái**, không slot nào kiêm hai nghĩa; **gradient chỉ
   đi trong một họ màu**. Vàng = còn kịp, rust = bị chặn, san hô không bao giờ là lỗi. Luật đầy đủ
-  ở `docs/design/prompts/00-he-thong.md`. Bản dựng `/q` ở `designs/q.dc.html` (Claude Design —
-  cần `support.js` của runtime, mở trình duyệt thường sẽ trắng trang).
+  ở `docs/design/prompts/00-he-thong.md`. Bản dựng ở `designs/*.dc.html` (Claude Design) — chạy
+  bằng `designs/support.js` đã commit, nhưng phải **phục vụ qua HTTP cục bộ** (runtime `fetch` lại
+  chính file, không nhận `file://`) và **cần mạng** (React + Archivo).
 - **D13** — **`/admin` trên màn rộng là một cột `max-width:440px` căn giữa**, không bố cục lại,
   không breakpoint nào khác. Áp cho `/staff` luôn. Rủi ro nhận rõ: nhập Excel và in poster A4 là
   việc-của-laptop nhưng vẫn phải làm trong cột hẹp — mở lại chỉ khi pilot `M4-S13` báo về, và mở

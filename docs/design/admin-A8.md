@@ -60,35 +60,78 @@ nguyên yêu cầu `min-height` cố định vì lý do đó là bố cục, kh�
 
 ---
 
-## Lượt kiểm bằng mắt — **CHƯA CHẠY**
+## Lượt kiểm bằng mắt — **đã chạy**, bố cục 15/15 đạt
 
-Toàn bộ phần dưới là **đọc source**. Bản dựng chưa qua lượt render thật: `.dc.html` cần
-`./support.js` của runtime Claude Design, không có trong repo (`00-he-thong.md § A7`), nên môi
-trường viết báo cáo này không mở được file.
+Chạy bằng Chromium headless trên `designs/support.js` (runtime Claude Design, nay đã commit — xem
+`§ 7`), phục vụ qua HTTP cục bộ. **Archivo tải thật** (`document.fonts.check('800 36px Archivo')`
+= `true`) — đo bằng font fallback thì mọi con số dưới đây vô nghĩa. Không lỗi console, không
+request nào hỏng. **30 lượt đo: 15 màn × {390px, 360px}**, mỗi lượt chạy lại hai lần với tên trung
+tâm ngắn (`Gym Thành Phát`) và dài (`TRUNG TÂM ANH NGỮ SAO MAI`, đúng như `§ A1b:81` bắt).
 
-`staff-A8.md` cho thấy lượt render báo về **năm việc ngoài checklist** mà đọc source không thấy —
-nên đừng coi báo cáo này là đã đóng. Phải chạy lượt kiểm và bổ sung kết quả vào chính mục này.
+Ba con số quan trọng nhất, đều đạt tuyệt đối:
 
-Chỗ phải soi, xếp theo mức nghi ngờ giảm dần — mỗi chỗ xem ở **cả 390px và 360px**:
+- **Không một phần tử nào bị cắt ngang** ở cả 30 lượt. Kể cả các span khai `text-overflow:ellipsis`
+  cũng **chưa lần nào phải dùng tới** ellipsis — `scrollWidth − clientWidth = 0` khắp nơi.
+- **Hàng nhãn nhỏ cao đúng 22px ở cả 30 lượt**, kể cả màn 13/14/15 (tên hội viên, không chip).
+- **`heroTop` = 182px đứng im ở cả 30 lượt.** Hero không nhảy một pixel nào khi chuyển màn — đây
+  chính là thứ `§ A1b` điều 3 muốn bảo vệ, và nó đạt ở mức tuyệt đối chứ không phải "gần đúng".
 
-1. **Lưới thao tác 2 cột** ở màn 13 (`:494`, `grid-template-columns:1fr 1fr`). Ở 360px mỗi ô còn
-   ~116px cho chữ, mà nhãn dài nhất là `SỬA SỐ ĐIỆN THOẠI` và `THU HỒI THIẾT BỊ` — viết hoa,
-   `wdth 92`, 13.5px. Ô sẽ cao lên chứ không tràn (không `overflow:hidden`), nhưng bảy ô cao lên
-   thì màn phải cuộn thêm. Đo `scrollHeight`.
-2. **Hàng ba nút ở màn 4** (`:200-205`): nút quay lại 56px + `Bỏ qua` + `Tiếp tục`, gap 10. Ở 360px
-   còn ~126px mỗi nút. Đây là chỗ hẹp nhất của cả bản dựng, mà `§ B1` lại bắt `Bỏ qua` phải
-   **ngang hàng** nút tiếp tục — không được rớt xuống dòng.
-3. **Ba ô tổng kết** ở màn 6/7 (`:259`, `repeat(3,1fr)`): số 26px + nhãn `KHÔNG ĐỔI` 9.5px
-   `letter-spacing:.11em`. Ở 360px mỗi ô ~93px. Nhãn có xuống dòng không.
-4. **Header tên dài.** `§ A1b:81` bắt thử bằng `TRUNG TÂM ANH NGỮ SAO MAI`, không phải `GYM ABC`.
-   Prop `orgName` sửa được ở panel — đổi rồi xem lại **cả 15 màn**, vì `headTitle` cũng in trên thẻ
-   hội viên (`:461`) và trên poster A4 (`:372`), hai chỗ chật hơn header.
-5. **Hàng nhãn nhỏ** ở màn 13/14/15 mang tên hội viên `Nguyễn Thị Hồng Nhung` + không có chip →
-   kiểm `min-height:22px` giữ được, hero không nhảy khi chuyển từ màn 11 sang 13.
-6. **Poster A4** (`:371`, `aspect-ratio:1/1.414`, `max-width:238px`) + khối `Dán ở đâu` bên dưới có
-   vừa 844px không, hay phải cuộn — màn 10 là màn cuối wizard, cuộn ở đây là mất nút tải.
-7. **Màn 15 nền rust**: `§ A2` cấm màu bão hoà tràn kín màn. Rust `#8E2C1B` được phép làm nền màn
-   (D12), nhưng phải xem thật xem hai ô nhập `rgba(0,0,0,.20)` trên nền đó có đọc được không.
+Bốn chỗ tôi nghi nhất trước khi render — **cả bốn đều không vỡ**:
+
+| Nghi ngờ | Đo được ở 360px |
+|---|---|
+| Lưới thao tác 2 cột, nhãn `SỬA SỐ ĐIỆN THOẠI` | ô rộng **143px**; 5 ô cao 62px, 2 ô (`TẠM DỪNG THẺ`, `SỬA SỐ ĐIỆN THOẠI`) giãn lên **70px**. Không cắt chữ, lưới tự giãn. Đọc tốt |
+| Hàng ba nút ở màn 4 (`Bỏ qua` phải ngang hàng `Tiếp tục`) | mỗi nút **126×56px**, tràn = 0. Vẫn ngang hàng, không rớt dòng |
+| Tên trung tâm dài | header **2 dòng, cao 36px**, không tràn, ở cả 15 màn. Trên thẻ hội viên: 1 dòng, rộng 207px trong lòng thẻ 328px, **cách mép phải đúng 18px = đúng padding**. Trên poster A4: 1 dòng |
+| Poster A4 có phải cuộn không | tờ giấy cao **337px**, cả màn `scrollHeight = clientHeight = 458` → **không phải cuộn**, nút tải không bị đẩy khuất |
+
+### Hành vi động — kiểm bằng cách bấm thật
+
+- **Hero đổi vì dữ liệu:** để trang chủ chạy 9,2 giây (hai nhịp `tick()`), hero tự đi từ
+  `24 ĐÃ TỚI HÔM NAY` → `26 ĐÃ TỚI HÔM NAY`. Không ai bấm gì.
+- **Hero đứng yên khi lọc — `§ 0a` đúng như viết.** Qua **năm** trạng thái lọc khác nhau (chưa lọc
+  → lọc `Sắp hết hạn` → thêm ô tìm `hoang` → `0938` → `zzz`), hero giữ nguyên
+  `22 HỘI VIÊN TRONG DANH SÁCH` **không đổi một lần nào**, còn dòng kết quả đổi đủ:
+  `Tất cả · 22 hội viên` → `sắp hết hạn — 4 trong 22 hội viên` → `sắp hết hạn · "hoang" — 0 trong 22`.
+- **Đường khó nhất cũng đúng:** bấm ô cảnh báo `4 THẺ SẮP HẾT HẠN` ở trang chủ → nhảy sang màn 11
+  đã lọc sẵn, hero vẫn `22`, dòng kết quả `sắp hết hạn — 4 trong 22 hội viên`. Đây là đoạn văn tôi
+  viết ở `§ 0a` trước khi render được, và render xác nhận đúng từng chữ.
+- **Ô tìm lọc thật, và chuẩn hoá cả dấu lẫn dấu cách:** `nguyen thi` (không dấu) → ra
+  `Nguyễn Thị Hồng Nhung`; `HOÀNG` → ra `Lê Hoàng Phương Anh`; `0938` và `0938 447` (có dấu cách)
+  đều ra đúng người; `zzz` → 0 kết quả kèm câu chỉ đường *"Thử gõ ngắn hơn, hoặc gõ 3 số cuối"*.
+
+### Ba việc lượt render báo về mà đọc source không thấy
+
+**R1 · Vùng chạm của thanh nav là 86×41px — dưới ngưỡng 52px của `§ A4`.** Có ở cả 6 màn ngoài
+wizard. Nguyên nhân: `:570-577` dùng `padding:11px 0` quanh icon 19px = 41px, không khai
+`min-height`.
+
+**R2 · Năm nút phụ dạng chữ gạch chân chỉ cao 44px** — cũng dưới 52px: `Chọn file khác` (màn 6, 7),
+`Xem danh sách hội viên` (màn 9), `Xong, vào trang chủ` (màn 10), `Quay lại hồ sơ` (màn 14, 15).
+Đây là `min-height:44px` **cố ý gõ trong code**, không phải tai nạn.
+
+R1 và R2 cùng đặt một câu hỏi mà `§ A4` chưa trả lời: ngưỡng 52px được viết ra với lý do *"tay ướt
+mồ hôi ở cửa phòng tập"* — đó là hoàn cảnh của `/staff`. Chủ trung tâm ngồi giữa hai ca thì 44px
+(ngưỡng của Apple HIG) có đủ không? Đề nghị `§ A4` nói rõ: **52px cho hành động chính và cho
+`/staff`; 44px là sàn tuyệt đối cho nút phụ trên `/admin`** — và nếu chốt thế thì thanh nav ở R1
+vẫn phải sửa, vì nav là điều hướng chính chứ không phải nút phụ.
+
+**R3 · Hai icon nav chưa dùng tới bị vẽ hỏng.** Đo hộp bao nét vẽ trong khung 24×24:
+
+| Mục nav | Số nét | Nét vẽ | Lấp đầy |
+|---|---|---|---|
+| Trang chủ | 1 | 18×19 | 59% |
+| Hội viên | 3 | 20×18 | 63% |
+| **Báo cáo** | 1 | **12×9 tại (6,11)** | **19%** |
+| **Cài đặt** | 2 | **15×10 tại (4,7)** | **26%** |
+
+Icon `Cài đặt` ở `:577` chỉ có một vòng tròn `r=3` cộng **hai mẩu cung 2px rời rạc**
+(`M19.4 15a1.6 1.6 0 0 0 .3 1.8M4.6 9a1.6 1.6 0 0 0-.3-1.8`) — vành bánh răng bị thiếu, nên trên
+màn hình nó hiện ra như dấu `'o,`. Thấy rõ trong ảnh chụp ở màn 11 và màn 13. Icon `Báo cáo` không
+hỏng nhưng ba cột chỉ cao 9/24 và dồn xuống đáy khung, nên nhỏ hơn hẳn hai icon bên cạnh.
+
+Cả hai đều là mục lượt `03b` sẽ nối vào, nhưng chúng **đang hiển thị** — người bấm thử sẽ đọc ra
+là lỗi render chứ không phải "chưa làm". Phải sửa trong lượt này, không để lại cho `03b`.
 
 ---
 
@@ -289,19 +332,69 @@ loại (nhật ký của một hội viên, chi tiết một lead học thử).
 
 ---
 
-## 6 · Lỗi tìm được khi rà mã — bốn cái, đều nhỏ
+## 6 · Lỗi tìm được khi rà mã — bốn cái, **cả bốn đã xác nhận bằng render**
 
 Không cái nào là lỗi thiết kế; đều là lệch số liệu hoặc lệch hành vi trong bản dựng.
 
-| # | Lỗi | Chỗ |
-|---|---|---|
-| 6.1 | **Tổng số dòng không khớp giữa hai màn.** Màn 5 nói file có `25 DÒNG` (`:241`), màn 6 cộng lại ra 22 (`12+3+7`, `:838-840`), màn 7 ra 23 (`10+3+7` + 3 lỗi). Bấm liền hai màn là thấy | `:241` vs `:837-841` |
-| 6.2 | **Màn 9 không đổi số khi đến từ nhánh lỗi.** `doneTags` cứng `12 mới` (`:936`) kể cả khi đi từ màn 7 (chỉ 10 mới). Và hero màn 9 lấy `C.MEMBERS.length` (`:768`) — đúng 22 chỉ vì trùng, không phải vì tính từ kết quả nhập | `:768`, `:936` |
-| 6.3 | **Kiểm trùng SĐT so khớp chuỗi có dấu cách.** `:748` `x.p === S.editPhone`, trong khi ô tìm ở màn 11 thì có chuẩn hoá (`:783`). Gõ `0983550128` (không dấu cách) sẽ báo "Số này chưa ai dùng" dù đang trùng thật — đúng cái mà `§ B4` cấm nuốt lỗi im lặng | `:748` |
-| 6.4 | **Nút `Tiếp tục` ở bước 1 luôn sáng.** `w1Op: 1` cứng (`:906`), trong khi bước 4 thì mờ đúng luật (`w4Op`, cùng dòng). `§ A6` đòi "gõ ô nhập thì nút bật" | `:906` |
+### 6.1 Tổng số dòng không khớp giữa các màn
 
-6.1–6.3 nên sửa trong bản dựng — người xem sẽ vấp phải. 6.4 tuỳ: nếu tên trung tâm được phép để
-trống và lấy mặc định thì nút sáng là đúng, nhưng lúc đó `§ B1` phải nói ra điều đó.
+Bấm liền ba màn là thấy:
+
+| Màn | Bản dựng nói | Cộng lại |
+|---|---|---|
+| 5, sau khi chọn file | `hoi-vien-thang-8.xlsx · 25 DÒNG` | 25 |
+| 6, xem trước | `12 MỚI · 3 CẬP NHẬT · 7 KHÔNG ĐỔI` | **22** |
+| 7, có dòng lỗi | `10 MỚI · 3 CẬP NHẬT · 7 KHÔNG ĐỔI` + `3 DÒNG KHÔNG GHI ĐƯỢC` | **23** |
+
+Ba con số cho cùng một file. Chỗ sai: `:241` gõ cứng `25 DÒNG`, `:837-841` gõ cứng bộ ba tổng kết.
+
+### 6.2 Màn 9 không đổi số khi đến từ nhánh lỗi
+
+Render màn 9 luôn ra `ĐÃ GHI 22 HỘI VIÊN` + `12 mới · 3 cập nhật · 7 không đổi`, kể cả khi đi từ
+màn 7 (chỉ 10 mới). `doneTags` gõ cứng ở `:936`; hero lấy `C.MEMBERS.length` ở `:768` — ra đúng 22
+chỉ vì **trùng số**, không phải vì tính từ kết quả nhập.
+
+### 6.3 Kiểm trùng SĐT không chuẩn hoá dấu cách — xác nhận, và là **lệch nội bộ**
+
+Gõ thật vào ô SĐT ở màn 14, cùng một số điện thoại:
+
+| Gõ vào | Bản dựng báo |
+|---|---|
+| `0983 550 128` | **TRÙNG VỚI HỘI VIÊN KHÁC** ✓ |
+| `0983550128` | **"Số này chưa ai dùng"** ✗ |
+
+Đây không phải giới hạn chung của bản dựng: ô tìm ở màn 11 gõ `0938 447` **có** chuẩn hoá dấu cách
+và ra đúng người. Cùng một file, hai chỗ xử lý SĐT theo hai kiểu — `:748` so khớp chuỗi thô
+(`x.p === S.editPhone`) trong khi `:783` có chuẩn hoá. Và đây đúng là chỗ `§ B4` cấm nuốt lỗi im
+lặng: người dùng gõ liền số rồi bấm Lưu, tưởng xong.
+
+### 6.4 Nút `Tiếp tục` ở bước 1 luôn sáng
+
+Render: ô tên **trống**, nút `opacity: 1`, `disabled = false`. `w1Op: 1` gõ cứng ở `:906`, trong
+khi `w4Op` ngay cùng dòng thì mờ đúng luật. `§ A6` đòi "gõ ô nhập thì nút bật".
+
+Tuỳ: nếu tên trung tâm được phép để trống và lấy mặc định (`:738` có fallback thật) thì nút sáng
+là đúng — nhưng lúc đó `§ B1` phải nói ra điều đó, chứ không để hai bước cùng wizard hành xử khác nhau.
+
+---
+
+**Xếp việc:** 6.1, 6.2, 6.3 và R3 (icon hỏng) nên sửa trong bản dựng — người xem sẽ vấp phải cả
+bốn. 6.4, R1, R2 là câu hỏi luật, phải chốt ở `§ A4` / `§ B1` trước rồi mới sửa.
+
+## 7 · `designs/support.js` đã được commit
+
+Trước lượt này `.gitignore` chặn `designs/support.js`, và `§ A7` ghi runtime "không có trong repo,
+mở bằng trình duyệt thường sẽ ra trang trắng". Hệ quả thật: **không ai chạy được lượt kiểm `§ A8`**
+— báo cáo này suýt nữa đóng lại mà chỉ có phần đọc source, đúng cái mà `staff-A8.md` đã chứng minh
+là không đủ.
+
+Đã bỏ chặn và commit file. Nó là file generated (`// GENERATED from dc-runtime/src/*.ts — do not
+edit`), 69KB, và kéo React 18.3.1 + ReactDOM + Babel từ `unpkg.com` kèm SRI khi chạy — nghĩa là
+**mở bản dựng vẫn cần mạng**, chỉ không cần runtime của Claude Design nữa.
+
+Cách chạy lại lượt kiểm này về sau: phục vụ thư mục `designs/` qua HTTP cục bộ (mở thẳng `file://`
+thì runtime báo lỗi fetch), rồi lái bằng Chromium headless — bảng nhảy nhanh ở `:587` cho phép
+tới thẳng từng màn, và bề rộng khung đổi bằng cách set `style.width` trên div `844px`.
 
 ---
 
@@ -309,8 +402,8 @@ trống và lấy mặc định thì nút sáng là đúng, nhưng lúc đó `§
 
 | Việc | Cho ai |
 |---|---|
-| **Chạy lượt kiểm bằng mắt** 15 màn × 2 bề rộng, ghi kết quả vào mục trên | trước khi đóng `03a` |
-| **Sửa 4 lỗi ở § 6** | trước khi đóng `03a` |
+| **Sửa 3 lỗi số liệu** (§ 6.1, 6.2, 6.3) + **2 icon nav hỏng** (R3) | trước khi đóng `03a` |
+| **Chốt ngưỡng vùng chạm ở `§ A4`** (R1 nav 41px, R2 nút phụ 44px, § 6.4 nút bước 1) rồi mới sửa | trước khi đóng `03a` |
 | **`/staff` hero còn làm theo cách cũ** — `§ 0a` vừa lật luật, `designs/staff.dc.html` chưa theo | lượt sửa riêng, không phải `03a` |
 | **`§ A1` còn thiếu hai câu**: ô icon 42px lấy màu ông nội (§ 1.2); vật mô phỏng thế giới thật nằm ngoài hệ bốn tầng (§ 1.3) | khi viết `docs/DESIGN.md` |
 | **Sage có được mang nghĩa phụ "cái đang diễn ra" không** (§ 2, cột hôm nay) | khi viết `docs/DESIGN.md` |
