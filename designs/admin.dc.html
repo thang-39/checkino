@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#0B0C0B; color:#F2F2EC; font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.45; }
+a { color:#F2F2EC; text-decoration:underline; } a:hover { color:#F98872; }
+input::placeholder { color:currentColor; opacity:.45; }
+textarea::placeholder { color:currentColor; opacity:.45; }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;gap:40px;padding:36px 300px 36px 36px;box-sizing:border-box">
+
+  <div style="width:390px;height:844px;flex:none;border:9px solid #080908;border-radius:42px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 44px rgba(0,0,0,.55);background:{{ scrBg }};color:{{ scrFg }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 22px 2px;font-size:12.5px;font-weight:700;opacity:.9;flex:none">
+      <span>{{ clock }}</span>
+      <span style="display:flex;gap:6px;align-items:center;font-size:11px;letter-spacing:.06em">4G
+        <span style="width:21px;height:11px;border:1.5px solid currentColor;border-radius:3px;position:relative;display:inline-block"><span style="position:absolute;top:2px;bottom:2px;left:2px;right:6px;background:currentColor;border-radius:1px"></span></span>
+      </span>
+    </div>
+
+    <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
+
+      <!-- HEADER BAR — § A1b: nơi chốn. Đứng yên tuyệt đối qua cả 15 màn. -->
+      <div style="display:flex;align-items:center;gap:11px;flex:none">
+        <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:21px;font-weight:800;letter-spacing:-.04em;font-variation-settings:'wdth' 88">C</span>
+        <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">{{ headTitle }}</p>
+        <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:{{ pillBg }};font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">{{ pillText }}</span>
+      </div>
+
+      <!-- NHÃN NHỎ + HERO — § B0b: nhãn nhỏ mang tên khu vực (hoặc tên hội viên ở màn chi tiết) -->
+      <div style="padding:6px 2px 2px;flex:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:22px">
+          <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ eyebrow }}</p>
+          <sc-if value="{{ chipShow }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:{{ pillBg }};line-height:1;white-space:nowrap;flex:none">{{ chipText }}</span>
+          </sc-if>
+        </div>
+        <p style="margin:11px 0 0;font-size:36px;font-weight:800;line-height:.95;letter-spacing:-.035em;text-transform:uppercase;font-variation-settings:'wdth' 82;text-wrap:balance">{{ hero1 }}<br>{{ hero2 }}</p>
+      </div>
+
+      <!-- THANH TIẾN TRÌNH 5 BƯỚC — nằm dưới hero, trong vùng nội dung, để ba slot đầu màn
+           giữ đúng vị trí như mọi màn khác. Không dùng màu bão hoà: chip BƯỚC n/5 ở header
+           đã nói bằng chữ (§ A2 — khi chữ đã nói rồi thì đừng thêm tín hiệu thứ hai). -->
+      <sc-if value="{{ progShow }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:5px;flex:none;padding:0 2px">
+          <sc-for list="{{ stepBars }}" as="b" hint-placeholder-count="5">
+            <span style="flex:1;height:4px;border-radius:999px;background:{{ b.bg }}"></span>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ══ 1 · TRANG CHỦ ══ -->
+      <sc-if value="{{ sHome }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <div onClick="{{ goExpiring }}" style="flex:none;display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:#1F211F;cursor:pointer" style-active="opacity:.75">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#F3C24A;color:#2C1F03">!</span>
+            <div style="min-width:0">
+              <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ alertTitle }}</h5>
+              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">Trong 7 ngày tới. Gọi trước khi hội viên tự bỏ.</p>
+            </div>
+          </div>
+
+          <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:14px;background:#F4573F;color:#2A0C06">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Lượt điểm<br>danh</p>
+              <span style="display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.30);font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">7 ngày
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></span>
+            </div>
+            <div style="border-radius:18px;padding:13px 14px;background:#F98872">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase">Trung bình mỗi ngày</span>
+                <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.55)">+7,5%</span>
+              </div>
+              <div style="font-size:33px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:7px">19<small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.75">lượt</small></div>
+            </div>
+            <div style="display:flex;align-items:flex-end;gap:6px;height:88px">
+              <sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+                <span style="flex:1;border-radius:8px 8px 6px 6px;height:{{ b.h }};background:{{ b.bg }}"></span>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:7px;flex-wrap:wrap">
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#C4D4C1;display:block"></i>{{ legendToday }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#FFFFFF;display:block"></i>TB 7 ngày 19</span>
+            </div>
+          </div>
+
+          <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:14px;background:#6F66F0;color:#0D0838">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Chỗ gói<br>miễn phí</p>
+              <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.22);font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">{{ limitPill }}</span>
+            </div>
+            <div style="border-radius:18px;padding:13px 14px;background:#9E98F6">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase">Đã dùng</span>
+                <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.55)">{{ seatsLeft }}</span>
+              </div>
+              <div style="font-size:33px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:7px">{{ memberCount }}<small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.75">{{ limitOf }}</small></div>
+            </div>
+          </div>
+
+          <p style="margin:2px 2px -4px;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;flex:none">Đang vào · trực tiếp</p>
+          <div style="flex:none;display:flex;flex-direction:column;gap:8px;padding-bottom:2px">
+            <sc-for list="{{ feed }}" as="f" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:12px;min-height:56px;background:#1F211F;border-radius:18px;padding:8px 16px">
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font-size:17px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.name }}</span>
+                  <span style="display:block;font-size:12px;font-weight:600;color:#9AA096;margin-top:1px">{{ f.sub }}</span>
+                </span>
+                <span style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.55;flex:none">{{ f.ago }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ 2 · WIZARD BƯỚC 1 · THÔNG TIN TRUNG TÂM ══ -->
+      <sc-if value="{{ sW1 }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+          <div style="flex:none;display:flex;flex-direction:column;gap:7px">
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Tên trung tâm</p>
+            <input value="{{ fOrg }}" onChange="{{ onOrg }}" placeholder="Gym Thành Phát" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+          </div>
+          <div style="flex:none;display:flex;flex-direction:column;gap:7px">
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Địa chỉ</p>
+            <input value="{{ fAddr }}" onChange="{{ onAddr }}" placeholder="123 Nguyễn Thị Thập, Quận 7" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+          </div>
+          <p style="margin:0 2px;font-size:13px;color:#9AA096;line-height:1.45;flex:none">Tên này sẽ hiện trên poster QR dán ở cửa, và trên máy của cô giáo khi điểm danh.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
+          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;opacity:{{ w1Op }}" style-active="opacity:.8">Tiếp tục
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 3 · WIZARD BƯỚC 2 · ĐIỂM QUÉT ══ -->
+      <sc-if value="{{ sW2 }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+          <div style="flex:none;display:flex;flex-direction:column;gap:7px">
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Tên điểm quét</p>
+            <input value="{{ fSpot }}" onChange="{{ onSpot }}" placeholder="Cửa chính" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+          </div>
+          <div style="flex:none;display:flex;flex-direction:column;gap:7px">
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Giờ mở cửa</p>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input value="{{ fOpen }}" onChange="{{ onOpen }}" inputmode="numeric" style="flex:1;min-width:0;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+              <span style="font-size:15px;font-weight:700;opacity:.5;flex:none">tới</span>
+              <input value="{{ fClose }}" onChange="{{ onClose }}" inputmode="numeric" style="flex:1;min-width:0;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+            </div>
+          </div>
+          <div style="flex:none;border-radius:24px;padding:17px;background:#1F211F;display:flex;flex-direction:column;gap:12px">
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Mã QR sẽ sinh ra</p>
+            <div style="display:flex;gap:14px;align-items:center;border-radius:18px;padding:13px 14px;background:#2A2D2A">
+              <span style="width:96px;height:96px;flex:none;background:#FFFFFF;border-radius:10px;padding:6px;box-sizing:border-box">{{ qrArt }}</span>
+              <div style="min-width:0">
+                <p style="margin:0 0 5px;font-size:15px;font-weight:700;line-height:1.25">{{ spotLine }}</p>
+                <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Mã này chỉ dùng cho điểm quét này. Thêm điểm quét khác sau cũng được.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
+          <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">Tiếp tục
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 4 · WIZARD BƯỚC 3 · BỘ MÔN (bỏ qua được, ngang hàng nút tiếp tục) ══ -->
+      <sc-if value="{{ sW3 }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+          <div style="flex:none;display:flex;flex-direction:column;gap:7px">
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Thêm bộ môn</p>
+            <div style="display:flex;gap:10px">
+              <input value="{{ fNewProg }}" onChange="{{ onNewProg }}" placeholder="Boxing" style="flex:1;min-width:0;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+              <button onClick="{{ addProg }}" style="flex:none;min-height:56px;padding:0 22px;border:0;border-radius:999px;background:rgba(255,255,255,.13);color:#F2F2EC;font:inherit;font-size:13.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer" style-active="opacity:.7">Thêm</button>
+            </div>
+          </div>
+          <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{ progChips }}" as="p" hint-placeholder-count="3">
+                <button onClick="{{ p.remove }}" style="display:inline-flex;align-items:center;gap:9px;border:0;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;padding:0 16px;min-height:52px;border-radius:999px;background:#A9E5F1;color:#052430" style-active="opacity:.75">{{ p.name }}
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <p style="margin:0 2px;font-size:13px;color:#9AA096;line-height:1.45;flex:none">{{ progNote }}</p>
+        </div>
+        <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
+          <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+          <button onClick="{{ skipProgs }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:rgba(255,255,255,.13);color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.7">Bỏ qua</button>
+          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Tiếp tục</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 5 · WIZARD BƯỚC 4 · CHỌN NGUỒN ══ -->
+      <sc-if value="{{ sW4 }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div style="flex:none;display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:#1F211F">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#F3C24A;color:#2C1F03">!</span>
+            <div style="min-width:0">
+              <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">Bước này bắt buộc</h5>
+              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">Danh sách rỗng thì không ai điểm danh được. Cú quét thử của anh/chị sẽ rơi vào form học thử, dễ tưởng là phần mềm hỏng.</p>
+            </div>
+          </div>
+          <button onClick="{{ pickFile }}" style="flex:none;display:flex;gap:14px;align-items:center;text-align:left;width:100%;box-sizing:border-box;border:0;cursor:pointer;font:inherit;color:#F2F2EC;min-height:76px;background:{{ srcFileBg }};border-radius:18px;padding:12px 16px" style-active="opacity:.8">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#2A2D2A;color:#F2F2EC">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"></path><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7z"></path></svg></span>
+            <span style="flex:1;min-width:0">
+              <span style="display:block;font-size:16px;font-weight:700;line-height:1.25">Chọn file</span>
+              <span style="display:block;font-size:12.5px;color:#9AA096;margin-top:2px">Excel (.xlsx) hoặc .csv</span>
+            </span>
+          </button>
+          <button onClick="{{ pickPaste }}" style="flex:none;display:flex;gap:14px;align-items:center;text-align:left;width:100%;box-sizing:border-box;border:0;cursor:pointer;font:inherit;color:#F2F2EC;min-height:76px;background:{{ srcPasteBg }};border-radius:18px;padding:12px 16px" style-active="opacity:.8">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#2A2D2A;color:#F2F2EC">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M4 9.5h16M9.5 4v16"></path></svg></span>
+            <span style="flex:1;min-width:0">
+              <span style="display:block;font-size:16px;font-weight:700;line-height:1.25">Dán từ Excel</span>
+              <span style="display:block;font-size:12.5px;color:#9AA096;margin-top:2px">Chọn cột trong Excel rồi dán vào đây</span>
+            </span>
+          </button>
+          <sc-if value="{{ srcPaste }}" hint-placeholder-val="{{ false }}">
+            <textarea value="{{ pasteVal }}" onChange="{{ onPaste }}" placeholder="Nguyễn Thị Hồng Nhung	0912345678	Boxing" style="flex:none;width:100%;box-sizing:border-box;height:104px;resize:none;background:#1F211F;border:0;border-radius:18px;padding:14px 16px;font:inherit;font-size:13.5px;font-weight:600;line-height:1.6;color:#F2F2EC"></textarea>
+          </sc-if>
+          <sc-if value="{{ srcFile }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;display:flex;align-items:center;gap:10px;background:#1F211F;border-radius:999px;min-height:52px;padding:0 18px">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9AA096" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"></path><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7z"></path></svg>
+              <span style="flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">hoi-vien-thang-8.xlsx</span>
+              <span style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.55;flex:none">25 DÒNG</span>
+            </div>
+          </sc-if>
+          <p style="margin:2px 2px 0;font-size:13px;color:#9AA096;line-height:1.45;flex:none">Chưa có file? <a href="#tai-file-mau">Tải file mẫu</a> — ba cột: tên, số điện thoại, bộ môn.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
+          <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+          <button onClick="{{ toPreview }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;opacity:{{ w4Op }}" style-active="opacity:.8">Xem trước
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 6 + 7 · XEM TRƯỚC NHẬP LIỆU (7 = biến thể có dòng lỗi) ══ -->
+      <sc-if value="{{ sPv }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:13px;background:#F4573F;color:#2A0C06">
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Sẽ ghi vào danh sách</p>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+              <sc-for list="{{ pvTiles }}" as="t" hint-placeholder-count="3">
+                <div style="border-radius:18px;padding:12px 11px;background:#F98872">
+                  <div style="font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1">{{ t.n }}</div>
+                  <div style="font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;opacity:.78;margin-top:5px">{{ t.k }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <sc-if value="{{ pvHasErr }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:11px;background:#F3C24A;color:#2C1F03">
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">3 dòng không ghi được</p>
+              <sc-for list="{{ pvErrors }}" as="e" hint-placeholder-count="3">
+                <div style="border-radius:18px;padding:12px 14px;background:#F8DC96">
+                  <div style="font-size:14.5px;font-weight:700;line-height:1.3">{{ e.who }}</div>
+                  <div style="font-size:12.5px;font-weight:600;opacity:.78;margin-top:3px;line-height:1.4">{{ e.why }}</div>
+                </div>
+              </sc-for>
+              <p style="margin:0;font-size:12.5px;font-weight:600;opacity:.8;line-height:1.45">Ba dòng này sẽ bị bỏ qua. Sửa trong file rồi nhập lại lần nữa là xong — nhập lại không ghi trùng ai.</p>
+            </div>
+          </sc-if>
+
+          <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px">
+            <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">Nhập danh sách <b>không xoá ai cả</b>. Hội viên vắng mặt trong file để nguyên.</p>
+          </div>
+
+          <sc-if value="{{ pvNewProgs }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px;display:flex;flex-direction:column;gap:10px">
+              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Sẽ tạo 2 bộ môn mới</p>
+              <div style="display:flex;gap:7px;flex-wrap:wrap">
+                <span style="font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.55);color:#131413">Boxing</span>
+                <span style="font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.55);color:#131413">Yoga</span>
+              </div>
+              <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Chỉ tạo khi anh/chị bấm xác nhận.</p>
+            </div>
+          </sc-if>
+
+          <p style="margin:2px 2px -4px;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;flex:none">{{ pvListLabel }}</p>
+          <div style="flex:none;display:flex;flex-direction:column;gap:8px;padding-bottom:2px">
+            <sc-for list="{{ pvRows }}" as="r" hint-placeholder-count="6">
+              <div style="display:flex;align-items:center;gap:10px;min-height:56px;background:#1F211F;border-radius:18px;padding:8px 12px 8px 16px">
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font-size:16px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span>
+                  <span style="display:block;font-size:12px;font-weight:600;color:#9AA096;margin-top:1px">{{ r.sub }}</span>
+                </span>
+                <span style="font-size:10.5px;font-weight:800;letter-spacing:.09em;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.55);color:#131413;flex:none">{{ r.tag }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
+          <button onClick="{{ confirmImport }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">{{ pvCta }}</button>
+          <button onClick="{{ back }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Chọn file khác</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 8 · XEM TRƯỚC — FILE HỎNG HOÀN TOÀN ══ -->
+      <sc-if value="{{ sPvBad }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div style="flex:none;display:flex;align-items:center;gap:10px;background:#1F211F;border-radius:999px;min-height:52px;padding:0 18px">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9AA096" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"></path><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7z"></path></svg>
+            <span style="flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">danh-sach-hoi-vien.xlsx</span>
+          </div>
+          <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px">
+            <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">Đọc được 1 cột. Không thấy cột nào tên giống <b>Tên</b> hay <b>Số điện thoại</b>, nên không biết dòng nào là hội viên nào.</p>
+          </div>
+          <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:11px;background:#F3C24A;color:#2C1F03">
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Sửa theo 3 bước</p>
+            <sc-for list="{{ fixSteps }}" as="s" hint-placeholder-count="3">
+              <div style="display:flex;gap:12px;align-items:center;border-radius:18px;padding:12px 14px;background:#F8DC96">
+                <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:19px;font-weight:800;background:#F3C24A;color:#2C1F03">{{ s.n }}</span>
+                <p style="margin:0;font-size:14px;font-weight:600;line-height:1.4">{{ s.text }}</p>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin:2px 2px 0;font-size:13px;color:#9AA096;line-height:1.45;flex:none">Không sửa được file? <a href="#tai-file-mau">Tải file mẫu</a> rồi gõ tay vài người trước, thêm sau cũng được.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
+          <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+          <button onClick="{{ back }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Chọn file khác</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 9 · NHẬP XONG (nền màn sage — § A2: sage = xong xuôi) ══ -->
+      <sc-if value="{{ sDone }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <div style="flex:none;border-radius:18px;padding:13px 16px;background:rgba(255,255,255,.55);display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ doneTags }}" as="d" hint-placeholder-count="3">
+              <span style="font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;background:#FFFFFF">{{ d.text }}</span>
+            </sc-for>
+          </div>
+          <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:rgba(255,255,255,.55)">
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Bước tiếp theo</p>
+            <div style="border-radius:18px;padding:13px 14px;background:#FFFFFF">
+              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Còn một bước: in poster QR để dán ở cửa. Có poster là quét thử được ngay.</p>
+            </div>
+          </div>
+          <div style="flex:1"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
+          <button onClick="{{ next }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.85">Tiếp tục: poster QR
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+          <button onClick="{{ goList }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Xem danh sách hội viên</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 10 · WIZARD BƯỚC 5 · POSTER QR ══ -->
+      <sc-if value="{{ sPoster }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px;align-items:center">
+          <!-- xem trước tờ A4: đây là ảnh của giấy in, không phải khối UI — ngoài hệ bốn tầng -->
+          <div style="flex:none;width:100%;max-width:238px;aspect-ratio:1/1.414;box-sizing:border-box;background:#F2F2EC;color:#131413;border-radius:12px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:11px;box-shadow:0 14px 30px rgba(0,0,0,.5)">
+            <p style="margin:0;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;text-align:center;font-variation-settings:'wdth' 88;line-height:1.15">{{ headTitle }}</p>
+            <p style="margin:0;font-size:25px;font-weight:800;line-height:.95;letter-spacing:-.03em;text-transform:uppercase;text-align:center;font-variation-settings:'wdth' 82">Quét để<br>điểm danh</p>
+            <span style="width:132px;height:132px;flex:none">{{ qrArt }}</span>
+            <p style="margin:0;font-size:12px;font-weight:700;text-align:center;line-height:1.35">{{ spotLine }}</p>
+            <div style="flex:1"></div>
+            <p style="margin:0;font-size:10px;font-weight:600;opacity:.6;text-align:center;line-height:1.4">Không cần cài ứng dụng.<br>Không cần mật khẩu.</p>
+          </div>
+          <div style="flex:none;display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:#1F211F;width:100%;box-sizing:border-box">
+            <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#A9E5F1;color:#052430">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
+            <div style="min-width:0">
+              <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">Dán ở đâu</h5>
+              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">Ngang tầm mắt, cạnh cửa chính, chỗ có đèn. In đen trắng cũng quét được.</p>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
+          <button onClick="{{ noop }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"></path><path d="M5 20h14"></path></svg>Tải poster PDF (A4)</button>
+          <button onClick="{{ finishWizard }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Xong, vào trang chủ</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 11 · DANH SÁCH HỘI VIÊN ══ -->
+      <sc-if value="{{ sList }}" hint-placeholder-val="{{ false }}">
+        <div style="position:relative;flex:none">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);opacity:.5"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Tìm theo tên hoặc số điện thoại" style="width:100%;box-sizing:border-box;min-height:52px;background:#1F211F;border:0;border-radius:999px;padding:0 20px 0 44px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+        </div>
+        <div style="display:flex;gap:9px;flex:none">
+          <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ openSport }}" style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:13.5px;font-weight:600;padding:0 14px;background:{{ sportPillBg }};color:{{ sportPillFg }}" style-active="opacity:.8">
+              <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ sportPillText }}</span>
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="flex:none;opacity:.7"><path d="m6 9 6 6 6-6"></path></svg></button>
+          </sc-if>
+          <button onClick="{{ openStatus }}" style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:13.5px;font-weight:600;padding:0 14px;background:{{ statusPillBg }};color:{{ statusPillFg }}" style-active="opacity:.8">
+            <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ statusPillText }}</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="flex:none;opacity:.7"><path d="m6 9 6 6 6-6"></path></svg></button>
+        </div>
+        <sc-if value="{{ filterOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:none;background:#1F211F;border-radius:18px;padding:8px;display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{ filterOpts }}" as="o" hint-placeholder-count="4">
+              <button onClick="{{ o.pick }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;font-size:14.5px;font-weight:600;min-height:48px;padding:0 14px;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }}" style-active="opacity:.8">{{ o.label }}
+                <span style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.6;flex:none">{{ o.n }}</span></button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <!-- DÒNG KẾT QUẢ — con số của tập đang lọc sống ở đây, cạnh thứ vừa gây ra nó,
+             chứ không leo lên hero (xem admin-A8 § 0a) -->
+        <p style="margin:0 4px;font-size:13.5px;font-weight:600;color:#9AA096;line-height:1.35;flex:none">{{ resultLine }}</p>
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <div onClick="{{ r.open }}" style="flex:none;display:flex;align-items:center;gap:10px;min-height:60px;background:#1F211F;border-radius:18px;padding:8px 12px 8px 16px;cursor:pointer" style-active="opacity:.8">
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-size:17px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:{{ r.nameFg }}">{{ r.name }}</span>
+                <span style="display:block;font-size:12px;font-weight:600;color:#9AA096;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.sub }}</span>
+              </span>
+              <sc-if value="{{ r.hasTag }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:10.5px;font-weight:800;letter-spacing:.09em;padding:4px 10px;border-radius:999px;white-space:nowrap;flex:none;background:{{ r.tagBg }};color:{{ r.tagFg }}">{{ r.tag }}</span>
+              </sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noMatch }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">{{ noMatchText }}</p></div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ══ 12 · DANH SÁCH HỘI VIÊN — RỖNG ══ -->
+      <sc-if value="{{ sEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:12px;background:#1F211F">
+          <div style="border-radius:18px;padding:13px 14px;background:#2A2D2A">
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Chưa nhập ai vào danh sách. Nhập từ file Excel xong trong một phút, và không cần gõ tay từng người.</p>
+          </div>
+          <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">Danh sách rỗng thì cô giáo mở máy lên cũng chỉ thấy màn trống, và cú quét thử của anh/chị sẽ rơi vào form học thử.</p>
+        </div>
+        <div style="flex:1"></div>
+        <button onClick="{{ goImport }}" style="flex:none;width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">Nhập danh sách
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+      </sc-if>
+
+      <!-- ══ 13 · CHI TIẾT HỘI VIÊN ══ -->
+      <sc-if value="{{ sMember }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <!-- thẻ hội viên: cùng một component với thẻ hội viên thấy ở /q -->
+          <div style="flex:none;border-radius:24px;padding:18px;aspect-ratio:1.586;box-sizing:border-box;display:flex;flex-direction:column;background:linear-gradient(135deg,#9E98F6 0%,#6F66F0 100%);color:#0D0838;box-shadow:0 12px 26px rgba(13,8,56,.26)">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+              <svg width="34" height="26" viewBox="0 0 32 24" fill="none"><rect x="0.75" y="0.75" width="30.5" height="22.5" rx="5" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.75)" stroke-width="1.5"></rect><path d="M1 6.5h30M1 12h30M1 17.5h30M11 1v5.5M21 1v5.5M11 17.5v5.5M21 17.5v5.5" stroke="rgba(255,255,255,.75)" stroke-width="1.2"></path></svg>
+              <div style="text-align:right">
+                <div style="font-size:14px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;font-variation-settings:'wdth' 88;line-height:1.1">{{ headTitle }}</div>
+                <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;margin-top:2px">{{ cardMeta }}</div>
+              </div>
+            </div>
+            <div style="flex:1"></div>
+            <p style="margin:0 0 5px;font-size:13px;font-weight:600;opacity:.78">{{ mName }}</p>
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+              <div style="min-width:0">
+                <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1;white-space:nowrap">{{ mLeft }}<span style="font-size:22px;font-weight:700;opacity:.55">{{ mTotal }}</span><small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.7">buổi</small></div>
+              </div>
+              <div style="text-align:right;flex:none">
+                <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;white-space:nowrap">Hết hạn · {{ mExp }}</div>
+                <div style="font-size:13.5px;font-weight:800;letter-spacing:.08em;margin-top:3px">{{ mPhone }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:#1F211F">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Lịch sử điểm danh</p>
+              <span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.13);white-space:nowrap;flex:none">30 ngày</span>
+            </div>
+            <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:10px;border-radius:18px;padding:12px 14px;background:#2A2D2A">
+                <span style="flex:1;min-width:0;font-size:14.5px;font-weight:700">{{ h.day }}</span>
+                <span style="font-size:13px;font-weight:600;color:#9AA096;flex:none">{{ h.at }}</span>
+              </div>
+            </sc-for>
+            <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.4">26 buổi trong 30 ngày qua. Buổi gần nhất: hôm nay.</p>
+          </div>
+
+          <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:#1F211F">
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Thao tác</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+              <sc-for list="{{ actions }}" as="a" hint-placeholder-count="7">
+                <button onClick="{{ a.go }}" style="text-align:left;border:0;cursor:pointer;font:inherit;color:#F2F2EC;min-height:62px;border-radius:18px;padding:11px 13px;background:#2A2D2A;grid-column:{{ a.col }}" style-active="opacity:.75">
+                  <span style="display:block;font-size:13.5px;font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.15;font-variation-settings:'wdth' 92">{{ a.label }}</span>
+                  <span style="display:block;font-size:11px;font-weight:600;color:#9AA096;margin-top:3px;line-height:1.3">{{ a.sub }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Thao tác này được ghi lại.</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ 14 · SỬA SỐ ĐIỆN THOẠI — TRÙNG VỚI HỘI VIÊN KHÁC ══ -->
+      <sc-if value="{{ sPhoneEdit }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <div style="flex:none;display:flex;flex-direction:column;gap:7px">
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Số điện thoại mới</p>
+            <input value="{{ editPhone }}" onChange="{{ onEditPhone }}" inputmode="tel" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:19px;font-weight:700;letter-spacing:.04em;color:#F2F2EC">
+          </div>
+          <sc-if value="{{ dupShow }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:11px;background:#F3C24A;color:#2C1F03">
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Trùng với hội viên khác</p>
+              <div style="border-radius:18px;padding:13px 14px;background:#F8DC96">
+                <div style="font-size:16px;font-weight:800;line-height:1.2">{{ dupName }}</div>
+                <div style="font-size:12.5px;font-weight:600;opacity:.78;margin-top:3px">{{ dupSub }}</div>
+              </div>
+              <p style="margin:0;font-size:13px;font-weight:600;line-height:1.45">Một số điện thoại chỉ dùng cho một hội viên. Đổi số khác cho {{ mFirstName }}, hoặc mở hồ sơ {{ dupName }} và sửa số ở đó trước.</p>
+              <button onClick="{{ openDup }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.85">Mở hồ sơ {{ dupName }}</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ dupClear }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px">
+              <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">Số này chưa ai dùng. Lưu xong, hội viên nhập số mới ở màn quét là vào được ngay.</p>
+            </div>
+          </sc-if>
+          <p style="margin:0 2px;font-size:12.5px;color:#9AA096;line-height:1.4;flex:none">Thao tác này được ghi lại.</p>
+          <div style="flex:1"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
+          <button onClick="{{ savePhone }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer;opacity:{{ saveOp }}" style-active="opacity:.8">Lưu số mới</button>
+          <button onClick="{{ goMember }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Quay lại hồ sơ</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 15 · TẠM DỪNG THẺ (nền màn rust — § A2: rust = hôm nay không vào được) ══ -->
+      <sc-if value="{{ sPause }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <div style="flex:none;border-radius:24px;padding:15px 16px;background:rgba(255,255,255,.10)">
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Trong lúc tạm dừng, {{ mFirstName }} quét mã sẽ <b>không vào được</b> và thấy màn “thẻ đang tạm dừng”. Ngày hết hạn đẩy lùi đúng số ngày nghỉ — không mất buổi nào.</p>
+          </div>
+          <div style="flex:none;display:flex;gap:10px">
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
+              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7">Từ ngày</p>
+              <input value="{{ pauseFrom }}" onChange="{{ onPauseFrom }}" style="width:100%;box-sizing:border-box;min-height:56px;background:rgba(0,0,0,.20);border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
+              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7">Đến ngày</p>
+              <input value="{{ pauseTo }}" onChange="{{ onPauseTo }}" style="width:100%;box-sizing:border-box;min-height:56px;background:rgba(0,0,0,.20);border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+            </div>
+          </div>
+          <p style="margin:0 2px;font-size:13px;line-height:1.45;opacity:.72;flex:none">{{ pauseSum }}</p>
+          <p style="margin:0 2px;font-size:12.5px;line-height:1.4;opacity:.62;flex:none">Thao tác này được ghi lại.</p>
+          <div style="flex:1"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
+          <button onClick="{{ goMember }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Tạm dừng thẻ</button>
+          <button onClick="{{ goMember }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Quay lại hồ sơ</button>
+        </div>
+      </sc-if>
+
+      <!-- THANH NAV NỔI — § B0b: dưới đáy, không có trong wizard.
+           Mục Báo cáo và Cài đặt là chỗ lượt 03b nối màn mới vào. -->
+      <sc-if value="{{ navShow }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:none;padding:6px 0 8px">
+          <div style="background:{{ navBarBg }};border-radius:999px;padding:7px;display:flex;align-items:center;justify-content:space-between">
+            <button onClick="{{ goHome }}" style="flex:1;display:grid;place-items:center;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navHomeBg }};color:{{ navHomeFg }}">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></button>
+            <button onClick="{{ goList }}" style="flex:1;display:grid;place-items:center;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navMemBg }};color:{{ navMemFg }}">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.85"></path></svg></button>
+            <span style="flex:1;display:grid;place-items:center;padding:11px 0;color:#9AA096">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20v-4M18 20v-9"></path></svg></span>
+            <span style="flex:1;display:grid;place-items:center;padding:11px 0;color:#9AA096">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8M4.6 9a1.6 1.6 0 0 0-.3-1.8"></path></svg></span>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="width:118px;height:5px;border-radius:999px;background:currentColor;opacity:.22;margin:2px auto 9px;flex:none"></div>
+    </div>
+  </div>
+
+  <!-- bảng nhảy nhanh giữa trạng thái — dụng cụ xem bản dựng, không phải UI sản phẩm -->
+  <div style="position:fixed;top:20px;right:20px;width:248px;max-height:calc(100vh - 40px);overflow:auto;background:#1F211F;color:#F2F2EC;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.4)">
+    <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.55;margin:0">Trạng thái /admin</p>
+    <div style="display:flex;flex-direction:column;gap:5px">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="15">
+        <button onClick="{{ item.go }}" style="display:flex;gap:8px;align-items:baseline;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:999px;background:{{ item.bg }};color:{{ item.fg }}"><span style="font-size:10px;font-weight:800;opacity:.55;width:16px;flex:none">{{ item.num }}</span>{{ item.label }}</button>
+      </sc-for>
+    </div>
+    <p style="font-size:11px;line-height:1.5;opacity:.55;margin:6px 2px 0">Trang chủ tự nhận thêm người vào — con số hero tăng theo. Ở màn 11, bấm hai pill lọc và gõ ô tìm đều lọc thật.</p>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 920}, &quot;orgName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Gym Thành Phát&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;branchName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Quận 7&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;freeLimit&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 50, &quot;min&quot;: 20, &quot;max&quot;: 200, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;coBoMon&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Bộ môn&quot;}, &quot;heroTheoBoLoc&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Luật hero&quot;}}">
+class Component extends DCLogic {
+  // ── DỮ LIỆU GIẢ (§ B5) — lượt 03b dùng lại chính object này và thêm dữ liệu vào ──
+  static ORG = { name: 'Gym Thành Phát', branch: 'Quận 7', address: '123 Nguyễn Thị Thập, Quận 7' };
+
+  static SCAN_POINTS = [
+    { id: 'sp1', name: 'Cửa chính', open: '06:00', close: '22:00' },
+    { id: 'sp2', name: 'Cửa sau', open: '06:00', close: '22:00' }
+  ];
+
+  static PROGRAMS = ['Boxing', 'Gym', 'Yoga'];
+
+  // st: ok = còn hạn · soon = sắp hết hạn (≤7 ngày) · exp = hết hạn · pause = thẻ tạm dừng
+  static MEMBERS = [
+    { id: 1, n: 'Nguyễn Thị Hồng Nhung', p: '0912 345 678', s: 'Boxing', left: 12, total: 24, exp: '04/09', st: 'ok', dev: 1 },
+    { id: 2, n: 'Trần Quốc Bảo', p: '0903 118 224', s: 'Boxing', left: 8, total: 24, exp: '09/08', st: 'soon', dev: 1 },
+    { id: 3, n: 'Lê Hoàng Phương Anh', p: '0938 447 190', s: 'Boxing', left: 20, total: 24, exp: '30/09', st: 'ok', dev: 0 },
+    { id: 4, n: 'Phạm Minh Khang', p: '0977 620 415', s: 'Boxing', left: 3, total: 12, exp: '10/08', st: 'soon', dev: 1 },
+    { id: 5, n: 'Trịnh Thu Hà', p: '0908 552 013', s: 'Boxing', left: 16, total: 24, exp: '22/09', st: 'ok', dev: 0 },
+    { id: 6, n: 'Đặng Văn Hiếu', p: '0931 774 806', s: 'Boxing', left: 0, total: 12, exp: '28/07', st: 'exp', dev: 0 },
+    { id: 7, n: 'Bùi Thị Kim Ngân', p: '0967 302 588', s: 'Boxing', left: 9, total: 12, exp: '18/09', st: 'ok', dev: 1 },
+    { id: 8, n: 'Hồ Nhật Quang', p: '0919 640 277', s: 'Boxing', left: 21, total: 36, exp: '02/11', st: 'ok', dev: 0 },
+    { id: 9, n: 'Võ Thị Thanh Trúc', p: '0905 813 449', s: 'Yoga', left: 14, total: 24, exp: '12/09', st: 'ok', dev: 1 },
+    { id: 10, n: 'Đặng Thuỳ Linh', p: '0972 118 640', s: 'Yoga', left: 5, total: 12, exp: '08/08', st: 'soon', dev: 0 },
+    { id: 11, n: 'Hoàng Thị Mai Chi', p: '0946 227 305', s: 'Yoga', left: 18, total: 24, exp: '26/09', st: 'ok', dev: 0 },
+    { id: 12, n: 'Vũ Ngọc Ánh', p: '0902 664 731', s: 'Yoga', left: 7, total: 12, exp: '15/09', st: 'ok', dev: 1 },
+    { id: 13, n: 'Lý Thị Bích Hằng', p: '0983 550 128', s: 'Yoga', left: 2, total: 24, exp: '19/10', st: 'pause', dev: 0 },
+    { id: 14, n: 'Phan Gia Huy', p: '0924 806 517', s: 'Yoga', left: 11, total: 12, exp: '28/09', st: 'ok', dev: 0 },
+    { id: 15, n: 'Nguyễn Khánh Vy', p: '0957 413 902', s: 'Yoga', left: 22, total: 36, exp: '14/11', st: 'ok', dev: 1 },
+    { id: 16, n: 'Bùi Anh Tuấn', p: '0911 205 663', s: 'Gym', left: 6, total: 12, exp: '11/08', st: 'soon', dev: 0 },
+    { id: 17, n: 'Ngô Đức Thịnh', p: '0936 770 481', s: 'Gym', left: 0, total: 24, exp: '21/07', st: 'exp', dev: 0 },
+    { id: 18, n: 'Đỗ Văn Long', p: '0909 336 174', s: 'Gym', left: 15, total: 24, exp: '07/10', st: 'ok', dev: 1 },
+    { id: 19, n: 'Trương Thị Ngọc Diệp', p: '0965 812 040', s: 'Gym', left: 19, total: 24, exp: '30/10', st: 'ok', dev: 0 },
+    { id: 20, n: 'Cao Minh Nhật', p: '0978 145 302', s: 'Gym', left: 10, total: 12, exp: '25/09', st: 'ok', dev: 0 },
+    { id: 21, n: 'Huỳnh Thị Tuyết Mai', p: '0943 617 985', s: 'Gym', left: 24, total: 36, exp: '08/12', st: 'ok', dev: 1 },
+    { id: 22, n: 'Lâm Quốc Việt', p: '0927 504 316', s: 'Gym', left: 13, total: 24, exp: '16/10', st: 'ok', dev: 0 }
+  ];
+
+  // Kết quả đọc file ở màn xem trước. rows = danh sách dòng, errors = dòng không ghi được.
+  static IMPORT = {
+    file: 'hoi-vien-thang-8.xlsx',
+    newPrograms: ['Boxing', 'Yoga'],
+    rows: [
+      { n: 'Nguyễn Thị Hồng Nhung', p: '0912 345 678', s: 'Boxing', tag: 'moi' },
+      { n: 'Trần Quốc Bảo', p: '0903 118 224', s: 'Boxing', tag: 'moi' },
+      { n: 'Lê Hoàng Phương Anh', p: '0938 447 190', s: 'Boxing', tag: 'capnhat' },
+      { n: 'Phạm Minh Khang', p: '0977 620 415', s: 'Boxing', tag: 'moi' },
+      { n: 'Võ Thị Thanh Trúc', p: '0905 813 449', s: 'Yoga', tag: 'moi' },
+      { n: 'Đặng Thuỳ Linh', p: '0972 118 640', s: 'Yoga', tag: 'capnhat' },
+      { n: 'Hoàng Thị Mai Chi', p: '0946 227 305', s: 'Yoga', tag: 'moi' },
+      { n: 'Bùi Anh Tuấn', p: '0911 205 663', s: 'Gym', tag: 'capnhat' }
+    ],
+    errors: [
+      { who: 'Dòng 7 · Đặng Văn Hiếu', why: 'Số điện thoại không đọc được: “091234”. Cần 10 số, bắt đầu bằng 0.' },
+      { who: 'Dòng 19 · Lý Thị Bích Hằng', why: 'Số 0983 550 128 đã có ở dòng 4 trong cùng file này.' },
+      { who: 'Dòng 23 · (không có tên)', why: 'Ô tên để trống. Có số điện thoại nhưng không biết là ai.' }
+    ]
+  };
+
+  static HISTORY = [
+    { day: 'Hôm nay', at: '18:12 · Cửa chính' },
+    { day: 'Thứ hai 03/08', at: '18:20 · Cửa chính' },
+    { day: 'Chủ nhật 02/08', at: '09:05 · Cửa sau' },
+    { day: 'Thứ sáu 31/07', at: '18:31 · Cửa chính' }
+  ];
+
+  // ── Chỗ lượt 03b thêm dữ liệu (§ A7): học thử, xếp hạng, nhật ký ──
+  static TRIAL_LEADS = [];
+  static RANKING = [];
+  static AUDIT_LOG = [];
+
+  static SCREENS = ['home', 'w1', 'w2', 'w3', 'w4', 'pv', 'pvErr', 'pvBad', 'done', 'poster', 'list', 'listEmpty', 'member', 'phoneEdit', 'pause'];
+
+  static NAV = ['Trang chủ', 'Bước 1 · Trung tâm', 'Bước 2 · Điểm quét', 'Bước 3 · Bộ môn', 'Bước 4 · Chọn nguồn', 'Xem trước nhập liệu', 'Xem trước — có dòng lỗi', 'Xem trước — file hỏng', 'Nhập xong', 'Bước 5 · Poster QR', 'Danh sách hội viên', 'Danh sách — chưa có ai', 'Chi tiết hội viên', 'Sửa SĐT — trùng số', 'Tạm dừng thẻ'];
+
+  static WIZARD = ['w1', 'w2', 'w3', 'w4', 'pv', 'pvErr', 'pvBad', 'done', 'poster'];
+  static STEP_OF = { w1: 1, w2: 2, w3: 3, w4: 4, pv: 4, pvErr: 4, pvBad: 4, done: 4, poster: 5 };
+  static STATUS = [
+    { k: 'all', label: 'Tất cả trạng thái', short: 'Trạng thái: tất cả' },
+    { k: 'ok', label: 'Còn hạn', short: 'Còn hạn' },
+    { k: 'soon', label: 'Sắp hết hạn', short: 'Sắp hết hạn' },
+    { k: 'exp', label: 'Hết hạn', short: 'Hết hạn' },
+    { k: 'pause', label: 'Thẻ tạm dừng', short: 'Tạm dừng' }
+  ];
+
+  state = {
+    scr: 'home', progs: null, orgName: '', addr: '', spot: '', open: '06:00', close: '22:00',
+    newProg: '', src: null, paste: '', q: '', fSport: 'all', fStatus: 'all', openFilter: null,
+    memberId: 1, editPhone: '0983 550 128', pauseFrom: '05/08/2026', pauseTo: '05/09/2026',
+    arrived: 24, feedIx: 0, skipped: false
+  };
+
+  static LIVE = [
+    { n: 'Nguyễn Thị Hồng Nhung', sub: 'Boxing · Cửa chính', ago: 'VỪA XONG' },
+    { n: 'Trần Quốc Bảo', sub: 'Boxing · Cửa chính', ago: '2 PHÚT' },
+    { n: 'Vũ Ngọc Ánh', sub: 'Yoga · Cửa sau', ago: '6 PHÚT' },
+    { n: 'Huỳnh Thị Tuyết Mai', sub: 'Gym · Cửa chính', ago: '9 PHÚT' },
+    { n: 'Phan Gia Huy', sub: 'Yoga · Cửa chính', ago: '13 PHÚT' }
+  ];
+
+  componentDidMount() { this.tick(); }
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  // luồng người đang vào, cập nhật trực tiếp (§ B3 #1). Hero tăng vì DỮ LIỆU đổi,
+  // không vì người dùng bấm bộ lọc — đúng luật ở admin-A8 § 0a.
+  tick() {
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      if (this.state.scr === 'home' && this.state.feedIx < 2) {
+        this.setState(s => ({ feedIx: s.feedIx + 1, arrived: s.arrived + 1 }));
+      }
+      this.tick();
+    }, 4200);
+  }
+
+  show(id) { this.setState({ scr: id, openFilter: null }); }
+
+  norm(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase(); }
+
+  qr() {
+    const N = 25;
+    let seed = 20260804;
+    const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+    const fin = (x, y) => (x < 8 && y < 8) || (x > N - 9 && y < 8) || (x < 8 && y > N - 9);
+    let d = '';
+    const box = (x, y, w, h) => { d += 'M' + x + ' ' + y + 'h' + w + 'v' + h + 'h' + (-w) + 'z'; };
+    [[0, 0], [N - 7, 0], [0, N - 7]].forEach(c => {
+      const x = c[0], y = c[1];
+      box(x, y, 7, 1); box(x, y + 6, 7, 1); box(x, y + 1, 1, 5); box(x + 6, y + 1, 1, 5); box(x + 2, y + 2, 3, 3);
+    });
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!fin(x, y) && rnd() > 0.5) box(x, y, 1, 1);
+    return React.createElement('svg', { viewBox: '0 0 ' + N + ' ' + N, style: { width: '100%', height: '100%', display: 'block' } },
+      React.createElement('path', { d: d, fill: '#131413' }));
+  }
+
+  renderVals() {
+    const S = this.state;
+    const C = Component;
+    const scr = S.scr;
+    const orgName = (S.orgName.trim() || (this.props.orgName ?? C.ORG.name)).toUpperCase();
+    const branch = this.props.branchName ?? C.ORG.branch;
+    const limit = this.props.freeLimit ?? 50;
+    const progs = S.progs || (this.props.coBoMon === false ? [] : C.PROGRAMS.slice());
+    const hasProgs = progs.length > 0;
+    const isWizard = C.WIZARD.indexOf(scr) >= 0;
+    const step = C.STEP_OF[scr] || 0;
+    const onLight = scr === 'done';
+    const onRust = scr === 'pause';
+    const m = C.MEMBERS.find(x => x.id === S.memberId) || C.MEMBERS[0];
+    const dup = C.MEMBERS.find(x => x.p === S.editPhone && x.id !== m.id);
+    const spot = S.spot.trim() || C.SCAN_POINTS[0].name;
+
+    // ── nhãn nhỏ (§ B0b: tên khu vực; màn chi tiết + thao tác trên một người → tên hội viên) ──
+    const EYE = {
+      home: 'Trang chủ', w1: 'Thông tin trung tâm', w2: 'Điểm quét', w3: 'Bộ môn',
+      w4: 'Nhập danh sách', pv: 'Xem trước · nhập danh sách', pvErr: 'Xem trước · nhập danh sách',
+      pvBad: 'Xem trước · nhập danh sách', done: 'Nhập danh sách', poster: 'Poster QR',
+      list: 'Danh sách hội viên', listEmpty: 'Danh sách hội viên',
+      member: m.n, phoneEdit: m.n, pause: m.n
+    };
+    const HERO = {
+      home: [S.arrived + ' đã tới', 'hôm nay'],
+      w1: ['Mở tài khoản', 'trong 5 bước'],
+      w2: ['Dán mã QR', 'ở đâu?'],
+      w3: ['Trung tâm dạy', 'những gì?'],
+      w4: ['Ai đang tập', 'ở đây?'],
+      pv: ['Kiểm lại', 'trước khi ghi'],
+      pvErr: ['Kiểm lại', 'trước khi ghi'],
+      pvBad: ['Không đọc được', 'file này'],
+      done: ['Đã ghi', C.MEMBERS.length + ' hội viên'],
+      poster: ['In poster', 'dán ở cửa'],
+      list: ['', ''],
+      listEmpty: ['Chưa có', 'hội viên nào'],
+      member: ['Còn ' + m.left + ' buổi', 'tới ' + m.exp],
+      phoneEdit: dup ? ['Số này đã có', 'người dùng'] : ['Đổi số', 'điện thoại'],
+      pause: ['Tạm dừng', 'thẻ này?']
+    };
+
+    // ── danh sách hội viên: lọc theo bộ môn × trạng thái × ô tìm ──
+    const qn = this.norm(S.q.trim());
+    const all = C.MEMBERS;
+    const shown = all.filter(x =>
+      (S.fSport === 'all' || x.s === S.fSport) &&
+      (S.fStatus === 'all' || x.st === S.fStatus) &&
+      (!qn || this.norm(x.n).indexOf(qn) >= 0 || x.p.replace(/\s/g, '').indexOf(qn.replace(/\s/g, '')) >= 0)
+    );
+    const filtering = S.fSport !== 'all' || S.fStatus !== 'all' || qn.length > 0;
+    const TAG = {
+      soon: { t: 'SẮP HẾT HẠN', bg: '#F3C24A', fg: '#2C1F03' },
+      exp: { t: 'HẾT HẠN', bg: 'rgba(255,255,255,.14)', fg: '#9AA096' },
+      pause: { t: 'TẠM DỪNG', bg: 'rgba(255,255,255,.14)', fg: '#9AA096' }
+    };
+    const rows = shown.map(x => {
+      const tag = TAG[x.st];
+      const bits = [];
+      if (hasProgs) bits.push(x.s);
+      bits.push(x.st === 'exp' ? 'hết hạn ' + x.exp : 'còn ' + x.left + ' buổi · tới ' + x.exp);
+      return {
+        name: x.n, sub: bits.join(' · '),
+        nameFg: (x.st === 'exp' || x.st === 'pause') ? '#9AA096' : '#F2F2EC',
+        hasTag: !!tag, tag: tag ? tag.t : '', tagBg: tag ? tag.bg : '', tagFg: tag ? tag.fg : '',
+        open: () => this.setState({ scr: 'member', memberId: x.id, openFilter: null, editPhone: '0983 550 128' })
+      };
+    });
+    // dòng kết quả: mọi con số phụ thuộc bộ lọc sống ở đây, không leo lên hero
+    const parts = [];
+    if (S.fSport !== 'all') parts.push(S.fSport);
+    if (S.fStatus !== 'all') parts.push(C.STATUS.find(s => s.k === S.fStatus).label.toLowerCase());
+    if (qn.length > 0) parts.push('“' + S.q.trim() + '”');
+    const resultLine = filtering
+      ? parts.join(' · ') + ' — ' + shown.length + ' trong ' + all.length + ' hội viên'
+      : 'Tất cả · ' + all.length + ' hội viên';
+
+    // HERO Ở MÀN DANH SÁCH — mặc định là hằng số của màn, không đổi theo bộ lọc.
+    // Bật prop heroTheoBoLoc để xem lại cách /staff đang làm (mẫu số nhảy theo chip).
+    if (scr === 'list') {
+      HERO.list = this.props.heroTheoBoLoc
+        ? [shown.length + ' hội viên', 'đang lọc']
+        : [all.length + ' hội viên', 'trong danh sách'];
+    }
+
+    const optBtn = on => ({ bg: on ? '#A9E5F1' : 'rgba(255,255,255,.07)', fg: on ? '#052430' : '#F2F2EC' });
+    let filterOpts = [];
+    if (S.openFilter === 'sport') {
+      filterOpts = [{ k: 'all', label: 'Tất cả bộ môn' }].concat(progs.map(p => ({ k: p, label: p }))).map(o => {
+        const on = S.fSport === o.k;
+        return Object.assign({ label: o.label, n: o.k === 'all' ? all.length : all.filter(x => x.s === o.k).length, pick: () => this.setState({ fSport: o.k, openFilter: null }) }, optBtn(on));
+      });
+    } else if (S.openFilter === 'status') {
+      filterOpts = C.STATUS.map(o => {
+        const on = S.fStatus === o.k;
+        return Object.assign({ label: o.label, n: o.k === 'all' ? all.length : all.filter(x => x.st === o.k).length, pick: () => this.setState({ fStatus: o.k, openFilter: null }) }, optBtn(on));
+      });
+    }
+    const sportOn = S.fSport !== 'all', statusOn = S.fStatus !== 'all';
+
+    // ── xem trước nhập liệu ──
+    const hasErr = scr === 'pvErr';
+    const pvTiles = [
+      { n: hasErr ? 10 : 12, k: 'Mới' },
+      { n: 3, k: 'Cập nhật' },
+      { n: 7, k: 'Không đổi' }
+    ];
+    const pvRows = C.IMPORT.rows.map(r => ({
+      name: r.n, sub: hasProgs ? r.p + ' · ' + r.s : r.p,
+      tag: r.tag === 'moi' ? 'MỚI' : 'CẬP NHẬT'
+    }));
+
+    const actions = [
+      { label: 'Gán gói mới', sub: 'Gói 12 / 24 / 36 buổi', go: () => {} },
+      { label: 'Gia hạn', sub: 'Thẻ hiện tại tới ' + m.exp, go: () => {} },
+      { label: 'Tạm dừng thẻ', sub: 'Nghỉ dài, không mất buổi', go: () => this.show('pause') },
+      { label: 'Sửa số điện thoại', sub: m.p, go: () => this.setState({ scr: 'phoneEdit', editPhone: '0983 550 128' }) },
+      { label: 'Sửa bộ môn', sub: m.s, go: () => {}, only: 'progs' },
+      { label: 'Thu hồi thiết bị', sub: m.dev ? m.dev + ' máy đã nhớ' : 'Chưa máy nào nhớ', go: () => {} },
+      { label: 'Ngưng hội viên', sub: 'Không xoá lịch sử điểm danh', go: () => {}, col: '1 / -1' }
+    ].filter(a => a.only !== 'progs' || hasProgs).map(a => ({ label: a.label, sub: a.sub, go: a.go, col: a.col || 'auto' }));
+
+    const navOn = k => ({ bg: k ? '#A9E5F1' : 'transparent', fg: k ? '#052430' : '#9AA096' });
+    const nHome = navOn(scr === 'home'), nMem = navOn(scr === 'list' || scr === 'listEmpty' || scr === 'member' || scr === 'phoneEdit' || scr === 'pause');
+    const navItems = C.NAV.map((label, i) => {
+      const id = C.SCREENS[i];
+      const on = scr === id;
+      return { label, num: String(i + 1), bg: on ? '#A9E5F1' : 'rgba(255,255,255,.07)', fg: on ? '#052430' : '#F2F2EC', go: () => this.show(id) };
+    });
+
+    const barOn = onLight ? '#14180F' : '#F2F2EC';
+    const barOff = onLight ? 'rgba(0,0,0,.14)' : 'rgba(255,255,255,.14)';
+    const soonCount = all.filter(x => x.st === 'soon').length;
+    const CLOCK = { home: '18:47', list: '18:49', listEmpty: '09:04', member: '18:51', phoneEdit: '18:52', pause: '18:53', done: '09:26', poster: '09:28' };
+
+    return {
+      scrBg: onLight ? '#C4D4C1' : (onRust ? '#8E2C1B' : '#131413'),
+      scrFg: onLight ? '#14180F' : '#F2F2EC',
+      pillBg: onLight ? 'rgba(0,0,0,.16)' : 'rgba(255,255,255,.13)',
+      clock: CLOCK[scr] || '09:12',
+      headTitle: scr === 'w1' ? 'Checkino' : orgName,
+      pillText: isWizard ? 'Bước ' + step + '/5' : branch,
+      eyebrow: EYE[scr] || '',
+      hero1: HERO[scr][0], hero2: HERO[scr][1],
+      chipShow: scr === 'home', chipText: 'HÔM NAY · 04/08',
+      progShow: isWizard,
+      stepBars: [1, 2, 3, 4, 5].map(n => ({ bg: n <= step ? barOn : barOff })),
+
+      sHome: scr === 'home', sW1: scr === 'w1', sW2: scr === 'w2', sW3: scr === 'w3', sW4: scr === 'w4',
+      sPv: scr === 'pv' || scr === 'pvErr', sPvBad: scr === 'pvBad', sDone: scr === 'done',
+      sPoster: scr === 'poster', sList: scr === 'list', sEmpty: scr === 'listEmpty',
+      sMember: scr === 'member', sPhoneEdit: scr === 'phoneEdit', sPause: scr === 'pause',
+      navShow: !isWizard,
+
+      // trang chủ
+      alertTitle: soonCount + ' thẻ sắp hết hạn',
+      goExpiring: () => this.setState({ scr: 'list', fStatus: 'soon', fSport: 'all', q: '', openFilter: null }),
+      bars: [52, 66, 44, 71, 58, 38, 100].map((h, i) => ({ h: h + '%', bg: i === 6 ? '#C4D4C1' : 'rgba(255,255,255,.42)' })),
+      legendToday: 'Hôm nay ' + S.arrived,
+      limitPill: limit + ' chỗ', limitOf: '/ ' + limit,
+      memberCount: all.length, seatsLeft: 'còn ' + (limit - all.length),
+      feed: C.LIVE.slice(0, 3 + S.feedIx).map(f => ({ name: f.n, sub: f.sub, ago: f.ago })),
+
+      // wizard
+      fOrg: S.orgName, onOrg: e => this.setState({ orgName: e.target.value }),
+      fAddr: S.addr, onAddr: e => this.setState({ addr: e.target.value }),
+      fSpot: S.spot, onSpot: e => this.setState({ spot: e.target.value }),
+      fOpen: S.open, onOpen: e => this.setState({ open: e.target.value }),
+      fClose: S.close, onClose: e => this.setState({ close: e.target.value }),
+      spotLine: spot + ' · Mở ' + S.open + '–' + S.close,
+      qrArt: this.qr(),
+      w1Op: 1, w4Op: S.src ? 1 : 0.5,
+      fNewProg: S.newProg, onNewProg: e => this.setState({ newProg: e.target.value }),
+      hasProgs, progChips: progs.map(p => ({ name: p, remove: () => this.setState({ progs: progs.filter(x => x !== p) }) })),
+      progNote: hasProgs
+        ? 'Bỏ qua cũng được. Trung tâm không chia bộ môn thì mọi màn sau đều không hỏi tới bộ môn nữa.'
+        : 'Chưa khai bộ môn nào. Bỏ qua là xong — mọi màn sau sẽ không hỏi tới bộ môn.',
+      addProg: () => { const v = this.state.newProg.trim(); if (v) this.setState({ progs: progs.concat([v]), newProg: '' }); },
+      skipProgs: () => this.setState({ progs: [], scr: 'w4' }),
+      next: () => { const o = { w1: 'w2', w2: 'w3', w3: 'w4', w4: 'pv', pv: 'done', pvErr: 'done', done: 'poster', poster: 'home' }; this.show(o[scr] || 'home'); },
+      back: () => { const o = { w2: 'w1', w3: 'w2', w4: 'w3', pv: 'w4', pvErr: 'w4', pvBad: 'w4', done: 'pv', poster: 'done' }; this.show(o[scr] || 'home'); },
+      pickFile: () => this.setState({ src: 'file' }), pickPaste: () => this.setState({ src: 'paste' }),
+      srcFile: S.src === 'file', srcPaste: S.src === 'paste',
+      srcFileBg: S.src === 'file' ? '#2A2D2A' : '#1F211F',
+      srcPasteBg: S.src === 'paste' ? '#2A2D2A' : '#1F211F',
+      pasteVal: S.paste, onPaste: e => this.setState({ paste: e.target.value }),
+      toPreview: () => { if (this.state.src) this.show('pv'); },
+
+      // xem trước
+      pvTiles, pvHasErr: hasErr, pvErrors: C.IMPORT.errors,
+      pvNewProgs: hasProgs, pvRows,
+      pvListLabel: hasErr ? '13 dòng sẽ ghi' : '15 dòng sẽ ghi',
+      pvCta: hasErr ? 'Ghi 13 dòng, bỏ 3 dòng lỗi' : 'Xác nhận ghi vào danh sách',
+      confirmImport: () => this.show('done'),
+      fixSteps: [
+        { n: '1', text: 'Dòng đầu tiên của file phải là tên cột: Tên · Số điện thoại · Bộ môn.' },
+        { n: '2', text: 'Mỗi hội viên một dòng. Số điện thoại 10 số, bắt đầu bằng 0.' },
+        { n: '3', text: 'Lưu lại dạng .xlsx hoặc .csv rồi chọn file lần nữa.' }
+      ],
+
+      // nhập xong
+      doneTags: [{ text: '12 mới' }, { text: '3 cập nhật' }, { text: '7 không đổi' }],
+      goList: () => this.show(all.length ? 'list' : 'listEmpty'),
+      goHome: () => this.show('home'),
+      goImport: () => this.show('w4'),
+      goMember: () => this.show('member'),
+      finishWizard: () => this.show('home'),
+      noop: () => {},
+
+      // danh sách
+      q: S.q, onQ: e => this.setState({ q: e.target.value }),
+      openSport: () => this.setState({ openFilter: S.openFilter === 'sport' ? null : 'sport' }),
+      openStatus: () => this.setState({ openFilter: S.openFilter === 'status' ? null : 'status' }),
+      sportPillText: sportOn ? S.fSport : 'Bộ môn: tất cả',
+      statusPillText: statusOn ? C.STATUS.find(s => s.k === S.fStatus).short : 'Trạng thái: tất cả',
+      sportPillBg: sportOn ? '#A9E5F1' : 'rgba(255,255,255,.13)', sportPillFg: sportOn ? '#052430' : '#F2F2EC',
+      statusPillBg: statusOn ? '#A9E5F1' : 'rgba(255,255,255,.13)', statusPillFg: statusOn ? '#052430' : '#F2F2EC',
+      filterOpen: !!S.openFilter, filterOpts,
+      resultLine, rows,
+      noMatch: rows.length === 0,
+      noMatchText: qn.length > 0
+        ? 'Không thấy ai khớp “' + S.q.trim() + '”. Thử gõ ngắn hơn, hoặc gõ 3 số cuối của số điện thoại.'
+        : 'Không có hội viên nào ở mục này. Bấm hai pill trên để bỏ lọc.',
+
+      // chi tiết hội viên
+      mName: m.n, mFirstName: m.n.split(' ').slice(-1)[0], mPhone: m.p,
+      mLeft: m.left, mTotal: '/' + m.total, mExp: m.exp + '/26',
+      cardMeta: hasProgs ? branch + ' · ' + m.s : branch,
+      history: C.HISTORY, actions,
+
+      // sửa số điện thoại
+      editPhone: S.editPhone, onEditPhone: e => this.setState({ editPhone: e.target.value }),
+      dupShow: !!dup, dupClear: !dup,
+      dupName: dup ? dup.n : '', dupSub: dup ? (hasProgs ? dup.s + ' · ' + dup.p : dup.p) : '',
+      openDup: () => { if (dup) this.setState({ scr: 'member', memberId: dup.id }); },
+      saveOp: dup ? 0.5 : 1,
+      savePhone: () => { if (!dup) this.show('member'); },
+
+      // tạm dừng thẻ
+      pauseFrom: S.pauseFrom, onPauseFrom: e => this.setState({ pauseFrom: e.target.value }),
+      pauseTo: S.pauseTo, onPauseTo: e => this.setState({ pauseTo: e.target.value }),
+      pauseSum: 'Nghỉ 31 ngày. Hết hạn đẩy từ ' + m.exp + ' sang 05/10.',
+
+      navBarBg: onRust ? 'rgba(0,0,0,.20)' : '#1F211F',
+      navHomeBg: nHome.bg, navHomeFg: nHome.fg, navMemBg: nMem.bg, navMemFg: nMem.fg,
+      navItems
+    };
+  }
+}
+
+</script>
+</body>
+</html>

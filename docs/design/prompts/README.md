@@ -10,8 +10,8 @@ Mỗi lượt là **một phiên riêng**. Mỗi lượt đọc `00-he-thong.md`
 | Lượt | Nói với Claude | Bề mặt | Số màn | Ghi ra |
 |---|---|---|---|---|
 | 1 | ~~đọc `00-he-thong.md` rồi làm `01-q-hoi-vien.md`~~ | `/q` | 11 trạng thái | `designs/q.dc.html` — **xong** |
-| 2 | đọc `00-he-thong.md` rồi làm `02-staff-co-giao.md` | `/staff` | 14 trạng thái | `designs/staff.dc.html` |
-| 3 | đọc `00-he-thong.md` rồi làm `03a-admin-nen-tang.md` | `/admin` | 13 màn | `designs/admin.dc.html` |
+| 2 | ~~đọc `00-he-thong.md` rồi làm `02-staff-co-giao.md`~~ | `/staff` | 14 trạng thái | `designs/staff.dc.html` — **đóng** (`../staff-A8.md`) |
+| 3 | ~~đọc `00-he-thong.md` rồi làm `03a-admin-nen-tang.md`~~ | `/admin` | 13 màn → dựng 15 | `designs/admin.dc.html` — **dựng xong**, còn nợ lượt kiểm bằng mắt (`../admin-A8.md`) |
 | 4 | đọc `00-he-thong.md` rồi làm `03b-admin-bao-cao.md` | `/admin` | 11 màn | mở rộng `designs/admin.dc.html` |
 
 Bản dựng làm bằng **Claude Design**, ra file `.dc.html` ở `designs/`. File trỏ tới `./support.js`
@@ -21,6 +21,13 @@ trang trắng. `docs/design/proto/` là dự tính cũ, bỏ trống.
 Lượt 1 đã chạy xong và đã qua bốn đợt sửa. Những gì nó chốt ra đã được nâng lên `00-he-thong.md`
 (§ A1b ba slot đầu màn, § A2 token `--c-rust` + sáu luật màu, § A3 hero 36px) và `DECISIONS.md`
 **D12**. Ba lượt còn lại thừa hưởng tự động vì đều đọc `00` trước.
+
+Lượt 2 đóng ở `../staff-A8.md`, để lại hai luật treo có chủ ý. Lượt 3 đã trả cả hai (hero không đổi
+theo bộ lọc; nhãn nhỏ rỗng chỉ có một nghĩa và chỉ tồn tại ở `/q`) — nâng lên `00-he-thong.md § A1b`,
+kèm `§ A4` một cột 440px và `§ A6` miễn luật `:root`, và `DECISIONS.md` **D13**.
+
+**Trước khi chạy lượt 4**, đọc `../admin-A8.md § Việc để lại` — lượt 3 còn nợ lượt kiểm bằng mắt
+và bốn lỗi số liệu nhỏ ở `§ 6`.
 
 **`00-he-thong.md` là nguồn sự thật duy nhất của phần luật chung.** Nội dung của nó không được
 chép sang file nào khác — sửa một chỗ là cả bốn lượt đổi theo.
