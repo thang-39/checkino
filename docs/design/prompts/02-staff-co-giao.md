@@ -69,6 +69,12 @@ UI phải nói ba điều này ra, không giấu:
 - **Bao nhiêu lượt đang chờ gửi** — một nút hoặc dải ở đáy, luôn thấy được.
 - **Tick nào đã lưu, tick nào còn chờ** — hai trạng thái khác nhau về **hình**, không chỉ khác màu.
 - **Danh sách lưu lúc mấy giờ** — vì nó có thể cũ, và cô giáo cần biết để đoán ai bị thiếu.
+  Chỗ của nó là **chip mốc giờ ở đầu màn** (slot thứ ba của `00 § A1b`), và **chỉ ở đó** — hiện
+  ở mọi màn có danh sách, để mốc giờ không phải xuất hiện đúng lúc xấu nhất. Chip phải mang **tiền
+  tố nói rõ chủ thể** (`DANH SÁCH 17:02`), không được ghi trơ mốc giờ: một mình `17:02` sẽ bị đọc
+  thành giờ lớp — đúng thứ § B0b cấm — và cũng đụng nghĩa với giờ tick ở dòng phụ hàng tên. Đừng
+  nhắc lại mốc giờ này ở dải mất mạng: `00 § A2` nói khi chữ đã nói rồi thì đừng thêm tín hiệu
+  thứ hai.
 
 Giới hạn đã chấp nhận, phải nói thẳng trong UI chứ không che: **lần đầu mở app bắt buộc phải có
 mạng.** Câu hướng dẫn: "Mở app một lần ở nơi có mạng, trước giờ lên lớp."
@@ -85,7 +91,7 @@ mạng.** Câu hướng dẫn: "Mở app một lần ở nơi có mạng, trư�
 | 6 | Có N lượt đang chờ gửi | dải ở đáy: "2 lượt đang chờ gửi". Phân biệt rõ với tick đã lưu |
 | 7 | Đang gửi | dải chuyển sang trạng thái đang chạy |
 | 8 | Gửi xong | dải biến mất hoặc báo "Đã lưu tất cả", mọi tick chuyển sang đã lưu |
-| 9 | Mất mạng | dải trạng thái mạng + "Danh sách lưu lúc 17:02". Vẫn tap được bình thường |
+| 9 | Mất mạng | dải trạng thái mạng + **số lượt đang chờ gửi** ở cỡ chữ chính. Vẫn tap được bình thường. Mốc giờ lưu danh sách **không** nhắc ở đây — nó sống ở chip mốc giờ đầu màn (xem B1) |
 | 10 | Danh sách rỗng — chưa nhập ai | "Chưa có hội viên nào. Chủ trung tâm cần nhập danh sách trước." |
 | 11 | Danh sách rỗng — hôm nay không ai cần điểm danh | khác hẳn #10: có hội viên trong hệ thống, nhưng hôm nay chưa ai. "Hôm nay chưa có ai cần điểm danh" |
 | 12 | Tìm nhanh theo tên | ô tìm, lọc ngay khi gõ. Gõ **không dấu** vẫn ra ("hong nhung" → "Hồng Nhung") |

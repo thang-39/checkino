@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&display=swap" rel="stylesheet">
 <style>
 body { margin:0; background:#0B0C0B; color:#F2F2EC; font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; line-height:1.45; }
-a { color:#A9E5F1; } a:hover { color:#F98872; }
+a { color:#F2F2EC; text-decoration:underline; } a:hover { color:#F98872; }
 input::placeholder { color:currentColor; opacity:.45; }
 @keyframes ckspin { to { transform:rotate(360deg); } }
 </style>
@@ -59,10 +59,14 @@ input::placeholder { color:currentColor; opacity:.45; }
       <!-- màn danh sách -->
       <sc-if value="{{ sList }}" hint-placeholder-val="{{ true }}">
         <sc-if value="{{ showChips }}" hint-placeholder-val="{{ true }}">
-          <div style="display:flex;gap:8px;overflow-x:auto;flex:none;padding-bottom:2px">
-            <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
-              <button onClick="{{ c.pick }}" style="border:0;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;padding:0 18px;min-height:52px;border-radius:999px;white-space:nowrap;flex:none;background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
-            </sc-for>
+          <!-- dãy chip cuộn ngang; vệt mờ bên phải nói "còn bộ môn nữa", cùng họ màu than -->
+          <div style="position:relative;flex:none">
+            <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:2px">
+              <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+                <button onClick="{{ c.pick }}" style="border:0;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;padding:0 18px;min-height:52px;border-radius:999px;white-space:nowrap;flex:none;background:{{ c.bg }};color:{{ c.fg }}">{{ c.label }}</button>
+              </sc-for>
+            </div>
+            <span style="position:absolute;top:0;bottom:2px;right:0;width:26px;pointer-events:none;background:linear-gradient(90deg,rgba(19,20,19,0),#131413)"></span>
           </div>
         </sc-if>
         <div style="position:relative;flex:none">
@@ -332,7 +336,10 @@ class Component extends DCLogic {
     else if (S.empty === 'class') { [hero1, hero2] = L.heroEmptyC; eyebrow = ''; }
     else if (S.ios) { [hero1, hero2] = L.heroIos; eyebrow = ''; }
     else { hero1 = arrived + '/' + roster.length; hero2 = L.arrived; eyebrow = S.sport !== 'all' ? S.sport.toUpperCase() + ' · ' + L.todayShort : L.today; }
-    const chips = [L.all, 'Boxing', 'Yoga', 'Gym', 'Kickfit'].map(label => {
+    // thứ tự chip: "Tất cả" luôn đầu, còn lại A→Z. Không xếp theo số người hôm nay:
+    // bộ môn sẽ nhảy chỗ giữa buổi, và cô giáo tap theo vị trí đã nhớ.
+    const SPORTS = ['Boxing', 'Gym', 'Kickfit', 'Yoga'];
+    const chips = [L.all, ...SPORTS].map(label => {
       const val = label === L.all ? 'all' : label;
       const on = S.sport === val;
       return { label, bg: on ? '#A9E5F1' : 'rgba(255,255,255,.08)', fg: on ? '#052430' : '#F2F2EC', pick: () => this.setState({ sport: val }) };
@@ -348,7 +355,10 @@ class Component extends DCLogic {
       branchName: this.props.branchName ?? 'Quận 7',
       netLabel: S.offline ? L.noNet : '4G',
       hero1, hero2, eyebrow,
-      chipShow: isList, chipText: L.savedChip + ' ' + savedAt,
+      // chip mốc giờ cũng bật ở màn 11: "hôm nay chưa có ai" rất có thể chỉ vì danh sách cũ,
+      // nên đó đúng là lúc cần biết danh sách tải lúc mấy giờ. Không bật ở màn 10 (chưa từng có
+      // danh sách) và màn 14 (chưa cài xong app).
+      chipShow: isList || S.empty === 'class', chipText: L.savedChip + ' ' + savedAt,
       sList: isList, sEmptyMembers: S.empty === 'members', sEmptyClass: S.empty === 'class', sIos: S.ios,
       showChips: isList && !S.noSports, chips, rows,
       emptyHint: isList && rows.length === 0 && (q.length > 0 || S.sport !== 'all'),

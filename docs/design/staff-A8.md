@@ -22,6 +22,35 @@ Bốn quyết định sản phẩm còn lại đã được gắn dấu `QUYẾT
 (§1.1, §1.3, và màu liên kết ở §2) đã vá thẳng vào `00-he-thong.md`. Trạng thái thiếu ở §4.5 đã
 thêm vào `02-staff-co-giao.md § B2` thành mục #15.
 
+## Lượt kiểm bằng mắt — 9/9 đạt
+
+Toàn bộ phần rà bên dưới là **đọc source**. Bản dựng đã qua thêm một lượt render thật, chín bước,
+**không bước nào vỡ và không sửa một dòng thiết kế nào**. Số đo đáng ghi lại:
+
+- **Header tên dài** `TRUNG TÂM ANH NGỮ SAO MAI`: 2 dòng, cao 36px, `scrollWidth − clientWidth = 0`,
+  pill `Quận 7` (74×40) cùng hàng cách tên 11px. Giống hệt ở 360px. Đây là bước dễ vỡ nhất theo
+  `§ A1b` và nó đạt.
+- **Hàng nhãn nhỏ** cao đúng 22px ở cả 15 màn nên hero không nhảy. Dài nhất `KICKFIT · HÔM NAY`
+  123px + chip 118px + gap 10 = **251px trên 358px** khả dụng — chưa cần tới ellipsis.
+- **Vùng danh sách cuộn** ở màn kẹp hai đầu nhất (13, có dải vàng trên + dải vàng đáy) còn 326px
+  cho nội dung 626px, cuộn tốt, dải không đè hàng cuối.
+- **Màn 14** vừa khít 844px (`scrollHeight = clientHeight`), không cần cuộn.
+- **Ở 360px**: cả 15 màn `contentOverflowX = 0`.
+
+Lượt kiểm báo về năm việc **ngoài checklist**. Cả năm đã xử lý:
+
+| Việc | Xử lý |
+|---|---|
+| **Chip `Kickfit` bị cắt còn "Ki"** ở cả 390px và 360px — mà màn 15 lại buộc phải bấm đúng chip đó, nên đường duy nhất tới trạng thái này gần như vô hình | **Đã sửa, hai phần.** (a) Chốt thứ tự chip: `Tất cả` luôn đầu, còn lại **A→Z** → `Kickfit` lên thứ tư, đọc được không cần cuộn. Không xếp theo số người hôm nay vì bộ môn sẽ nhảy chỗ giữa buổi mà cô giáo tap theo vị trí đã nhớ. (b) Thêm **vệt mờ 26px** ở rìa phải dãy chip để nói "còn bộ môn nữa" — gradient trong **một** họ màu (than trong suốt → than), đúng `§ A2`. Việc này cũng chốt luôn một mục đang để ngỏ ở §4.7 |
+| **`<helmet>` vẫn khai `a { color:#A9E5F1 }`** — vi phạm sẵn luật màu liên kết mới thêm vào `§ A2`, chưa lộ chỉ vì file không có thẻ `<a>` nào | **Đã sửa:** `a { color:#F2F2EC; text-decoration:underline }`, hover giữ san hô nhạt |
+| **`§ B2 #9` mâu thuẫn với quyết định ở §3.1** — luật vẫn đòi dải mất mạng nói "Danh sách lưu lúc 17:02", bản dựng thì không | **Đã sửa tài liệu cho khớp quyết định**, không để treo. `§ B2 #9` giờ ghi dải mang **số lượt chờ**, và `§ B1` gạch thứ ba nói rõ chỗ duy nhất của mốc giờ là chip đầu màn, kèm lý do phải có tiền tố `DANH SÁCH` |
+| **Nút Tải lại vô hiệu chỉ bằng màu chữ**, DOM vẫn nhận cú bấm (§3.3) | **Chuyển thành AC của `M3-S03`**: `disabled` + `aria-disabled` thật. Đây là việc của code, không phải của bản dựng — trong bản dựng thì đổi màu là đủ để xem |
+| **Chip mốc giờ tắt ở màn 11** (§4.6 đề xuất bật) | **Đã bật:** `chipShow: isList \|\| S.empty === 'class'`. Vẫn tắt ở màn 10 (chưa từng có danh sách) và màn 14 (chưa cài xong app) |
+
+Sau lượt này `/staff` **đóng**. Hai luật còn treo (§4.4 hero đổi mẫu số, §4.6 nhãn nhỏ rỗng mang hai
+nghĩa) không phải việc của `/staff` — chúng là luật của `§ A1b`, phải dựng `/admin` rồi quyết một
+lần cho cả hệ.
+
 ---
 
 Rà bản dựng hiện tại (đã qua một lượt sửa: bỏ khái niệm lớp, tick chờ đổi sang vàng, s5 tách khỏi
@@ -380,10 +409,14 @@ lần sau khi dựng `/admin`.
   một giây (§B0); giữ dim thì 700 vẫn không đủ.
 - **Toast "Đã lưu tất cả" tự ẩn sau ~1,9s**, và `gửi` mô phỏng mất 1,4s. §B2 #8 cho phép "biến mất
   **hoặc** báo Đã lưu tất cả" — bản dựng làm cả hai (báo rồi biến mất). Thời lượng là tự chọn.
-- **Nhãn chip bộ môn là chuỗi cứng** `['Tất cả','Boxing','Yoga','Gym']` trong `renderVals`, không
-  sinh từ `MEMBERS`. F3 phải sinh từ danh sách `program` thật, và cần chốt **thứ tự** chip (theo
-  tên? theo số người hôm nay? theo thứ tự chủ trung tâm khai?) và **có cắt bớt** khi trung tâm khai
-  10 bộ môn hay không.
+- **Nhãn chip bộ môn là chuỗi cứng** `SPORTS = ['Boxing','Gym','Kickfit','Yoga']` trong
+  `renderVals`, không sinh từ `MEMBERS` — và **đó là đúng**: `Kickfit` có 0 hội viên nhưng vẫn phải
+  hiện chip, vì chip sinh từ bảng `program`. F3 sinh từ `program` thật.
+  **Thứ tự đã chốt: `Tất cả` luôn đầu, còn lại A→Z.** Loại "xếp theo số người hôm nay" vì bộ môn sẽ
+  nhảy chỗ giữa buổi trong khi cô giáo tap theo vị trí đã nhớ; loại "theo thứ tự chủ trung tâm khai"
+  vì nó không đoán được từ phía cô giáo. Dãy chip **cuộn ngang** khi vượt bề rộng — hợp lệ, `§ A4`
+  chỉ cấm cuộn ngang với *bảng dữ liệu*, không cấm với bộ lọc — và có **vệt mờ 26px** ở rìa phải để
+  nói còn chip nữa. **Còn để ngỏ:** có cắt bớt khi trung tâm khai 10 bộ môn hay không.
 - **Bản EN toàn bộ là tự dịch** (`Nobody to check in`, `No sports set`, …). Prompt chỉ yêu cầu
   tiếng Việt; bản EN thêm vào để kiểm chiều dài nhãn theo §A3 ("tiếng Việt dài hơn ~15%"). Nó
   **không phải** cam kết đa ngữ của sản phẩm — đừng lấy làm nguồn dịch.

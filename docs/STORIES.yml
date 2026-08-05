@@ -601,6 +601,7 @@ stories:
       - "Dùng SwUpdate.versionUpdates → hiện thanh thông báo, người dùng tự bấm tải lại"
       - "TUYỆT ĐỐI không tự đổi bản trong im lặng — sẽ mất các tap còn trong memory giữa giờ học"
       - "Thử thật: deploy bản mới trong lúc đang mở app → thấy thanh, không thấy mất dữ liệu"
+      - "Nút 'Tải lại' lúc còn lượt chờ phải disabled THẬT (thuộc tính disabled + aria-disabled), không chỉ đổi màu chữ. Bản dựng designs/staff.dc.html chỉ đổi màu nên DOM vẫn nhận cú bấm — giữa giờ học, 'bấm mà không có gì xảy ra' đọc ra là app treo (docs/design/staff-A8.md § 3.3)"
 
   - id: M3-S04
     title: "Màn hình hướng dẫn cài trên iOS"
