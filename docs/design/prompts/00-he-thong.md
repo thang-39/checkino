@@ -221,9 +221,15 @@ chữ tiếng Anh rồi vỡ khi dịch. Tên người Việt dài — hàng dan
 | 03b · `/admin` báo cáo | **mở rộng chính** `designs/admin.dc.html` |
 
 Bản dựng sống ở **`designs/`**, định dạng **Claude Design** (`.dc.html`) chứ không phải HTML tự
-chứa như dự tính ban đầu. Hệ quả phải biết trước: file trỏ tới `./support.js` do runtime của
-Claude Design cấp, **không có trong repo** — mở file bằng trình duyệt thường sẽ ra trang trắng.
-Muốn xem thì mở trong Claude Design. `docs/design/proto/` bỏ trống, không dùng nữa.
+chứa như dự tính ban đầu. File trỏ tới `./support.js` — runtime của Claude Design, **đã commit
+trong repo** (`designs/support.js`, file generated, đừng sửa tay). `docs/design/proto/` bỏ trống,
+không dùng nữa.
+
+**Mở bản dựng thế nào:** phục vụ thư mục `designs/` qua **HTTP cục bộ** rồi mở, đừng mở thẳng
+`file://` — runtime dùng `fetch` để đọc lại chính file `.dc.html`, mà `fetch` không nhận scheme
+`file:`. Cũng **cần mạng**: `support.js` kéo React 18.3.1 + ReactDOM + Babel từ `unpkg.com` kèm SRI,
+và `<helmet>` kéo Archivo từ Google Fonts. Không có Archivo thì mọi phép đo bố cục đều sai — kiểm
+bằng `document.fonts.check('800 36px Archivo')` trước khi tin một con số nào.
 
 Lượt `03b` chạy ở phiên riêng, không có ngữ cảnh của `03a`. Nó phải **đọc lại**
 `designs/admin.dc.html`, giữ nguyên token và component đã có, rồi thêm màn vào — không viết

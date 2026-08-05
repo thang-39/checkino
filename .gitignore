@@ -50,6 +50,6 @@ tmp/
 # Claude Code internals
 .claude/.cc-writes/
 
-# Runtime của Claude Design — file generated, do runtime cấp lúc mở .dc.html
-# (docs/design/prompts/00-he-thong.md § A7). Không sửa tay, không commit.
-designs/support.js
+# Runtime của Claude Design (designs/support.js) TỪNG bị chặn ở đây. Đã bỏ chặn:
+# không có nó thì không ai mở được bản dựng .dc.html để chạy lượt kiểm bằng mắt § A8.
+# File là generated ("do not edit", rebuild bằng dc-runtime) — commit để dùng, không sửa tay.
