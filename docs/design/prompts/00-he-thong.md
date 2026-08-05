@@ -78,6 +78,28 @@ Ba điều **cấm**:
 Ngoại lệ duy nhất cho phép hero mang tên người: màn "đã nhận ra bạn" (thiết bị đã nhớ) — ở đó
 việc nhận ra tên **chính là** nội dung của trạng thái.
 
+**Eyebrow trống chỉ có một nghĩa: "chưa biết là ai".** Và nghĩa đó chỉ tồn tại ở `/q`, nơi thiết bị
+thật sự có thể chưa nhận ra người đang cầm máy. Ở `/staff` và `/admin` thì eyebrow **luôn có chữ**
+(tên bộ môn, tên khu vực, tên hội viên) — không được để trống rồi mượn khoảng trống đó nói "màn này
+không có gì để mô tả". `min-height` cố định vẫn giữ, nhưng đó là lý do **bố cục**, không phải nghĩa.
+Nguồn: `admin-A8.md § 0b`.
+
+### Con số nào được lên hero
+
+Tách theo **nguyên nhân làm con số đổi**, không theo màn:
+
+| Con số đổi vì | Sống ở đâu |
+|---|---|
+| **Dữ liệu đổi** — thêm người quét, thẻ hết hạn, nhập xong danh sách | **Hero 36px.** Đây đúng là "câu trạng thái" |
+| **Người dùng vừa bấm bộ lọc hoặc gõ tìm** | **Dòng kết quả cạnh bộ lọc.** Không bao giờ leo lên hero |
+
+Ở màn có bộ lọc, hero là **hằng số của màn** (`22 HỘI VIÊN TRONG DANH SÁCH`), và dòng kết quả mang
+đủ cả nguyên nhân lẫn mẫu số: `Sắp hết hạn — 4 trong 22 hội viên`.
+
+Lý do: hero đổi theo bộ lọc thì thứ duy nhất giải thích cú nhảy là eyebrow 10.5px `opacity:.62` —
+**thành phần mờ nhất đỡ nghĩa cho thành phần to nhất**. Người dùng thấy con số lớn đổi mà không
+thấy nguyên nhân. Nguồn: `admin-A8.md § 0a` (lật lại cách `/staff` đang làm — xem `staff-A8.md § 4.4`).
+
 Tên tổ chức tiếng Việt dài, phải xuống được 2 dòng ở bề rộng 360px mà không tràn, không cắt
 chữ. Thử bằng `TRUNG TÂM ANH NGỮ SAO MAI`, đừng thử bằng `GYM ABC`.
 
@@ -149,6 +171,9 @@ chữ tiếng Anh rồi vỡ khi dịch. Tên người Việt dài — hàng dan
 - Vùng chạm tối thiểu **52px**. Tay ướt mồ hôi ở cửa phòng tập.
 - Chữ trong ô nhập tối thiểu **16px**. Dưới ngưỡng đó Safari iOS tự phóng to trang khi chạm vào ô.
 - Mọi màn phải đọc được ở bề rộng **360px**.
+- **Màn rộng ≥ 720px: một cột `max-width:440px` căn giữa trên nền than, không bố cục lại.** Không
+  có breakpoint nào khác, không có bố cục hai cột, không có bảng ngang. Đây là quyết định sản phẩm
+  (`DECISIONS.md § D13`), không phải chỗ để cân nhắc lại lúc dựng.
 - Bảng dữ liệu trên điện thoại: dùng **hàng thẻ**, không dùng bảng cuộn ngang.
 - Nút tròn trắng 42px cho nút quay lại; pill dropdown cho bộ lọc; thanh nav nổi hình viên thuốc,
   mục đang chọn nền `--c-sky`.
@@ -174,8 +199,12 @@ chữ tiếng Anh rồi vỡ khi dịch. Tên người Việt dài — hàng dan
   dùng thư viện chart.
 - **Tương tác thật**, không phải ảnh tĩnh: bấm nút thì chuyển màn, gõ ô nhập thì nút bật, tick thì
   đổi trạng thái, chọn chip thì lọc danh sách. Dữ liệu giả để trong một object JS ở đầu file.
-- Toàn bộ token màu khai báo bằng CSS custom properties trên `:root`, đặt tên **đúng như bảng A2**.
-  Không viết mã màu rải rác trong CSS.
+- Token màu đặt tên **đúng như bảng A2**. Bản dựng `.dc.html` **được miễn** luật `:root` — định dạng
+  này viết style nội tuyến trên từng thẻ nên `var(--c-…)` phải gõ lại vào từng thuộc tính, không lãi
+  gì. Nơi token sống thật là `design/tokens.css`, viết sau khi đủ bốn bản dựng (`D12 · Chưa làm`).
+  Đổi lại: **mã màu trong bản dựng phải khớp từng ký tự với bảng A2** — không tự pha shade mới ngoài
+  các shade nhạt đã dùng. Nguồn của miễn trừ này: `admin-A8.md § 2.1` (cả ba bản dựng đều đã vi phạm
+  luật cũ, nên sửa luật chứ không sửa ba file đã đóng).
 - **Mỗi trạng thái là một màn bấm tới được**, không phải mô tả bằng chữ. Thêm một thanh điều hướng
   nhỏ cố định ở góc để nhảy nhanh giữa các trạng thái khi xem.
 - Khung điện thoại 390×844 để xem trên desktop, nhưng bên trong phải responsive tới 360px.
