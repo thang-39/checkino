@@ -1,5 +1,10 @@
 # 00 · Hệ thiết kế Checkino — đọc trước mọi lượt
 
+> **⏳ Tài liệu build-time — đã đóng vai trò.** Bốn lượt dựng UI đã xong. Nguồn sự thật của hệ
+> thiết kế cho code sản phẩm giờ là [`docs/DESIGN.md`](../../DESIGN.md) — nó đã hấp thụ luật
+> chung của file này (`DECISIONS.md § D15`). Giữ file này làm lịch sử build-time; khi nội dung
+> lệch, DESIGN.md thắng.
+
 File này là **nguồn sự thật** cho cả bốn lượt dựng UI. Mỗi file prompt (`01`, `02`, `03a`, `03b`)
 đều bắt đầu bằng "đọc file này trước". Sửa ở đây thì cả bốn lượt đổi theo — không chép nội dung
 file này đi đâu khác.

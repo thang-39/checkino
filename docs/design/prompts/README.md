@@ -1,5 +1,9 @@
 # Bốn lượt dựng UI
 
+> **⏳ Tài liệu build-time — đã đóng vai trò.** Cả bốn lượt dựng đã xong và đã gom vào
+> [`docs/DESIGN.md`](../../DESIGN.md) — spec thiết kế giữ lâu dài cho code sản phẩm
+> (`DECISIONS.md § D15`). Thư mục `prompts/` giờ là lịch sử build-time.
+
 Dùng để nhờ một phiên Claude khác dựng bản mẫu UI tương tác từ hướng thiết kế đã chốt
 (**Bản 2 · Bảng điều khiển**, `../ban-2-operational.html`).
 
