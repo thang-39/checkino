@@ -487,6 +487,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
               </div>
             </sc-for>
             <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.4">26 buổi trong 30 ngày qua. Buổi gần nhất: hôm nay.</p>
+            <button onClick="{{ goMemberHist }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:6px 0 0;text-align:left;min-height:44px" style-active="opacity:.7">Xem tất cả lịch sử theo tháng</button>
           </div>
 
           <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:#1F211F">
@@ -562,8 +563,284 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         </div>
       </sc-if>
 
+      <!-- ══ 16 · BÁO CÁO — trang gom báo cáo (glue cho tab Báo cáo, lượt 03b) ══ -->
+      <sc-if value="{{ sReports }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ reportLinks }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.go }}" style="flex:none;display:flex;align-items:center;gap:12px;min-height:66px;background:#1F211F;border-radius:20px;padding:13px 16px;cursor:pointer" style-active="opacity:.8">
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-size:15.5px;font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:1.15;font-variation-settings:'wdth' 90">{{ r.title }}</span>
+                <span style="display:block;font-size:12.5px;font-weight:600;color:#9AA096;margin-top:2px;line-height:1.3">{{ r.sub }}</span>
+              </span>
+              <sc-if value="{{ r.hasBadge }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:12px;font-weight:800;padding:4px 11px;border-radius:999px;background:{{ r.badgeBg }};color:{{ r.badgeFg }};flex:none">{{ r.badge }}</span>
+              </sc-if>
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#9AA096" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ══ 17 · XẾP HẠNG THÁNG (quán quân = khối vàng, § B1) ══ -->
+      <sc-if value="{{ sRank }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div style="flex:none;display:flex;gap:7px">
+            <sc-for list="{{ rankMonths }}" as="mo" hint-placeholder-count="3">
+              <button onClick="{{ mo.pick }}" style="flex:1;min-height:44px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;background:{{ mo.bg }};color:{{ mo.fg }}" style-active="opacity:.8">{{ mo.label }}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;display:flex;gap:7px;flex-wrap:wrap">
+              <sc-for list="{{ rankSports }}" as="sp" hint-placeholder-count="4">
+                <button onClick="{{ sp.pick }}" style="min-height:40px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;padding:0 14px;background:{{ sp.bg }};color:{{ sp.fg }}" style-active="opacity:.8">{{ sp.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ rankHasChamp }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:none;border-radius:24px;padding:16px;background:#F3C24A;color:#2C1F03;display:flex;align-items:center;gap:14px">
+              <span style="width:52px;height:52px;border-radius:999px;flex:none;display:grid;place-items:center;font-size:24px;font-weight:800;background:#2C1F03;color:#F3C24A">1</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.7">Quán quân {{ rankMonthLabel }}</div>
+                <div style="font-size:19px;font-weight:800;line-height:1.1;margin-top:2px;text-wrap:balance">{{ champName }}</div>
+                <div style="font-size:12.5px;font-weight:700;opacity:.75;margin-top:1px">{{ champSub }}</div>
+              </div>
+              <div style="text-align:right;flex:none"><div style="font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1">{{ champCount }}</div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7">buổi</div></div>
+            </div>
+          </sc-if>
+          <div style="flex:none;display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ rankRows }}" as="r" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;min-height:56px;background:#1F211F;border-radius:18px;padding:8px 16px">
+                <span style="width:24px;font-size:15px;font-weight:800;color:#9AA096;flex:none;text-align:center">{{ r.rank }}</span>
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:15.5px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.n }}</span><span style="display:block;font-size:12px;font-weight:600;color:#9AA096">{{ r.s }}</span></span>
+                <span style="font-size:17px;font-weight:800;flex:none">{{ r.count }}</span>
+              </div>
+            </sc-for>
+            <sc-if value="{{ rankEmpty }}" hint-placeholder-val="{{ false }}"><div style="background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">Chưa ai tập bộ môn này trong tháng.</p></div></sc-if>
+          </div>
+        </div>
+        <div style="flex:none;padding-bottom:2px"><button onClick="{{ noop }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-active="opacity:.8"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"></path></svg>Xuất file CSV</button></div>
+      </sc-if>
+
+      <!-- ══ 18 · THẺ SẮP HẾT HẠN (ngưỡng 7/14/30, § B1) ══ -->
+      <sc-if value="{{ sExpiring }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;gap:7px">
+          <sc-for list="{{ expThresholds }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.pick }}" style="flex:1;min-height:44px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;background:{{ t.bg }};color:{{ t.fg }}" style-active="opacity:.8">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <p style="margin:0 4px;font-size:13.5px;font-weight:600;color:#9AA096;line-height:1.35;flex:none">{{ expResultLine }}</p>
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ expRows }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.open }}" style="flex:none;display:flex;align-items:center;gap:10px;min-height:60px;background:#1F211F;border-radius:18px;padding:8px 12px 8px 16px;cursor:pointer" style-active="opacity:.8">
+              <span style="flex:1;min-width:0"><span style="display:block;font-size:16px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.n }}</span><span style="display:block;font-size:12px;font-weight:600;color:#9AA096">{{ r.sub }}</span></span>
+              <span style="font-size:10.5px;font-weight:800;letter-spacing:.09em;padding:4px 10px;border-radius:999px;white-space:nowrap;flex:none;background:{{ r.tagBg }};color:{{ r.tagFg }}">{{ r.tag }}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ expEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">Không có thẻ nào hết hạn trong {{ expDays }} ngày tới. Nới ngưỡng lên để xem xa hơn.</p></div></sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ══ 19 · LỊCH SỬ MỘT HỘI VIÊN (§ B0b: nhãn nhỏ mang tên người) ══ -->
+      <sc-if value="{{ sMemberHist }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <sc-for list="{{ histGroups }}" as="g" hint-placeholder-count="3">
+            <div style="flex:none;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 2px"><p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ g.month }}</p><span style="font-size:12px;font-weight:700;color:#9AA096">{{ g.count }} buổi</span></div>
+              <sc-for list="{{ g.items }}" as="h" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:10px;min-height:52px;background:#1F211F;border-radius:16px;padding:10px 14px">
+                  <span style="flex:1;min-width:0;font-size:14.5px;font-weight:700">{{ h.day }}</span>
+                  <span style="font-size:13px;font-weight:600;color:#9AA096;flex:none">{{ h.at }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+          <sc-if value="{{ histMore }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ loadMoreHist }}" style="flex:none;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer" style-active="opacity:.8">Xem thêm tháng trước</button>
+          </sc-if>
+          <p style="margin:0 2px;font-size:12.5px;color:#9AA096;line-height:1.4;flex:none">{{ histFoot }}</p>
+        </div>
+      </sc-if>
+
+      <!-- ══ 20 · DANH SÁCH HỌC THỬ (đổi trạng thái trên hàng, § B1) ══ -->
+      <sc-if value="{{ sTrials }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ trialRows }}" as="t" hint-placeholder-count="5">
+            <div style="flex:none;background:#1F211F;border-radius:18px;padding:12px 14px 12px 16px;display:flex;flex-direction:column;gap:10px">
+              <div onClick="{{ t.open }}" style="display:flex;align-items:center;gap:10px;cursor:pointer" style-active="opacity:.8">
+                <span style="flex:1;min-width:0"><span style="display:block;font-size:16px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.n }}</span><span style="display:block;font-size:12px;font-weight:600;color:#9AA096">{{ t.sub }}</span></span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9AA096" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="m9 6 6 6-6 6"></path></svg>
+              </div>
+              <div style="display:flex;gap:6px">
+                <sc-for list="{{ t.opts }}" as="o" hint-placeholder-count="3">
+                  <button onClick="{{ o.pick }}" style="flex:1;min-height:40px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:12px;font-weight:700;background:{{ o.bg }};color:{{ o.fg }}" style-active="opacity:.8">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ══ 21 · CHUYỂN HỌC THỬ THÀNH HỘI VIÊN (§ B0b: nhãn nhỏ mang tên người) ══ -->
+      <sc-if value="{{ sTrialConvert }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <div style="flex:none;border-radius:24px;padding:16px;background:#1F211F;display:flex;flex-direction:column;gap:10px">
+            <div style="border-radius:16px;padding:12px 14px;background:#2A2D2A;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">Tên</span><span style="font-size:14.5px;font-weight:700">{{ leadName }}</span></div>
+              <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">Số điện thoại</span><span style="font-size:14.5px;font-weight:700;letter-spacing:.03em">{{ leadPhone }}</span></div>
+              <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}"><div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">Bộ môn</span><span style="font-size:14.5px;font-weight:700">{{ leadSport }}</span></div></sc-if>
+            </div>
+            <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">Chuyển xong là hội viên có ngay hồ sơ và điểm danh được. Không phải gõ lại thông tin — còn gán gói thì làm sau ở hồ sơ.</p>
+          </div>
+          <sc-if value="{{ leadDup }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:9px;background:#F3C24A;color:#2C1F03">
+              <p style="margin:0;font-size:18px;font-weight:800;line-height:1.1;text-transform:uppercase;font-variation-settings:'wdth' 88">Số này đã có hội viên</p>
+              <p style="margin:0;font-size:13px;font-weight:600;line-height:1.45">{{ leadDupText }}</p>
+            </div>
+          </sc-if>
+          <div style="flex:1"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
+          <button onClick="{{ doConvert }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer;opacity:{{ convertOp }}" style-active="opacity:.8">Chuyển thành hội viên</button>
+          <button onClick="{{ goTrials }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Quay lại danh sách học thử</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 22 · TỈ LỆ CHUYỂN ĐỔI (theo tháng, § B1) ══ -->
+      <sc-if value="{{ sConvRate }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+          <div style="flex:none;border-radius:24px;padding:16px;background:#C4D4C1;color:#14180F;display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.65">3 tháng gần nhất</div>
+            <div style="font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1">{{ convBigPct }}</div>
+            <div style="font-size:13px;font-weight:700;opacity:.7">{{ convBigSub }}</div>
+          </div>
+          <div style="flex:none;display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ convRows }}" as="c" hint-placeholder-count="3">
+              <div style="background:#1F211F;border-radius:18px;padding:13px 16px;display:flex;flex-direction:column;gap:9px">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><span style="font-size:15px;font-weight:700">{{ c.month }}</span><span style="font-size:15px;font-weight:800">{{ c.pct }}</span></div>
+                <div style="height:8px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden"><span style="display:block;height:100%;border-radius:999px;background:#C4D4C1;width:{{ c.w }}"></span></div>
+                <span style="font-size:12px;font-weight:600;color:#9AA096">{{ c.sub }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ 23 · BẤT THƯỜNG CHỜ DUYỆT (vàng = cần xử lý, § B1) ══ -->
+      <sc-if value="{{ sAnomaly }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px"><p style="margin:0;font-size:13.5px;font-weight:600;line-height:1.45;color:#9AA096">Duyệt hay bỏ trước khi chốt xếp hạng tháng — lượt đáng ngờ không tính vào thưởng.</p></div>
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <sc-for list="{{ anomalyRows }}" as="a" hint-placeholder-count="3">
+            <div style="flex:none;border-radius:20px;padding:14px 16px;background:#F3C24A;color:#2C1F03;display:flex;flex-direction:column;gap:11px">
+              <div><div style="font-size:16.5px;font-weight:800;line-height:1.15">{{ a.n }}</div><div style="font-size:13px;font-weight:600;opacity:.82;margin-top:3px;line-height:1.35">{{ a.why }}</div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.6;margin-top:4px;text-transform:uppercase">{{ a.when }}</div></div>
+              <div style="display:flex;gap:8px">
+                <button onClick="{{ a.approve }}" style="flex:1;min-height:46px;border:0;border-radius:999px;background:#2C1F03;color:#F3C24A;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer" style-active="opacity:.85">Duyệt — tính buổi</button>
+                <button onClick="{{ a.reject }}" style="flex:1;min-height:46px;border:0;border-radius:999px;background:rgba(0,0,0,.12);color:#2C1F03;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer" style-active="opacity:.7">Bỏ lượt này</button>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ anomalyEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;border-radius:20px;padding:16px;background:#C4D4C1;color:#14180F"><p style="margin:0;font-size:14.5px;font-weight:700;line-height:1.45">Đã xử lý hết. Không còn lượt nào chờ duyệt — chốt xếp hạng tháng được rồi.</p></div></sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ══ 24 · NHẬT KÝ THAO TÁC (câu tiếng Việt, § B3) ══ -->
+      <sc-if value="{{ sAudit }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;gap:6px;flex-wrap:wrap">
+          <sc-for list="{{ auditWhoChips }}" as="w" hint-placeholder-count="3">
+            <button onClick="{{ w.pick }}" style="min-height:38px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:12px;font-weight:600;padding:0 13px;background:{{ w.bg }};color:{{ w.fg }}" style-active="opacity:.8">{{ w.label }}</button>
+          </sc-for>
+        </div>
+        <div style="flex:none;display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+          <sc-for list="{{ auditTypeChips }}" as="ty" hint-placeholder-count="4">
+            <button onClick="{{ ty.pick }}" style="min-height:36px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:11.5px;font-weight:600;padding:0 12px;background:{{ ty.bg }};color:{{ ty.fg }}" style-active="opacity:.8">{{ ty.label }}</button>
+          </sc-for>
+        </div>
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-top:11px">
+          <sc-for list="{{ auditRows }}" as="a" hint-placeholder-count="8">
+            <div style="flex:none;background:#1F211F;border-radius:16px;padding:12px 15px">
+              <p style="margin:0;font-size:14px;font-weight:600;line-height:1.4"><b style="font-weight:800">{{ a.who }}</b> {{ a.what }}</p>
+              <p style="margin:4px 0 0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9AA096">{{ a.when }}</p>
+            </div>
+          </sc-for>
+          <sc-if value="{{ auditEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;background:#1F211F;border-radius:16px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">Không có thao tác nào khớp bộ lọc.</p></div></sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ══ 25 · CHẠM TRẦN 50 HỘI VIÊN (§ B2 — chỗ duy nhất chặn người dùng) ══ -->
+      <sc-if value="{{ sCap }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+          <div style="flex:none;border-radius:24px;padding:18px;background:#F3C24A;color:#2C1F03;display:flex;flex-direction:column;gap:12px">
+            <p style="margin:0;font-size:22px;font-weight:800;line-height:1.08;text-transform:uppercase;font-variation-settings:'wdth' 86">Đã dùng hết<br>50 chỗ</p>
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Gói miễn phí dùng được 50 hội viên. Bạn đang có 50. Ngưng những người đã nghỉ để lấy chỗ, hoặc nâng gói để bỏ giới hạn.</p>
+          </div>
+          <div style="flex:1"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
+          <button onClick="{{ goUpgrade }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Nâng gói, bỏ giới hạn</button>
+          <button onClick="{{ goRetired }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer" style-active="opacity:.8">Xem ai đã nghỉ để lấy chỗ</button>
+        </div>
+      </sc-if>
+
+      <!-- ══ 26 · NÂNG GÓI (VietQR + mã trung tâm, KHÔNG cổng thanh toán, § B1) ══ -->
+      <sc-if value="{{ sUpgrade }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
+          <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:13px;background:linear-gradient(135deg,#9E98F6 0%,#6F66F0 100%);color:#0D0838">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Gói Pro</p>
+              <span style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.28);font-size:14px;font-weight:700;white-space:nowrap;flex:none">199k / tháng</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <sc-for list="{{ proPerks }}" as="p" hint-placeholder-count="5">
+                <div style="display:flex;gap:9px;align-items:flex-start"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M20 6 9 17l-5-5"></path></svg><span style="font-size:13.5px;font-weight:600;line-height:1.35">{{ p.t }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="flex:none;border-radius:24px;padding:17px;background:#1F211F;display:flex;flex-direction:column;gap:13px">
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Chuyển khoản để nâng</p>
+            <div style="display:flex;gap:14px;align-items:center;border-radius:18px;padding:14px;background:#2A2D2A">
+              <span style="width:104px;height:104px;flex:none;background:#FFFFFF;border-radius:12px;padding:7px;box-sizing:border-box">{{ qrArt }}</span>
+              <div style="min-width:0;display:flex;flex-direction:column;gap:8px">
+                <div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9AA096">Nội dung chuyển khoản</div><div style="font-size:16px;font-weight:800;letter-spacing:.04em;margin-top:2px">{{ payCode }}</div></div>
+                <p style="margin:0;font-size:12px;font-weight:600;color:#9AA096;line-height:1.4">Quét mã VietQR, ghi đúng nội dung trên. Gói tự mở trong ít phút — không cần nhập thẻ.</p>
+              </div>
+            </div>
+            <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Chuyển xong mà chưa mở? Nhắn Zalo hỗ trợ kèm mã trung tâm.</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ 27 · TRẠNG THÁI CHUNG — tải / rỗng / lỗi mạng (§ B1) ══ -->
+      <sc-if value="{{ sStates }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:none;display:flex;gap:7px">
+          <sc-for list="{{ stateTabs }}" as="s" hint-placeholder-count="3">
+            <button onClick="{{ s.pick }}" style="flex:1;min-height:44px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:13px;font-weight:700;background:{{ s.bg }};color:{{ s.fg }}" style-active="opacity:.8">{{ s.label }}</button>
+          </sc-for>
+        </div>
+        <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-top:12px">
+          <sc-if value="{{ stLoading }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ skeletons }}" as="k" hint-placeholder-count="5">
+              <div style="flex:none;display:flex;align-items:center;gap:12px;min-height:60px;background:#1F211F;border-radius:18px;padding:12px 16px">
+                <span style="flex:1"><span style="display:block;height:14px;width:{{ k.w }};border-radius:999px;background:rgba(255,255,255,.14)"></span><span style="display:block;height:11px;width:38%;border-radius:999px;background:rgba(255,255,255,.08);margin-top:8px"></span></span>
+              </div>
+            </sc-for>
+          </sc-if>
+          <sc-if value="{{ stEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:30px 20px">
+              <span style="width:60px;height:60px;border-radius:20px;background:#1F211F;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#9AA096" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M3 9h18"></path></svg></span>
+              <p style="margin:0;font-size:15px;font-weight:600;line-height:1.5;color:#9AA096;max-width:250px">Chưa có gì ở đây. Khi có dữ liệu, danh sách sẽ hiện ngay tại chỗ này.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{ stError }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:none;border-radius:24px;padding:18px;background:#F4573F;color:#2A0C06;display:flex;flex-direction:column;gap:12px">
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.1;text-transform:uppercase;font-variation-settings:'wdth' 88">Mất mạng</p>
+              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Không tải được danh sách. Kiểm tra mạng rồi thử lại — dữ liệu đã lưu không mất đi đâu.</p>
+              <button onClick="{{ noop }}" style="align-self:flex-start;min-height:48px;border:0;border-radius:999px;background:#2A0C06;color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;padding:0 22px;cursor:pointer" style-active="opacity:.85">Thử lại</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
       <!-- THANH NAV NỔI — § B0b: dưới đáy, không có trong wizard.
-           Mục Báo cáo và Cài đặt là chỗ lượt 03b nối màn mới vào. -->
+           Tab Báo cáo → trang gom báo cáo; tab Cài đặt → nâng gói. -->
       <sc-if value="{{ navShow }}" hint-placeholder-val="{{ true }}">
         <div style="flex:none;padding:6px 0 8px">
           <div style="background:{{ navBarBg }};border-radius:999px;padding:7px;display:flex;align-items:center;justify-content:space-between">
@@ -571,10 +848,10 @@ textarea::placeholder { color:currentColor; opacity:.45; }
               <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></button>
             <button onClick="{{ goList }}" style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navMemBg }};color:{{ navMemFg }}">
               <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.85"></path></svg></button>
-            <span style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;color:#9AA096">
-              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18 17V8M13 17V5M8 17v-4"></path></svg></span>
-            <span style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;color:#9AA096">
-              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.2a2 2 0 0 1-1 1.7l-.4.3a2 2 0 0 1-2 0l-.2-.1a2 2 0 0 0-2.7.7l-.2.4a2 2 0 0 0 .7 2.7l.2.1a2 2 0 0 1 1 1.7v.5a2 2 0 0 1-1 1.7l-.2.1a2 2 0 0 0-.7 2.7l.2.4a2 2 0 0 0 2.7.7l.2-.1a2 2 0 0 1 2 0l.4.3a2 2 0 0 1 1 1.7v.2a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.2a2 2 0 0 1 1-1.7l.4-.3a2 2 0 0 1 2 0l.2.1a2 2 0 0 0 2.7-.7l.2-.4a2 2 0 0 0-.7-2.7l-.2-.1a2 2 0 0 1-1-1.7v-.5a2 2 0 0 1 1-1.7l.2-.1a2 2 0 0 0 .7-2.7l-.2-.4a2 2 0 0 0-2.7-.7l-.2.1a2 2 0 0 1-2 0l-.4-.3a2 2 0 0 1-1-1.7V4a2 2 0 0 0-2-2z"></path></svg></span>
+            <button onClick="{{ goReports }}" style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navRepBg }};color:{{ navRepFg }}">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18 17V8M13 17V5M8 17v-4"></path></svg></button>
+            <button onClick="{{ goSettings }}" style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navSetBg }};color:{{ navSetFg }}">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.2a2 2 0 0 1-1 1.7l-.4.3a2 2 0 0 1-2 0l-.2-.1a2 2 0 0 0-2.7.7l-.2.4a2 2 0 0 0 .7 2.7l.2.1a2 2 0 0 1 1 1.7v.5a2 2 0 0 1-1 1.7l-.2.1a2 2 0 0 0-.7 2.7l.2.4a2 2 0 0 0 2.7.7l.2-.1a2 2 0 0 1 2 0l.4.3a2 2 0 0 1 1 1.7v.2a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.2a2 2 0 0 1 1-1.7l.4-.3a2 2 0 0 1 2 0l.2.1a2 2 0 0 0 2.7-.7l.2-.4a2 2 0 0 0-.7-2.7l-.2-.1a2 2 0 0 1-1-1.7v-.5a2 2 0 0 1 1-1.7l.2-.1a2 2 0 0 0 .7-2.7l-.2-.4a2 2 0 0 0-2.7-.7l-.2.1a2 2 0 0 1-2 0l-.4-.3a2 2 0 0 1-1-1.7V4a2 2 0 0 0-2-2z"></path></svg></button>
           </div>
         </div>
       </sc-if>
@@ -665,14 +942,72 @@ class Component extends DCLogic {
     { day: 'Thứ sáu 31/07', at: '18:31 · Cửa chính' }
   ];
 
-  // ── Chỗ lượt 03b thêm dữ liệu (§ A7): học thử, xếp hạng, nhật ký ──
-  static TRIAL_LEADS = [];
-  static RANKING = [];
-  static AUDIT_LOG = [];
+  // ── Dữ liệu lượt 03b (§ B4): học thử, xếp hạng, nhật ký, bất thường ──
+  // st: lienhe = đã liên hệ · chuyen = đã chuyển đổi · bo = đã bỏ
+  static TRIAL_LEADS = [
+    { id: 't1', n: 'Nguyễn Hoài An', p: '0912 660 340', s: 'Boxing', when: '02/08', st: 'lienhe' },
+    { id: 't2', n: 'Trần Gia Bảo', p: '0938 771 205', s: 'Gym', when: '31/07', st: 'lienhe' },
+    { id: 't3', n: 'Lê Thị Mỹ Duyên', p: '0907 415 668', s: 'Yoga', when: '28/07', st: 'chuyen' },
+    { id: 't4', n: 'Phạm Tuấn Kiệt', p: '0965 220 913', s: 'Gym', when: '25/07', st: 'bo' },
+    { id: 't5', n: 'Đỗ Khánh Linh', p: '0919 337 802', s: 'Yoga', when: '22/07', st: 'chuyen' }
+  ];
 
-  static SCREENS = ['home', 'w1', 'w2', 'w3', 'w4', 'pv', 'pvErr', 'pvBad', 'done', 'poster', 'list', 'listEmpty', 'member', 'phoneEdit', 'pause'];
+  // Xếp hạng theo số buổi đã tới trong tháng. Tháng gần nhất đứng đầu mảng.
+  static RANKING = [
+    { month: 'Tháng 8', rows: [
+      { n: 'Huỳnh Thị Tuyết Mai', s: 'Gym', count: 21 },
+      { n: 'Nguyễn Khánh Vy', s: 'Yoga', count: 19 },
+      { n: 'Nguyễn Thị Hồng Nhung', s: 'Boxing', count: 18 },
+      { n: 'Đỗ Văn Long', s: 'Gym', count: 16 },
+      { n: 'Hồ Nhật Quang', s: 'Boxing', count: 15 }
+    ] },
+    { month: 'Tháng 7', rows: [
+      { n: 'Nguyễn Khánh Vy', s: 'Yoga', count: 23 },
+      { n: 'Huỳnh Thị Tuyết Mai', s: 'Gym', count: 20 },
+      { n: 'Trương Thị Ngọc Diệp', s: 'Gym', count: 18 },
+      { n: 'Nguyễn Thị Hồng Nhung', s: 'Boxing', count: 17 },
+      { n: 'Vũ Ngọc Ánh', s: 'Yoga', count: 14 }
+    ] },
+    { month: 'Tháng 6', rows: [
+      { n: 'Huỳnh Thị Tuyết Mai', s: 'Gym', count: 22 },
+      { n: 'Hồ Nhật Quang', s: 'Boxing', count: 19 },
+      { n: 'Nguyễn Khánh Vy', s: 'Yoga', count: 17 },
+      { n: 'Bùi Thị Kim Ngân', s: 'Boxing', count: 15 },
+      { n: 'Đặng Thuỳ Linh', s: 'Yoga', count: 12 }
+    ] }
+  ];
 
-  static NAV = ['Trang chủ', 'Bước 1 · Trung tâm', 'Bước 2 · Điểm quét', 'Bước 3 · Bộ môn', 'Bước 4 · Chọn nguồn', 'Xem trước nhập liệu', 'Xem trước — có dòng lỗi', 'Xem trước — file hỏng', 'Nhập xong', 'Bước 5 · Poster QR', 'Danh sách hội viên', 'Danh sách — chưa có ai', 'Chi tiết hội viên', 'Sửa SĐT — trùng số', 'Tạm dừng thẻ'];
+  // Nhật ký thao tác — câu tiếng Việt (§ B3), không phải dòng log. type để lọc.
+  static AUDIT_LOG = [
+    { who: 'Cô Lan', what: 'sửa số điện thoại của Trần Quốc Bảo', when: 'Hôm nay 14:32', type: 'sua' },
+    { who: 'Anh Phát', what: 'gia hạn thẻ cho Nguyễn Thị Hồng Nhung — thêm 24 buổi', when: 'Hôm nay 11:08', type: 'the' },
+    { who: 'Cô Lan', what: 'duyệt một lượt điểm danh bất thường của Hồ Nhật Quang', when: 'Hôm nay 09:20', type: 'duyet' },
+    { who: 'Anh Phát', what: 'chuyển học thử Lê Thị Mỹ Duyên thành hội viên', when: 'Hôm qua 17:45', type: 'hoc-thu' },
+    { who: 'Cô Lan', what: 'tạm dừng thẻ của Lý Thị Bích Hằng — nghỉ 1 tháng', when: 'Hôm qua 16:02', type: 'the' },
+    { who: 'Anh Phát', what: 'nhập danh sách từ file — thêm 15 hội viên', when: 'Hôm qua 10:15', type: 'nhap' },
+    { who: 'Cô Lan', what: 'gán gói 24 buổi cho Phan Gia Huy', when: '05/08 15:30', type: 'the' },
+    { who: 'Anh Phát', what: 'thu hồi thiết bị đã nhớ của Đặng Văn Hiếu', when: '05/08 09:44', type: 'thiet-bi' },
+    { who: 'Cô Lan', what: 'ngưng hội viên Ngô Đức Thịnh — giữ lại lịch sử điểm danh', when: '04/08 18:12', type: 'ngung' },
+    { who: 'Anh Phát', what: 'sửa bộ môn của Vũ Ngọc Ánh: Yoga', when: '04/08 14:20', type: 'sua' },
+    { who: 'Cô Lan', what: 'bỏ một lượt điểm danh bất thường của Cao Minh Nhật', when: '03/08 20:05', type: 'duyet' },
+    { who: 'Anh Phát', what: 'gia hạn thẻ cho Bùi Anh Tuấn — thêm 12 buổi', when: '03/08 12:33', type: 'the' },
+    { who: 'Cô Lan', what: 'sửa số điện thoại của Đỗ Văn Long', when: '02/08 19:50', type: 'sua' },
+    { who: 'Anh Phát', what: 'tạm dừng thẻ của Trịnh Thu Hà — nghỉ 2 tuần', when: '02/08 08:10', type: 'the' },
+    { who: 'Cô Lan', what: 'gán gói 36 buổi cho Nguyễn Khánh Vy', when: '01/08 16:40', type: 'the' }
+  ];
+
+  // Lượt điểm danh đáng ngờ, chờ duyệt trước khi phát thưởng tháng.
+  static ANOMALIES = [
+    { id: 'a1', n: 'Hồ Nhật Quang', s: 'Boxing', why: '2 lượt quét cách nhau 40 giây · Cửa chính', when: 'Hôm nay 18:12' },
+    { id: 'a2', n: 'Cao Minh Nhật', s: 'Gym', why: 'Quét lúc 03:14 — ngoài giờ mở cửa', when: 'Hôm nay 03:14' },
+    { id: 'a3', n: 'Phan Gia Huy', s: 'Yoga', why: '5 lượt quét trong một ngày · hai cửa', when: 'Hôm qua' }
+  ];
+
+  static SCREENS = ['home', 'w1', 'w2', 'w3', 'w4', 'pv', 'pvErr', 'pvBad', 'done', 'poster', 'list', 'listEmpty', 'member', 'phoneEdit', 'pause',
+    'reports', 'rank', 'expiring', 'memberHist', 'trials', 'trialConvert', 'convRate', 'anomaly', 'audit', 'cap', 'upgrade', 'states'];
+
+  static NAV = ['Trang chủ', 'Bước 1 · Trung tâm', 'Bước 2 · Điểm quét', 'Bước 3 · Bộ môn', 'Bước 4 · Chọn nguồn', 'Xem trước nhập liệu', 'Xem trước — có dòng lỗi', 'Xem trước — file hỏng', 'Nhập xong', 'Bước 5 · Poster QR', 'Danh sách hội viên', 'Danh sách — chưa có ai', 'Chi tiết hội viên', 'Sửa SĐT — trùng số', 'Tạm dừng thẻ',
+    'Báo cáo — trang gom', 'Xếp hạng tháng', 'Thẻ sắp hết hạn', 'Lịch sử một hội viên', 'Danh sách học thử', 'Chuyển học thử → hội viên', 'Tỉ lệ chuyển đổi', 'Bất thường chờ duyệt', 'Nhật ký thao tác', 'Chạm trần 50', 'Nâng gói', 'Trạng thái chung'];
 
   static WIZARD = ['w1', 'w2', 'w3', 'w4', 'pv', 'pvErr', 'pvBad', 'done', 'poster'];
   static STEP_OF = { w1: 1, w2: 2, w3: 3, w4: 4, pv: 4, pvErr: 4, pvBad: 4, done: 4, poster: 5 };
@@ -688,7 +1023,9 @@ class Component extends DCLogic {
     scr: 'home', progs: null, orgName: '', addr: '', spot: '', open: '06:00', close: '22:00',
     newProg: '', src: null, paste: '', q: '', fSport: 'all', fStatus: 'all', openFilter: null,
     memberId: 1, editPhone: '0983 550 128', pauseFrom: '05/08/2026', pauseTo: '05/09/2026',
-    arrived: 24, feedIx: 0, skipped: false, impResult: null
+    arrived: 24, feedIx: 0, skipped: false, impResult: null,
+    rankMonth: 0, rankSport: 'all', expDays: 7, leadId: 't1', trialState: {},
+    auditWho: 'all', auditType: 'all', anomalyDone: [], histPages: 1, stateVar: 'loading'
   };
 
   static LIVE = [
@@ -765,13 +1102,87 @@ class Component extends DCLogic {
     const dCounts = S.impResult || cCounts;                             // màn 9 lấy đúng nhánh đã xác nhận
     const dSum = dCounts.moi + dCounts.capnhat + dCounts.khongdoi;       // "Đã ghi N hội viên"
 
+    // ══════════ DỮ LIỆU & LOGIC LƯỢT 03b ══════════
+    const pill = on => ({ bg: on ? '#A9E5F1' : 'rgba(255,255,255,.07)', fg: on ? '#052430' : '#F2F2EC' });
+
+    // 17 · Xếp hạng tháng
+    const rk = C.RANKING[S.rankMonth] || C.RANKING[0];
+    const rankMonths = C.RANKING.map((r, i) => Object.assign({ label: r.month, pick: () => this.setState({ scr: 'rank', rankMonth: i }) }, pill(S.rankMonth === i)));
+    const rankSports = hasProgs ? ['all'].concat(C.PROGRAMS).map(k => Object.assign({ label: k === 'all' ? 'Tất cả' : k, pick: () => this.setState({ rankSport: k }) }, pill(S.rankSport === k))) : [];
+    const rankFiltered = rk.rows.filter(x => S.rankSport === 'all' || x.s === S.rankSport);
+    const champ = rankFiltered[0] || null;
+    const rankRows = rankFiltered.slice(1).map((x, i) => ({ rank: i + 2, n: x.n, s: x.s, count: x.count }));
+
+    // 18 · Thẻ sắp hết hạn (ngày còn lại tính từ 04/08, dữ liệu dẫn ngưỡng)
+    const daysLeft = e => { const p = e.split('/'); return (Number(p[1]) - 8) * 30 + (Number(p[0]) - 4); };
+    const expThresholds = [7, 14, 30].map(d => Object.assign({ label: d + ' ngày', pick: () => this.setState({ expDays: d }) }, pill(S.expDays === d)));
+    const expList = C.MEMBERS.map(x => ({ x, dl: daysLeft(x.exp) })).filter(o => o.x.st !== 'exp' && o.dl >= 0 && o.dl <= S.expDays).sort((a, b) => a.dl - b.dl);
+    const expRows = expList.map(o => ({ n: o.x.n, sub: (hasProgs ? o.x.s + ' · ' : '') + 'hết hạn ' + o.x.exp, tag: o.dl === 0 ? 'HÔM NAY' : 'CÒN ' + o.dl + ' NGÀY', tagBg: o.dl <= 7 ? '#F3C24A' : 'rgba(255,255,255,.14)', tagFg: o.dl <= 7 ? '#2C1F03' : '#9AA096', open: () => this.setState({ scr: 'member', memberId: o.x.id }) }));
+
+    // 19 · Lịch sử một hội viên (nhóm theo tháng, phân trang)
+    const HIST_ALL = [
+      { month: 'Tháng 8', items: [ { day: 'Hôm nay', at: '18:12 · Cửa chính' }, { day: 'Thứ hai 03/08', at: '18:20 · Cửa chính' }, { day: 'Chủ nhật 02/08', at: '09:05 · Cửa sau' } ] },
+      { month: 'Tháng 7', items: [ { day: '30/07', at: '18:31 · Cửa chính' }, { day: '27/07', at: '19:02 · Cửa chính' }, { day: '24/07', at: '18:44 · Cửa sau' }, { day: '20/07', at: '18:10 · Cửa chính' } ] },
+      { month: 'Tháng 6', items: [ { day: '28/06', at: '18:22 · Cửa chính' }, { day: '21/06', at: '18:50 · Cửa sau' } ] }
+    ];
+    const histGroups = HIST_ALL.slice(0, S.histPages).map(g => ({ month: g.month, count: g.items.length, items: g.items }));
+    const histMore = S.histPages < HIST_ALL.length;
+
+    // 20 · Danh sách học thử
+    const TR_ST = { lienhe: { label: 'Đã liên hệ', bg: '#F3C24A', fg: '#2C1F03' }, chuyen: { label: 'Đã chuyển đổi', bg: '#C4D4C1', fg: '#14180F' }, bo: { label: 'Đã bỏ', bg: 'rgba(255,255,255,.14)', fg: '#9AA096' } };
+    const trialSt = id => S.trialState[id] || C.TRIAL_LEADS.find(t => t.id === id).st;
+    const trialRows = C.TRIAL_LEADS.map(t => ({
+      n: t.n, sub: (hasProgs ? t.s + ' · ' : '') + t.p + ' · ' + t.when,
+      open: () => this.setState({ scr: 'trialConvert', leadId: t.id }),
+      opts: ['lienhe', 'chuyen', 'bo'].map(k => { const on = trialSt(t.id) === k; const c = TR_ST[k]; return { label: c.label, bg: on ? c.bg : 'rgba(255,255,255,.07)', fg: on ? c.fg : '#F2F2EC', pick: () => this.setState({ trialState: Object.assign({}, S.trialState, { [t.id]: k }) }) }; })
+    }));
+
+    // 21 · Chuyển học thử → hội viên (trùng SĐT thì báo rõ trùng ai)
+    const lead = C.TRIAL_LEADS.find(t => t.id === S.leadId) || C.TRIAL_LEADS[0];
+    const leadDupM = C.MEMBERS.find(x => stripPhone(x.p) === stripPhone(lead.p));
+
+    // 22 · Tỉ lệ chuyển đổi (theo tháng)
+    const CONV = [ { month: 'Tháng 8', conv: 3, total: 5 }, { month: 'Tháng 7', conv: 4, total: 6 }, { month: 'Tháng 6', conv: 2, total: 5 } ];
+    const convPct = o => Math.round(o.conv / o.total * 100);
+    const convRows = CONV.map(o => ({ month: o.month, pct: convPct(o) + '%', w: convPct(o) + '%', sub: o.conv + ' / ' + o.total + ' lead thành hội viên' }));
+    const convTotalC = CONV.reduce((s, o) => s + o.conv, 0), convTotalT = CONV.reduce((s, o) => s + o.total, 0);
+    const convBigPct = Math.round(convTotalC / convTotalT * 100) + '%';
+
+    // 23 · Bất thường chờ duyệt
+    const anomalyRows = C.ANOMALIES.filter(a => S.anomalyDone.indexOf(a.id) < 0).map(a => ({ n: a.n, why: a.why, when: a.when, approve: () => this.setState({ anomalyDone: S.anomalyDone.concat([a.id]) }), reject: () => this.setState({ anomalyDone: S.anomalyDone.concat([a.id]) }) }));
+
+    // 24 · Nhật ký thao tác (lọc người + loại)
+    const AUDIT_WHO = ['all', 'Cô Lan', 'Anh Phát'];
+    const AUDIT_TYPES = [ { k: 'all', label: 'Tất cả' }, { k: 'the', label: 'Thẻ & gói' }, { k: 'sua', label: 'Sửa hồ sơ' }, { k: 'duyet', label: 'Duyệt' }, { k: 'hoc-thu', label: 'Học thử' }, { k: 'nhap', label: 'Nhập DS' }, { k: 'thiet-bi', label: 'Thiết bị' }, { k: 'ngung', label: 'Ngưng' } ];
+    const auditWhoChips = AUDIT_WHO.map(w => Object.assign({ label: w === 'all' ? 'Mọi người' : w, pick: () => this.setState({ auditWho: w }) }, pill(S.auditWho === w)));
+    const auditTypeChips = AUDIT_TYPES.map(t => Object.assign({ label: t.label, pick: () => this.setState({ auditType: t.k }) }, pill(S.auditType === t.k)));
+    const auditRows = C.AUDIT_LOG.filter(a => (S.auditWho === 'all' || a.who === S.auditWho) && (S.auditType === 'all' || a.type === S.auditType)).map(a => ({ who: a.who, what: a.what, when: a.when }));
+
+    // 27 · Trạng thái chung
+    const stateTabs = [ { k: 'loading', label: 'Đang tải' }, { k: 'empty', label: 'Rỗng' }, { k: 'error', label: 'Lỗi mạng' } ].map(s => Object.assign({ label: s.label, pick: () => this.setState({ stateVar: s.k }) }, pill(S.stateVar === s.k)));
+
+    // 16 · Trang gom báo cáo
+    const reportLinks = [
+      { title: 'Xếp hạng tháng', sub: 'Ai đi tập chăm nhất', go: () => this.show('rank') },
+      { title: 'Thẻ sắp hết hạn', sub: 'Gọi trước khi hội viên bỏ', badge: String(C.MEMBERS.filter(x => x.st === 'soon').length), hasBadge: true, badgeBg: '#F3C24A', badgeFg: '#2C1F03', go: () => this.setState({ scr: 'expiring', expDays: 7 }) },
+      { title: 'Tỉ lệ chuyển đổi', sub: 'Học thử thành hội viên', go: () => this.show('convRate') },
+      { title: 'Danh sách học thử', sub: 'Lead đang theo đuổi', go: () => this.show('trials') },
+      { title: 'Bất thường chờ duyệt', sub: 'Lượt quét đáng ngờ', badge: String(anomalyRows.length), hasBadge: anomalyRows.length > 0, badgeBg: '#F4573F', badgeFg: '#2A0C06', go: () => this.show('anomaly') },
+      { title: 'Nhật ký thao tác', sub: 'Ai làm gì lúc nào', go: () => this.show('audit') }
+    ];
+
     // ── nhãn nhỏ (§ B0b: tên khu vực; màn chi tiết + thao tác trên một người → tên hội viên) ──
     const EYE = {
       home: 'Trang chủ', w1: 'Thông tin trung tâm', w2: 'Điểm quét', w3: 'Bộ môn',
       w4: 'Nhập danh sách', pv: 'Xem trước · nhập danh sách', pvErr: 'Xem trước · nhập danh sách',
       pvBad: 'Xem trước · nhập danh sách', done: 'Nhập danh sách', poster: 'Poster QR',
       list: 'Danh sách hội viên', listEmpty: 'Danh sách hội viên',
-      member: m.n, phoneEdit: m.n, pause: m.n
+      member: m.n, phoneEdit: m.n, pause: m.n,
+      // 03b — tên khu vực, trừ hai màn nói về một người (memberHist, trialConvert)
+      reports: 'Báo cáo', rank: 'Xếp hạng tháng', expiring: 'Thẻ sắp hết hạn',
+      memberHist: m.n, trials: 'Danh sách học thử', trialConvert: lead.n,
+      convRate: 'Tỉ lệ chuyển đổi', anomaly: 'Bất thường chờ duyệt', audit: 'Nhật ký thao tác',
+      cap: 'Chỗ gói miễn phí', upgrade: 'Nâng gói', states: 'Trạng thái màn'
     };
     const HERO = {
       home: [S.arrived + ' đã tới', 'hôm nay'],
@@ -788,7 +1199,20 @@ class Component extends DCLogic {
       listEmpty: ['Chưa có', 'hội viên nào'],
       member: ['Còn ' + m.left + ' buổi', 'tới ' + m.exp],
       phoneEdit: dup ? ['Số này đã có', 'người dùng'] : ['Đổi số', 'điện thoại'],
-      pause: ['Tạm dừng', 'thẻ này?']
+      pause: ['Tạm dừng', 'thẻ này?'],
+      // 03b — hero là câu trạng thái/con số (§ A1b)
+      reports: ['Xem gì', 'tháng này'],
+      rank: ['Quán quân', rk.month],
+      expiring: [expRows.length + ' thẻ', 'sắp hết hạn'],
+      memberHist: ['Lịch sử', 'điểm danh'],
+      trials: [C.TRIAL_LEADS.length + ' lượt', 'học thử'],
+      trialConvert: ['Chuyển thành', 'hội viên'],
+      convRate: [convBigPct, 'đã chuyển'],
+      anomaly: [anomalyRows.length + ' lượt', 'chờ duyệt'],
+      audit: ['Ai làm gì', 'lúc nào'],
+      cap: ['Hết chỗ', 'gói free'],
+      upgrade: ['Gói Pro', 'bỏ giới hạn'],
+      states: ['Ba trạng', 'thái màn']
     };
 
     // ── danh sách hội viên: lọc theo bộ môn × trạng thái × ô tìm ──
@@ -871,7 +1295,11 @@ class Component extends DCLogic {
     ].filter(a => a.only !== 'progs' || hasProgs).map(a => ({ label: a.label, sub: a.sub, go: a.go, col: a.col || 'auto' }));
 
     const navOn = k => ({ bg: k ? '#A9E5F1' : 'transparent', fg: k ? '#052430' : '#9AA096' });
-    const nHome = navOn(scr === 'home'), nMem = navOn(scr === 'list' || scr === 'listEmpty' || scr === 'member' || scr === 'phoneEdit' || scr === 'pause');
+    const MEM_SCR = ['list', 'listEmpty', 'member', 'phoneEdit', 'pause', 'memberHist'];
+    const REP_SCR = ['reports', 'rank', 'expiring', 'trials', 'trialConvert', 'convRate', 'anomaly', 'audit'];
+    const SET_SCR = ['upgrade', 'cap', 'states'];
+    const nHome = navOn(scr === 'home'), nMem = navOn(MEM_SCR.indexOf(scr) >= 0);
+    const nRep = navOn(REP_SCR.indexOf(scr) >= 0), nSet = navOn(SET_SCR.indexOf(scr) >= 0);
     const navItems = C.NAV.map((label, i) => {
       const id = C.SCREENS[i];
       const on = scr === id;
@@ -900,6 +1328,10 @@ class Component extends DCLogic {
       sPv: scr === 'pv' || scr === 'pvErr', sPvBad: scr === 'pvBad', sDone: scr === 'done',
       sPoster: scr === 'poster', sList: scr === 'list', sEmpty: scr === 'listEmpty',
       sMember: scr === 'member', sPhoneEdit: scr === 'phoneEdit', sPause: scr === 'pause',
+      sReports: scr === 'reports', sRank: scr === 'rank', sExpiring: scr === 'expiring',
+      sMemberHist: scr === 'memberHist', sTrials: scr === 'trials', sTrialConvert: scr === 'trialConvert',
+      sConvRate: scr === 'convRate', sAnomaly: scr === 'anomaly', sAudit: scr === 'audit',
+      sCap: scr === 'cap', sUpgrade: scr === 'upgrade', sStates: scr === 'states',
       navShow: !isWizard,
 
       // trang chủ
@@ -956,6 +1388,7 @@ class Component extends DCLogic {
       goHome: () => this.show('home'),
       goImport: () => this.show('w4'),
       goMember: () => this.show('member'),
+      goMemberHist: () => this.setState({ scr: 'memberHist', histPages: 1 }),
       finishWizard: () => this.show('home'),
       noop: () => {},
 
@@ -992,6 +1425,33 @@ class Component extends DCLogic {
       pauseFrom: S.pauseFrom, onPauseFrom: e => this.setState({ pauseFrom: e.target.value }),
       pauseTo: S.pauseTo, onPauseTo: e => this.setState({ pauseTo: e.target.value }),
       pauseSum: 'Nghỉ 31 ngày. Hết hạn đẩy từ ' + m.exp + ' sang 05/10.',
+
+      // ── 03b ──
+      reportLinks,
+      rankMonths, rankSports, rankHasChamp: !!champ, rankMonthLabel: rk.month,
+      champName: champ ? champ.n : '', champSub: champ ? (hasProgs ? champ.s + ' · ' + branch : branch) : '', champCount: champ ? champ.count : '',
+      rankRows, rankEmpty: rankFiltered.length === 0,
+      expThresholds, expRows, expDays: S.expDays,
+      expResultLine: expRows.length + ' thẻ hết hạn trong ' + S.expDays + ' ngày tới', expEmpty: expRows.length === 0,
+      histGroups, histMore, loadMoreHist: () => this.setState({ histPages: Math.min(HIST_ALL.length, S.histPages + 1) }),
+      histFoot: 'Tổng ' + HIST_ALL.reduce((s, g) => s + g.items.length, 0) + ' buổi trong 3 tháng. Buổi mới nhất ở trên.',
+      trialRows,
+      leadName: lead.n, leadPhone: lead.p, leadSport: lead.s,
+      leadDup: !!leadDupM, leadDupText: leadDupM ? ('Số ' + lead.p + ' đang là của ' + leadDupM.n + '. Sửa số ở một trong hai người trước khi chuyển.') : '',
+      convertOp: leadDupM ? 0.5 : 1,
+      doConvert: () => { if (!leadDupM) this.setState({ trialState: Object.assign({}, S.trialState, { [lead.id]: 'chuyen' }), scr: 'trials' }); },
+      goTrials: () => this.show('trials'),
+      convRows, convBigPct, convBigSub: convTotalC + ' / ' + convTotalT + ' lead đã thành hội viên',
+      anomalyRows, anomalyEmpty: anomalyRows.length === 0,
+      auditWhoChips, auditTypeChips, auditRows, auditEmpty: auditRows.length === 0,
+      proPerks: [{ t: 'Bỏ giới hạn 50 hội viên' }, { t: 'Nối với Google Sheet — sửa bên nào cũng khớp' }, { t: 'Nhiều cơ sở, phân quyền cho nhân viên' }, { t: 'Nhắc hội viên sắp hết hạn qua Zalo' }, { t: 'Hội viên tự nhận thẻ bằng mã gửi tin nhắn' }],
+      payCode: 'NANG GOI CKO-GTP-7739',
+      goUpgrade: () => this.show('upgrade'),
+      goRetired: () => this.setState({ scr: 'list', fStatus: 'exp', fSport: 'all', q: '', openFilter: null }),
+      stateTabs, stLoading: S.stateVar === 'loading', stEmpty: S.stateVar === 'empty', stError: S.stateVar === 'error',
+      skeletons: [{ w: '62%' }, { w: '48%' }, { w: '70%' }, { w: '54%' }, { w: '60%' }],
+      goReports: () => this.show('reports'), goSettings: () => this.show('upgrade'),
+      navRepBg: nRep.bg, navRepFg: nRep.fg, navSetBg: nSet.bg, navSetFg: nSet.fg,
 
       navBarBg: onRust ? 'rgba(0,0,0,.20)' : '#1F211F',
       navHomeBg: nHome.bg, navHomeFg: nHome.fg, navMemBg: nMem.bg, navMemFg: nMem.fg,
