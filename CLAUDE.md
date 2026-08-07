@@ -40,9 +40,9 @@ Hai cái bẫy môi trường trên máy dev hiện tại:
 
 | Tầng | File | Chứa gì | Thắng khi lệch |
 |---|---|---|---|
-| Tại sao | [`DECISIONS.md`](DECISIONS.md) | D1–D12 + Ba cơ chế + SQL mẫu | **Luôn thắng** |
+| Tại sao | [`DECISIONS.md`](DECISIONS.md) | D1–D15 + Ba cơ chế + SQL mẫu | **Luôn thắng** |
 | Sản phẩm làm gì | `PRD.md` (v2.3) | F1–F11, NFR, tier, metric | Hành vi sản phẩm |
-| Giao diện | [`docs/design/prompts/00-he-thong.md`](docs/design/prompts/00-he-thong.md) | bốn tầng hộp, ba slot đầu màn, màu, chữ | **Hình dáng UI** |
+| Giao diện | [`docs/DESIGN.md`](docs/DESIGN.md) | bốn tầng hộp, ba slot đầu màn, token màu, thang chữ, đặc tả từng màn | **Hình dáng UI** |
 | Stack & hình dáng | `PLAN.md` (v2.2) | stack, schema, M0–M4, DoD, danh sách cắt | Ý định milestone |
 | **Việc phải làm** | [`docs/STORIES.yml`](docs/STORIES.yml) | acceptance criteria + thứ tự phụ thuộc | **Chia việc** |
 | Trạng thái | GitHub issues | open/closed, comment, PR | Không phải nguồn |
@@ -79,7 +79,7 @@ lệnh nghĩa là cần `gh auth switch -u thang-39`. Remote dùng ssh alias `gi
 (M0→M3), tức **17–21 tuần** ở 15–20h/tuần. `PLAN.md` chỉ ước lượng hai hạng mục rồi suy ra
 tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi ra tuần.
 
-## Mười bốn quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
+## Mười lăm quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
 
 - **D1** — Zalo OA/ZNS là tính năng **gói Pro**, không thuộc lõi v1. Free tier chạy hoàn toàn
   không cần Zalo. Lý do: xác thực OA bắt buộc có GPKD của khách hàng, giết mục tiêu onboarding
@@ -118,7 +118,7 @@ tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi r
   dễ làm sai: **nền màn chỉ có ba giá trị** (than / sage / rust `#8E2C1B`); **header = nơi chốn,
   nhãn nhỏ = tên người, hero 36px = trạng thái**, không slot nào kiêm hai nghĩa; **gradient chỉ
   đi trong một họ màu**. Vàng = còn kịp, rust = bị chặn, san hô không bao giờ là lỗi. Luật đầy đủ
-  ở `docs/design/prompts/00-he-thong.md`. Bản dựng ở `designs/*.dc.html` (Claude Design) — chạy
+  ở `docs/DESIGN.md` (D15 dời từ prompt build-time sang). Bản dựng ở `designs/*.dc.html` (Claude Design) — chạy
   bằng `designs/support.js` đã commit, nhưng phải **phục vụ qua HTTP cục bộ** (runtime `fetch` lại
   chính file, không nhận `file://`) và **cần mạng** (React + Archivo).
 - **D13** — **`/admin` trên màn rộng là một cột `max-width:440px` căn giữa**, không bố cục lại,
@@ -129,6 +129,12 @@ tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi r
   lựa chọn được nhớ (localStorage ở `/admin` `/staff`, cookie ở `/q`). Chỉ hai ngôn ngữ, không khung
   đa-locale. Lý do là **cược mở rộng thị trường sau**, không phải nhu cầu v1 đã xác nhận — chi phí là
   hai bộ khoá copy phải giữ đồng bộ; được phép rút về vi-only tới M4 nếu không có tín hiệu ngoài VN.
+- **D15** — **`docs/DESIGN.md` là nguồn sự thật của hệ thiết kế** cho giai đoạn code sản phẩm; nó hấp
+  thụ toàn bộ luật chung của `00-he-thong.md` (bốn tầng, token màu, thang chữ) + đặc tả từng màn. Các
+  prompt `docs/design/prompts/*` thành **lịch sử build-time đã đóng vai trò**, không đọc để làm việc.
+  Không đảo D12–D14 — DESIGN.md thi hành chúng. Bốn nghĩa được chốt lại khi hấp thụ: **vàng** chỉ "còn
+  kịp" (bỏ "thành tích"), **sage** chỉ "xong xuôi" (cái "hôm nay" → coral), **tím** = "con số về người",
+  **header avatar** = logo/monogram (bỏ emoji 🏋️). Bản dựng `*.dc.html` cần một lượt sửa riêng theo bốn nghĩa này.
 
 **Ràng buộc xuyên suốt:** free tier phải có chi phí biến đổi = **0đ**.
 

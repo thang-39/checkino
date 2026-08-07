@@ -584,6 +584,11 @@ lý do**, không chép lại đặc tả.
 `--c-yellow` `#F3C24A` · `--c-sage` `#C4D4C1` · `--c-sky` `#A9E5F1` (+ `--c-dim` `#9AA096` cho
 chữ phụ).
 
+> **Cập nhật (D15):** nghĩa chi tiết của từng token giờ do
+> [`docs/DESIGN.md § 2`](docs/DESIGN.md) giữ. Ba chỗ `00-he-thong.md § A2` để mang hai nghĩa đã
+> chốt ở đó: **vàng** chỉ còn "cần xử lý, còn kịp" (bỏ "thành tích"); **sage** chỉ còn "xong
+> xuôi"; **tím** = "con số về người (sĩ số + sức chứa)". Xem D15.
+
 **`--c-rust` là token thêm mới.** Bảng màu ban đầu không có màu nào mang nghĩa "bị chặn", nên
 vàng phải gánh cả *"sắp hết hạn"* lẫn *"đã hết hạn"* — hậu quả là hai màn khác hẳn nhau về
 nghiệp vụ lại trông na ná. Rust là san hô nung tối, cùng gia đình nên không phá bảng màu, và đủ
@@ -763,6 +768,59 @@ Ai dịch: **chủ dự án tự dịch** bản en (không thuê), vì đằng n
 
 Chưa lộ story mới ngay; khi tới M2 render các màn Angular thì gắn `QUYẾT ĐỊNH CẦN CHỐT` nếu cần chốt
 cơ chế lưu ngôn ngữ ở tầng code.
+
+---
+
+## D15 — `docs/DESIGN.md` là nguồn sự thật của hệ thiết kế; prompt build-time thành lịch sử
+
+**Chốt 2026-08-07, sau khi viết đủ bốn báo cáo `*-A8.md` và gom chúng vào `docs/DESIGN.md`.**
+
+### Bối cảnh — một cam kết build-time hết hạn
+
+Trong lúc dựng bốn lượt UI, luật chung sống ở `docs/design/prompts/00-he-thong.md` với cam kết
+"nguồn sự thật **duy nhất** của luật chung, không chép sang file nào khác — sửa một chỗ là cả
+bốn lượt đổi theo". Cam kết đó đúng **lúc dựng**: bốn phiên Claude Design chạy độc lập, cần một
+file luật không được phân mảnh.
+
+Nhưng `00` là **prompt build-time**. `README.md § "Sau khi có bốn bản dựng"` đã định sẵn: thứ
+giữ lại cho code sản phẩm là `design/tokens.css` + **`docs/DESIGN.md`** (luật bốn tầng, nghĩa
+màu, đặc tả từng màn) + `styleguide.html` + skill `/design-screen`. Bốn lượt dựng nay đã xong.
+
+### Quyết định
+
+**`docs/DESIGN.md` là nguồn sự thật của hệ thiết kế cho giai đoạn code sản phẩm.** Nó hấp thụ
+toàn bộ luật chung của `00-he-thong.md` (bốn tầng hộp, ba slot đầu màn, token màu, thang chữ,
+kích thước) cộng đặc tả từng màn ba bề mặt. Khi hình dáng/nghĩa UI lệch nhau, DESIGN.md thắng.
+
+`00-he-thong.md` và các prompt `01/02/03*` chuyển thành **lịch sử build-time đã đóng vai trò** —
+mỗi file thêm một header ngắn trỏ về DESIGN.md. Giữ nội dung làm dấu vết, không đọc để làm việc.
+
+### Bốn chỗ nhập nhằng đã chốt khi hấp thụ luật chung
+
+Bốn báo cáo A8 dồn lại các chỗ `00`/bản dựng tự nới nghĩa hoặc để treo. DESIGN.md chốt (chi tiết
++ ripple ở [`docs/DESIGN.md § 2` và `§ 5`](docs/DESIGN.md)):
+
+1. **Vàng một nghĩa** — "cần xử lý, còn kịp". Bỏ "thành tích". Quán quân xếp hạng dùng **icon
+   huy chương + số hạng** trên nền than, không dùng khối vàng.
+2. **Sage một nghĩa** — "xong xuôi". Cái "đang diễn ra / là hôm nay" thuộc **coral**. Cột "hôm
+   nay" của biểu đồ trang chủ `/admin` phải đổi sage → coral.
+3. **Tím = "con số về người"** — phủ cả sĩ số trong ngày ("24 người đã tới") lẫn con số có trần
+   (cap 50, số buổi). Bản dựng giữ nguyên.
+4. **Header avatar = logo/monogram của trung tâm** cho cả ba bề mặt (header = nơi chốn). Bỏ
+   emoji 🏋️ (đọc nhầm thành bộ môn) ở `/q` và `/staff`.
+
+### Ripple
+
+- `q.dc.html` (cột không có; avatar 🏋️), `staff.dc.html` (avatar 🏋️; hero còn đổi theo bộ lọc),
+  `admin.dc.html` (cột hôm nay sage; quán quân khối vàng) cần một **lượt sửa bản dựng riêng** —
+  không sửa trong lượt viết DESIGN.md.
+- `design/tokens.css`, `styleguide.html`, skill `/design-screen` viết sau, dựa vào DESIGN.md.
+- `D12` được ghi chú: nghĩa màu chi tiết giờ do DESIGN.md giữ.
+
+### Cái này **không** phải
+
+Không đảo bất kỳ quyết định thiết kế nào của D12–D14 — DESIGN.md thi hành chúng. Đây chỉ là dời
+**nơi giữ** luật chung từ prompt build-time sang spec sản phẩm, đúng như `README.md` đã định.
 
 ---
 
