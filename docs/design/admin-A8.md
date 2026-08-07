@@ -1,11 +1,12 @@
 # Báo cáo tự kiểm A8 — `/admin` nền tảng (`designs/admin.dc.html`)
 
-> Báo cáo của lượt dựng `03a` theo `00-he-thong.md § A8`.
-> Bản dựng: `designs/admin.dc.html` (15 màn) · Prompt: `docs/design/prompts/03a-admin-nen-tang.md`
+> Báo cáo hai lượt dựng `/admin` theo `00-he-thong.md § A8`.
+> Bản dựng: `designs/admin.dc.html` — **27 màn** (15 của `03a` + 12 của `03b`).
+> Prompt: `docs/design/prompts/03a-admin-nen-tang.md` và `03b-admin-bao-cao.md`.
 >
-> **Đây là báo cáo lượt 3/4.** Lượt `03b` mở rộng chính file này và sẽ **thêm vào** báo cáo này,
-> không viết file mới. `docs/DESIGN.md` viết sau khi đủ bốn bản dựng — xem
-> `DECISIONS.md § D12 · Chưa làm`. Đừng chắt lọc file này thành hệ thiết kế bây giờ.
+> **Gồm hai phần:** lượt 3/4 (`03a`, phần chính bên dưới) và lượt 4/4 (`03b`, nối ở cuối file
+> đúng yêu cầu prompt). `docs/DESIGN.md` viết sau khi đủ bốn bản dựng — xem
+> `DECISIONS.md § D12 · Chưa làm`; còn thiếu `q-A8.md`. Đừng chắt lọc file này thành hệ thiết kế bây giờ.
 
 ---
 
@@ -436,3 +437,91 @@ của câu hỏi đó.
 
 Một quyết định **thiết kế** đã chốt trong lượt này và đã ghi ra ngoài repo tài liệu:
 `DECISIONS.md § D13` — `/admin` trên màn rộng là một cột căn giữa, không bố cục lại.
+
+---
+
+# Báo cáo tự kiểm A8 — `/admin` báo cáo (lượt `03b`)
+
+> Phần thêm vào chính file này (đúng yêu cầu prompt `03b`). Bản dựng: `designs/admin.dc.html`
+> mở rộng từ 15 lên **27 màn**. Prompt: `docs/design/prompts/03b-admin-bao-cao.md`.
+> **Báo cáo lượt 4/4.** Sau lượt này đủ bốn bản dựng — trừ `q-A8.md` chưa từng tồn tại (xem dưới).
+
+## B0b · Hai tiền đề đã làm trước khi dựng
+
+1. **`§ B0b` viết lại** (`03a-admin-nen-tang.md:41`) theo ranh giới "màn này đang nói về ai" thay
+   cho "màn chi tiết hội viên" — đúng đề nghị `§ 5` ở trên. Hai màn mới nói về một người
+   (`memberHist`, `trialConvert`) mang nhãn nhỏ là **tên người**; chín màn còn lại mang tên khu vực.
+2. **Hoà số màn.** `03b` đánh số màn của nó từ #14, nhưng `SCREENS` đã dùng chỉ số 14/15 cho
+   `phoneEdit`/`pause` (hai màn `§ B4` dựng thành màn đầy đủ ở `03a`). `SCREENS` là mảng phẳng nên
+   11 màn mới **nối tiếp** thành vị trí 16–27 trong bảng nhảy dev; không đè, không đánh số lại màn cũ.
+   Ánh xạ: 16 trang gom báo cáo (glue) · 17 xếp hạng · 18 sắp hết hạn · 19 lịch sử một hội viên ·
+   20 học thử · 21 chuyển học thử · 22 tỉ lệ chuyển đổi · 23 bất thường · 24 nhật ký · 25 chạm trần ·
+   26 nâng gói · 27 trạng thái chung.
+
+## Đã giữ nguyên (ràng buộc "không viết lại")
+
+Token màu, tên class inline, `state`/`renderVals`, ba slot đầu màn, thanh nav, và object dữ liệu
+`03a` đều giữ nguyên. 11 màn mới **dùng lại** `MEMBERS`/`PROGRAMS`/`SCAN_POINTS`; dữ liệu mới đổ vào
+đúng ba mảng `03a` đã chừa (`TRIAL_LEADS`/`RANKING`/`AUDIT_LOG`) cộng `ANOMALIES`. Hai tab nav
+"Báo cáo"/"Cài đặt" trước để xám nay nối: Báo cáo → trang gom, Cài đặt → nâng gói.
+
+## Lượt kiểm bằng mắt — đã chạy (Chromium headless, phục vụ HTTP cục bộ)
+
+- **Bố cục 12 màn mới đạt ở 390px và 360px**: đo `scrollWidth` trong khung ép 360px, **0 phần tử
+  tràn ngang** ở cả 12 màn. Một chỗ suýt cắt (tên quán quân "Huỳnh Thị Tuyết Mai" vượt 11px ở 360)
+  đã sửa cho **xuống dòng** thay vì ellipsis — giữ mạch "chưa phải dùng ellipsis".
+- **Ba slot đầu màn đúng `§ B0b`** (đọc từ render): nhãn nhỏ `memberHist` = `NGUYỄN THỊ HỒNG NHUNG`,
+  `trialConvert` = `NGUYỄN HOÀI AN` (tên người); chín màn còn lại là tên khu vực. Hero là câu trạng
+  thái/con số ở cả 12 màn.
+- **Hành vi động (bấm thật)**: xếp hạng đổi quán quân theo tháng (T8 Huỳnh Thị Tuyết Mai 21 · T7
+  Nguyễn Khánh Vy 23 · T6 Huỳnh Thị Tuyết Mai 22) và theo bộ lọc bộ môn (T8·Yoga → Nguyễn Khánh Vy
+  19); thẻ sắp hết hạn 7→30 ngày đổi 4→5 dòng (số dẫn từ ngày hết hạn, không gõ cứng); nhật ký lọc
+  "Anh Phát" còn 7/15 dòng đúng người; bất thường duyệt/bỏ giảm 3→2→…→hiện "Đã xử lý hết"; học thử
+  đổi trạng thái ngay trên hàng (Đã liên hệ → Đã chuyển đổi); nút chuyển đổi sáng (lead không trùng).
+- **Không có lỗi JS** trên console (chỉ một 404 favicon vô hại).
+
+## Màu — đối chiếu `§ A2`
+
+- **Vàng** cho việc *cần xử lý sớm*: khối quán quân xếp hạng (prompt `§ B1` yêu cầu "quán quân là
+  khối vàng"), thẻ sắp hết hạn (tag ≤7 ngày), bất thường chờ duyệt, chạm trần 50. Đây là chỗ đáng
+  bàn: vàng ở Checkino nghĩa "còn kịp, phải xử lý sớm" — hợp cho *sắp hết hạn / chờ duyệt / chạm
+  trần*, nhưng **quán quân** không phải "cần xử lý". Prompt ép màu vàng cho quán quân, nên bản dựng
+  theo prompt; ghi lại đây làm dữ liệu cho `docs/DESIGN.md`: **vàng đang mang hai nghĩa** ("cần xử
+  lý" và "phần thưởng/nổi bật"), cần chốt một khi viết hệ thiết kế.
+- **Sage** cho *đã xong / kết quả tốt*: thẻ tỉ lệ chuyển đổi, tag "đã chuyển đổi" ở học thử, empty
+  state "đã xử lý hết" của bất thường — nhất quán với nghĩa sage ở `03a` (nền màn `done`).
+- **San hô** cho *không phải lỗi* nhưng cần chú ý: khối "mất mạng" ở màn trạng thái chung.
+- **Tím** (họ màu tiền, như ô "chỗ gói miễn phí" ở trang chủ) cho thẻ Gói Pro ở màn nâng gói.
+
+## Chỗ phải tự quyết vì prompt không nói rõ (A8.4 — dữ liệu cho `docs/DESIGN.md`)
+
+- **Tab "Cài đặt" trỏ vào đâu.** Prompt không có màn "Cài đặt" trong 11 màn. Nối tab này → **nâng
+  gói**, vì với chủ free đó là thứ "cài đặt" đáng quan tâm nhất; `cap`/`states` để tới bằng bảng nhảy.
+  Nếu sau này có màn cài đặt thật (đổi giờ mở cửa, sửa điểm quét) thì tab này nên trỏ vào đó.
+- **Thêm một màn glue** ("trang gom báo cáo", vị trí 16) không nằm trong 11 màn — cần để tab "Báo
+  cáo" có nơi đáp xuống và liệt kê 6 báo cáo. Đánh dấu là điều hướng, không phải màn nghiệp vụ.
+- **Số ngày còn lại** ở "thẻ sắp hết hạn" tính bằng công thức thô `(tháng-8)*30 + (ngày-4)` từ chuỗi
+  `exp`, vì `MEMBERS` không có trường ngày. Đủ để ngưỡng 7/14/30 dẫn số đúng chiều; ngày thật thì
+  backend tính.
+- **`cap`/`states` không có lối vào cố định trong nav** — `cap` bật theo ngữ cảnh (thêm hội viên khi
+  đã 50), `states` là màn minh hoạ meta. Cả hai tới được qua bảng nhảy dev; `cap` cũng tới từ nút
+  "nâng gói" ngược lại. Đúng bản chất tình huống của chúng.
+- **Chữ nghĩa tiền/kỹ thuật** (`§ B5`): tránh hết từ kỹ thuật — dùng "nối với Google Sheet, sửa bên
+  nào cũng khớp" thay cho "đồng bộ"; "nhận thẻ bằng mã gửi tin nhắn" thay cho "OTP".
+
+## Việc còn lại sau lượt 03b
+
+| Việc | Cho ai |
+|---|---|
+| **`q-A8.md` chưa từng tồn tại** dù `01-q-hoi-vien.md:7` hứa | trước khi viết `docs/DESIGN.md` |
+| **`§ A1` còn thiếu hai câu** (ô icon 42px lấy màu ông nội; vật mô phỏng thật ngoài hệ bốn tầng) | khi viết `docs/DESIGN.md` |
+| **Vàng mang hai nghĩa** (cần-xử-lý vs phần-thưởng, § Màu trên) và **sage nghĩa phụ "đang diễn ra"** | khi viết `docs/DESIGN.md` |
+| **`/staff` hero chưa theo luật `§ A1b`** (đổi vì dữ liệu, không vì bộ lọc) | lượt sửa riêng `/staff` |
+| **`design/tokens.css`, `styleguide.html`, skill `/design-screen`** | sau khi đủ bốn báo cáo |
+
+## Quyết định sản phẩm cần chốt (lượt 03b)
+
+Không lộ quyết định nghiệp vụ mới cho `STORIES.yml`. Màn nâng gói giả định chuyển khoản VietQR +
+mã trung tâm, **không** cổng thanh toán — đúng `§ B1` và khớp free-tier chi phí biến đổi 0đ. Danh
+sách lợi ích Pro lấy từ `DECISIONS.md § D6` (gỡ cap, mirror Sheet, đa cơ sở + phân quyền, Zalo,
+member OTP), không thêm hứa hẹn mới.

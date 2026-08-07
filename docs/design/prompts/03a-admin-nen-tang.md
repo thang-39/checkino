@@ -38,10 +38,18 @@ Chip bước thay chỗ pill cơ sở. Sau khi xong wizard, header về đúng d
 tâm + pill cơ sở. Đổi ngay giữa bước 1 và bước 2 là **có chủ ý** — đó là khoảnh khắc trung tâm
 bắt đầu tồn tại, và người dùng thấy tên mình vừa gõ hiện lên là một phần thưởng nhỏ.
 
-**2 · Nhãn nhỏ trên `/admin` mang tên màn, không mang tên người.** Chủ trung tâm là người đang
-cầm máy, hiện tên họ ra chẳng để làm gì. Nên nhãn nhỏ mang **tên khu vực** (`DANH SÁCH HỘI VIÊN`,
-`NHẬP DANH SÁCH`), trừ **màn chi tiết hội viên** — ở đó nhãn nhỏ mang đúng tên hội viên đó, vì
-lúc này màn đang nói về một người cụ thể.
+**2 · Nhãn nhỏ trên `/admin` theo ranh giới "màn này đang nói về ai".** Chủ trung tâm là người
+đang cầm máy, hiện tên họ ra chẳng để làm gì. Ranh giới thật **không phải** "màn chi tiết hội
+viên" mà là:
+
+- Màn nói về **một khu vực / một tập** (danh sách, nhập liệu, xếp hạng, thẻ sắp hết hạn, học thử,
+  nhật ký toàn trung tâm, bất thường) → nhãn nhỏ mang **tên khu vực** (`DANH SÁCH HỘI VIÊN`,
+  `NHẬP DANH SÁCH`, `XẾP HẠNG THÁNG`).
+- Màn nói về **một người cụ thể** (chi tiết hội viên, sửa SĐT, tạm dừng thẻ, lịch sử một hội viên,
+  chi tiết một lead học thử) → nhãn nhỏ mang **đúng tên người đó**.
+
+Ranh giới này chốt sau lượt `03a` (`admin-A8.md § 5`): ba màn `member`/`phoneEdit`/`pause` đã theo
+nó, và lượt `03b` đẻ thêm màn cùng loại nên phải nói rõ ở đây thay vì để mỗi màn tự đoán.
 
 Hero vẫn là câu trạng thái 36px ở mọi màn. Ở trang chủ, hero là **con số của hôm nay**
 (ví dụ `24` kèm chữ `ĐÃ TỚI HÔM NAY`) — đó là câu trạng thái ở dạng số, giống `/staff`.
