@@ -79,7 +79,7 @@ lệnh nghĩa là cần `gh auth switch -u thang-39`. Remote dùng ssh alias `gi
 (M0→M3), tức **17–21 tuần** ở 15–20h/tuần. `PLAN.md` chỉ ước lượng hai hạng mục rồi suy ra
 tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi ra tuần.
 
-## Mười ba quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
+## Mười bốn quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
 
 - **D1** — Zalo OA/ZNS là tính năng **gói Pro**, không thuộc lõi v1. Free tier chạy hoàn toàn
   không cần Zalo. Lý do: xác thực OA bắt buộc có GPKD của khách hàng, giết mục tiêu onboarding
@@ -125,6 +125,10 @@ tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi r
   không breakpoint nào khác. Áp cho `/staff` luôn. Rủi ro nhận rõ: nhập Excel và in poster A4 là
   việc-của-laptop nhưng vẫn phải làm trong cột hẹp — mở lại chỉ khi pilot `M4-S13` báo về, và mở
   bằng một lượt dựng riêng, không thêm breakpoint lẻ lúc code.
+- **D14** — **Giao diện song ngữ vi/en, mặc định tiếng Việt** ở cả ba bề mặt; người dùng đổi được,
+  lựa chọn được nhớ (localStorage ở `/admin` `/staff`, cookie ở `/q`). Chỉ hai ngôn ngữ, không khung
+  đa-locale. Lý do là **cược mở rộng thị trường sau**, không phải nhu cầu v1 đã xác nhận — chi phí là
+  hai bộ khoá copy phải giữ đồng bộ; được phép rút về vi-only tới M4 nếu không có tín hiệu ngoài VN.
 
 **Ràng buộc xuyên suốt:** free tier phải có chi phí biến đổi = **0đ**.
 

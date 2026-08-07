@@ -704,6 +704,68 @@ Luật thi hành nằm ở `docs/design/prompts/00-he-thong.md § A4`.
 
 ---
 
+## D14 — Giao diện **song ngữ vi/en**, mặc định tiếng Việt
+
+**Chốt 2026-08-07, sau khi cả bốn bản dựng UI đã xong và viết đủ bốn báo cáo `*-A8.md`.**
+
+### Bối cảnh — quyết định này sinh ra từ một chỗ tự quyết của bản dựng
+
+Cả ba bản dựng đều đã mang sẵn một lớp dịch hai ngôn ngữ và nút đổi EN/VI: `q.dc.html` (05/08, mặc
+định `en`), `staff.dc.html` (mặc định `vi`), và `admin.dc.html` (thêm 07/08). **Không prompt nào
+yêu cầu bản tiếng Anh** — `00-he-thong.md:164` chỉ dùng tiếng Anh làm mốc "chữ Việt dài hơn ~15%,
+đừng thiết kế vừa khít chữ Anh rồi vỡ khi dịch", tức tiền đề là thiết kế bằng tiếng Việt. Lớp song
+ngữ là **quyết định tự phát của Claude Design**, ghi lại ở `q-A8.md § 4.1`.
+
+Ba mặc định lệch nhau (q=en, staff=vi, admin mới thêm) nghĩa là nó đang là một giả định không ai ký.
+Quyết định này ký nó — chọn giữ, không gỡ — và làm ba mặc định nhất quán.
+
+### Quyết định
+
+Giao diện **song ngữ Việt/Anh ở cả ba bề mặt** (`/q`, `/staff`, `/admin`). **Mặc định tiếng Việt**
+ở cả ba; người dùng đổi sang tiếng Anh được, và lựa chọn được **nhớ lại**:
+
+- `/admin`, `/staff` (Angular SPA): lưu ở `localStorage`.
+- `/q` (Thymeleaf server-render): cookie ngôn ngữ (khác cookie device token của D3), đọc lúc render.
+  Không có cookie → mặc định `vi`. Không suy từ `Accept-Language` — chủ dự án chọn "mặc định vi,
+  người dùng đổi", không "theo trình duyệt".
+
+Chỉ **hai** ngôn ngữ, không dựng khung i18n nhiều-locale (ICU, số nhiều, RTL…). Copy sống thành hai
+bộ khoá song song, như `DICT` trong các bản dựng.
+
+### Lý do
+
+**Đặt nền cho mở rộng thị trường sau** — không phải một nhu cầu khách hàng v1 đã xác nhận. Đây là
+một **cược có chủ ý về hướng đi**, nói thẳng để không nhầm với nhu cầu đã kiểm chứng:
+
+1. Lớp dịch **đã tồn tại** trong cả ba bản dựng. Gỡ ra cũng là việc, và sẽ phải làm lại nếu cược
+   đúng. Giữ thì rẻ hơn miễn là kỷ luật hai-bộ-khoá được giữ từ đầu.
+2. Kiến trúc rẻ nhất để "để ngỏ" cửa quốc tế: tách chuỗi ra khỏi template ngay từ M2 tốn ít hơn
+   nhiều so với đi bóc chuỗi cứng khắp codebase sau này.
+3. Không đội chi phí biến đổi (ràng buộc xuyên suốt): dịch là chuỗi tĩnh, không gọi dịch vụ ngoài.
+
+### Chi phí và rủi ro — nói thẳng, vì nó căng với D13 lý do #3
+
+**Một người xây, part-time.** Song ngữ nghĩa là **mọi chuỗi hiển thị phải duy trì hai bản** và giữ
+đồng bộ mãi mãi — đúng loại "hai bộ để lệch" mà D13 đã từ chối cho bố cục desktop. Chấp nhận ở đây
+vì chi phí là **tuyến tính theo số chuỗi** (dịch một lần, sửa khi đổi copy), không phải hai hệ luật
+render như bố cục; và vì cược để-ngỏ-thị-trường được cho là đáng. Nếu tới M4 mà không có tín hiệu
+thị trường nào ngoài VN, **được phép rút gọn về vi-only** — bỏ bộ khoá `en`, giữ khung tách-chuỗi.
+
+Ai dịch: **chủ dự án tự dịch** bản en (không thuê), vì đằng nào cũng cần đọc để đúng giọng sản phẩm.
+
+### Ripple sang các việc chưa làm
+
+- `design/tokens.css` không đổi (token là màu/chữ, không phải nội dung).
+- `docs/DESIGN.md` + `styleguide.html` phải kiểm nhãn/nút ở **bản dài hơn trong hai ngôn ngữ** (thường
+  là tiếng Việt, theo `00 § A3`), và ghi rõ toggle EN/VI trong bản dựng là **thật**, không phải
+  scaffold — khác với bảng nhảy trạng thái và khung máy iOS.
+- Các story M2+ đụng copy phải tách chuỗi ra khỏi template ngay, không gõ cứng tiếng Việt.
+
+Chưa lộ story mới ngay; khi tới M2 render các màn Angular thì gắn `QUYẾT ĐỊNH CẦN CHỐT` nếu cần chốt
+cơ chế lưu ngôn ngữ ở tầng code.
+
+---
+
 ## Ba cơ chế kỹ thuật đã chốt
 
 Ghi ở đây vì chúng dễ làm sai và hậu quả nặng.
