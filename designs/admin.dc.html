@@ -238,7 +238,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             <div style="flex:none;display:flex;align-items:center;gap:10px;background:#1F211F;border-radius:999px;min-height:52px;padding:0 18px">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#9AA096" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"></path><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7z"></path></svg>
               <span style="flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">hoi-vien-thang-8.xlsx</span>
-              <span style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.55;flex:none">25 DÒNG</span>
+              <span style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.55;flex:none">{{ fileRowsLabel }}</span>
             </div>
           </sc-if>
           <p style="margin:2px 2px 0;font-size:13px;color:#9AA096;line-height:1.45;flex:none">Chưa có file? <a href="#tai-file-mau">Tải file mẫu</a> — ba cột: tên, số điện thoại, bộ môn.</p>
@@ -268,7 +268,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
 
           <sc-if value="{{ pvHasErr }}" hint-placeholder-val="{{ false }}">
             <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:11px;background:#F3C24A;color:#2C1F03">
-              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">3 dòng không ghi được</p>
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ pvErrTitle }}</p>
               <sc-for list="{{ pvErrors }}" as="e" hint-placeholder-count="3">
                 <div style="border-radius:18px;padding:12px 14px;background:#F8DC96">
                   <div style="font-size:14.5px;font-weight:700;line-height:1.3">{{ e.who }}</div>
@@ -567,14 +567,14 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ navShow }}" hint-placeholder-val="{{ true }}">
         <div style="flex:none;padding:6px 0 8px">
           <div style="background:{{ navBarBg }};border-radius:999px;padding:7px;display:flex;align-items:center;justify-content:space-between">
-            <button onClick="{{ goHome }}" style="flex:1;display:grid;place-items:center;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navHomeBg }};color:{{ navHomeFg }}">
+            <button onClick="{{ goHome }}" style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navHomeBg }};color:{{ navHomeFg }}">
               <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></button>
-            <button onClick="{{ goList }}" style="flex:1;display:grid;place-items:center;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navMemBg }};color:{{ navMemFg }}">
+            <button onClick="{{ goList }}" style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;border:0;border-radius:999px;cursor:pointer;background:{{ navMemBg }};color:{{ navMemFg }}">
               <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.85"></path></svg></button>
-            <span style="flex:1;display:grid;place-items:center;padding:11px 0;color:#9AA096">
-              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20v-4M18 20v-9"></path></svg></span>
-            <span style="flex:1;display:grid;place-items:center;padding:11px 0;color:#9AA096">
-              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8M4.6 9a1.6 1.6 0 0 0-.3-1.8"></path></svg></span>
+            <span style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;color:#9AA096">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M18 17V8M13 17V5M8 17v-4"></path></svg></span>
+            <span style="flex:1;display:grid;place-items:center;min-height:52px;box-sizing:border-box;padding:11px 0;color:#9AA096">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.2a2 2 0 0 1-1 1.7l-.4.3a2 2 0 0 1-2 0l-.2-.1a2 2 0 0 0-2.7.7l-.2.4a2 2 0 0 0 .7 2.7l.2.1a2 2 0 0 1 1 1.7v.5a2 2 0 0 1-1 1.7l-.2.1a2 2 0 0 0-.7 2.7l.2.4a2 2 0 0 0 2.7.7l.2-.1a2 2 0 0 1 2 0l.4.3a2 2 0 0 1 1 1.7v.2a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.2a2 2 0 0 1 1-1.7l.4-.3a2 2 0 0 1 2 0l.2.1a2 2 0 0 0 2.7-.7l.2-.4a2 2 0 0 0-.7-2.7l-.2-.1a2 2 0 0 1-1-1.7v-.5a2 2 0 0 1 1-1.7l.2-.1a2 2 0 0 0 .7-2.7l-.2-.4a2 2 0 0 0-2.7-.7l-.2.1a2 2 0 0 1-2 0l-.4-.3a2 2 0 0 1-1-1.7V4a2 2 0 0 0-2-2z"></path></svg></span>
           </div>
         </div>
       </sc-if>
@@ -637,6 +637,9 @@ class Component extends DCLogic {
   // Kết quả đọc file ở màn xem trước. rows = danh sách dòng, errors = dòng không ghi được.
   static IMPORT = {
     file: 'hoi-vien-thang-8.xlsx',
+    // Nguồn DUY NHẤT cho mọi con số nhập liệu (§ admin-A8 6.1): dòng trong file =
+    // moi + capnhat + khongdoi; nhánh có lỗi trừ đi đúng errors.length khỏi "mới".
+    clean: { moi: 15, capnhat: 3, khongdoi: 7 },
     newPrograms: ['Boxing', 'Yoga'],
     rows: [
       { n: 'Nguyễn Thị Hồng Nhung', p: '0912 345 678', s: 'Boxing', tag: 'moi' },
@@ -685,7 +688,7 @@ class Component extends DCLogic {
     scr: 'home', progs: null, orgName: '', addr: '', spot: '', open: '06:00', close: '22:00',
     newProg: '', src: null, paste: '', q: '', fSport: 'all', fStatus: 'all', openFilter: null,
     memberId: 1, editPhone: '0983 550 128', pauseFrom: '05/08/2026', pauseTo: '05/09/2026',
-    arrived: 24, feedIx: 0, skipped: false
+    arrived: 24, feedIx: 0, skipped: false, impResult: null
   };
 
   static LIVE = [
@@ -745,8 +748,22 @@ class Component extends DCLogic {
     const onLight = scr === 'done';
     const onRust = scr === 'pause';
     const m = C.MEMBERS.find(x => x.id === S.memberId) || C.MEMBERS[0];
-    const dup = C.MEMBERS.find(x => x.p === S.editPhone && x.id !== m.id);
+    // § admin-A8 6.3: so khớp SĐT phải chuẩn hoá dấu cách như ô tìm ở màn 11 (:783),
+    // nếu không "0983550128" và "0983 550 128" cho hai kết quả khác nhau.
+    const stripPhone = p => p.replace(/\s/g, '');
+    const dup = C.MEMBERS.find(x => stripPhone(x.p) === stripPhone(S.editPhone) && x.id !== m.id);
     const spot = S.spot.trim() || C.SCAN_POINTS[0].name;
+
+    // ── số liệu nhập file: MỘT nguồn (§ admin-A8 6.1/6.2) ──
+    const imp = C.IMPORT, errN = imp.errors.length, cCounts = imp.clean;
+    const fileRows = cCounts.moi + cCounts.capnhat + cCounts.khongdoi;   // dòng trong file
+    const hasErr = scr === 'pvErr';
+    const pvCounts = hasErr
+      ? { moi: cCounts.moi - errN, capnhat: cCounts.capnhat, khongdoi: cCounts.khongdoi }
+      : cCounts;
+    const pvWrite = pvCounts.moi + pvCounts.capnhat;                     // dòng sẽ ghi = mới + cập nhật
+    const dCounts = S.impResult || cCounts;                             // màn 9 lấy đúng nhánh đã xác nhận
+    const dSum = dCounts.moi + dCounts.capnhat + dCounts.khongdoi;       // "Đã ghi N hội viên"
 
     // ── nhãn nhỏ (§ B0b: tên khu vực; màn chi tiết + thao tác trên một người → tên hội viên) ──
     const EYE = {
@@ -765,7 +782,7 @@ class Component extends DCLogic {
       pv: ['Kiểm lại', 'trước khi ghi'],
       pvErr: ['Kiểm lại', 'trước khi ghi'],
       pvBad: ['Không đọc được', 'file này'],
-      done: ['Đã ghi', C.MEMBERS.length + ' hội viên'],
+      done: ['Đã ghi', dSum + ' hội viên'],
       poster: ['In poster', 'dán ở cửa'],
       list: ['', ''],
       listEmpty: ['Chưa có', 'hội viên nào'],
@@ -832,12 +849,11 @@ class Component extends DCLogic {
     }
     const sportOn = S.fSport !== 'all', statusOn = S.fStatus !== 'all';
 
-    // ── xem trước nhập liệu ──
-    const hasErr = scr === 'pvErr';
+    // ── xem trước nhập liệu (số lấy từ pvCounts, tính một nguồn ở trên) ──
     const pvTiles = [
-      { n: hasErr ? 10 : 12, k: 'Mới' },
-      { n: 3, k: 'Cập nhật' },
-      { n: 7, k: 'Không đổi' }
+      { n: pvCounts.moi, k: 'Mới' },
+      { n: pvCounts.capnhat, k: 'Cập nhật' },
+      { n: pvCounts.khongdoi, k: 'Không đổi' }
     ];
     const pvRows = C.IMPORT.rows.map(r => ({
       name: r.n, sub: hasProgs ? r.p + ' · ' + r.s : r.p,
@@ -903,7 +919,7 @@ class Component extends DCLogic {
       fClose: S.close, onClose: e => this.setState({ close: e.target.value }),
       spotLine: spot + ' · Mở ' + S.open + '–' + S.close,
       qrArt: this.qr(),
-      w1Op: 1, w4Op: S.src ? 1 : 0.5,
+      w1Op: S.orgName.trim() ? 1 : 0.5, w4Op: S.src ? 1 : 0.5,
       fNewProg: S.newProg, onNewProg: e => this.setState({ newProg: e.target.value }),
       hasProgs, progChips: progs.map(p => ({ name: p, remove: () => this.setState({ progs: progs.filter(x => x !== p) }) })),
       progNote: hasProgs
@@ -911,7 +927,7 @@ class Component extends DCLogic {
         : 'Chưa khai bộ môn nào. Bỏ qua là xong — mọi màn sau sẽ không hỏi tới bộ môn.',
       addProg: () => { const v = this.state.newProg.trim(); if (v) this.setState({ progs: progs.concat([v]), newProg: '' }); },
       skipProgs: () => this.setState({ progs: [], scr: 'w4' }),
-      next: () => { const o = { w1: 'w2', w2: 'w3', w3: 'w4', w4: 'pv', pv: 'done', pvErr: 'done', done: 'poster', poster: 'home' }; this.show(o[scr] || 'home'); },
+      next: () => { if (scr === 'w1' && !this.state.orgName.trim()) return; const o = { w1: 'w2', w2: 'w3', w3: 'w4', w4: 'pv', pv: 'done', pvErr: 'done', done: 'poster', poster: 'home' }; this.show(o[scr] || 'home'); },
       back: () => { const o = { w2: 'w1', w3: 'w2', w4: 'w3', pv: 'w4', pvErr: 'w4', pvBad: 'w4', done: 'pv', poster: 'done' }; this.show(o[scr] || 'home'); },
       pickFile: () => this.setState({ src: 'file' }), pickPaste: () => this.setState({ src: 'paste' }),
       srcFile: S.src === 'file', srcPaste: S.src === 'paste',
@@ -922,10 +938,12 @@ class Component extends DCLogic {
 
       // xem trước
       pvTiles, pvHasErr: hasErr, pvErrors: C.IMPORT.errors,
+      pvErrTitle: errN + ' dòng không ghi được',
+      fileRowsLabel: fileRows + ' DÒNG',
       pvNewProgs: hasProgs, pvRows,
-      pvListLabel: hasErr ? '13 dòng sẽ ghi' : '15 dòng sẽ ghi',
-      pvCta: hasErr ? 'Ghi 13 dòng, bỏ 3 dòng lỗi' : 'Xác nhận ghi vào danh sách',
-      confirmImport: () => this.show('done'),
+      pvListLabel: pvWrite + ' dòng sẽ ghi',
+      pvCta: hasErr ? ('Ghi ' + pvWrite + ' dòng, bỏ ' + errN + ' dòng lỗi') : 'Xác nhận ghi vào danh sách',
+      confirmImport: () => this.setState({ impResult: pvCounts, scr: 'done', openFilter: null }),
       fixSteps: [
         { n: '1', text: 'Dòng đầu tiên của file phải là tên cột: Tên · Số điện thoại · Bộ môn.' },
         { n: '2', text: 'Mỗi hội viên một dòng. Số điện thoại 10 số, bắt đầu bằng 0.' },
@@ -933,7 +951,7 @@ class Component extends DCLogic {
       ],
 
       // nhập xong
-      doneTags: [{ text: '12 mới' }, { text: '3 cập nhật' }, { text: '7 không đổi' }],
+      doneTags: [{ text: dCounts.moi + ' mới' }, { text: dCounts.capnhat + ' cập nhật' }, { text: dCounts.khongdoi + ' không đổi' }],
       goList: () => this.show(all.length ? 'list' : 'listEmpty'),
       goHome: () => this.show('home'),
       goImport: () => this.show('w4'),

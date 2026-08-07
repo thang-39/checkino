@@ -381,6 +381,22 @@ là đúng — nhưng lúc đó `§ B1` phải nói ra điều đó, chứ khôn
 **Xếp việc:** 6.1, 6.2, 6.3 và R3 (icon hỏng) nên sửa trong bản dựng — người xem sẽ vấp phải cả
 bốn. 6.4, R1, R2 là câu hỏi luật, phải chốt ở `§ A4` / `§ B1` trước rồi mới sửa.
 
+> **ĐÃ SỬA (lượt đóng 03a).** Cả bảy việc treo đã xử lý và kiểm chứng bằng render headless:
+> - **6.1** — thêm `IMPORT.clean = {moi:15, capnhat:3, khongdoi:7}` làm nguồn duy nhất. Màn 5 hiện
+>   `fileRowsLabel` (=25), pv = 15/3/7 (=25), pvErr = 12/3/7 + 3 lỗi (=25). Ba màn khớp.
+> - **6.2** — `confirmImport` lưu `impResult` của nhánh đang đi; màn 9 lấy `dSum`/`dCounts` từ đó.
+>   Nhánh sạch → "Đã ghi 25", nhánh lỗi → "Đã ghi 22". Không còn hằng số 22.
+> - **6.3** — thêm `stripPhone()` chuẩn hoá dấu cách ở `dup`; `0983550128` và `0983 550 128` cùng
+>   báo TRÙNG (id 13).
+> - **6.4** — chọn phương án theo `§ A6` (không mở ngoại lệ mới): `w1Op = orgName.trim() ? 1 : .5`
+>   và `next()` chặn khi ô tên trống. Opacity render 0.5 → 1.0 khi gõ.
+> - **R1** — nav thêm `min-height:52px` + `box-sizing:border-box`; đo lại cả 4 mục = 52px đều.
+> - **R2** — 44px của năm nút phụ nay **hợp lệ** theo `§ A4` mới (sàn 44px cho nút phụ `/admin`),
+>   không cần đổi code.
+> - **R3** — vẽ lại icon "Báo cáo" (biểu đồ cột + trục) và "Cài đặt" (bánh răng đủ vành); bbox
+>   render ~18–20px, ngang hai icon bên cạnh.
+> Luật R1/R2 đã nâng lên `00-he-thong.md § A4`.
+
 ## 7 · `designs/support.js` đã được commit
 
 Trước lượt này `.gitignore` chặn `designs/support.js`, và `§ A7` ghi runtime "không có trong repo,
@@ -402,8 +418,8 @@ tới thẳng từng màn, và bề rộng khung đổi bằng cách set `style.
 
 | Việc | Cho ai |
 |---|---|
-| **Sửa 3 lỗi số liệu** (§ 6.1, 6.2, 6.3) + **2 icon nav hỏng** (R3) | trước khi đóng `03a` |
-| **Chốt ngưỡng vùng chạm ở `§ A4`** (R1 nav 41px, R2 nút phụ 44px, § 6.4 nút bước 1) rồi mới sửa | trước khi đóng `03a` |
+| ~~**Sửa 3 lỗi số liệu** (§ 6.1, 6.2, 6.3) + **2 icon nav hỏng** (R3)~~ — **xong**, kiểm bằng render | ~~trước khi đóng `03a`~~ |
+| ~~**Chốt ngưỡng vùng chạm ở `§ A4`** (R1, R2, § 6.4)~~ — **xong**: `§ A4` tách 52px chính / 44px nút phụ `/admin`; nav ≥52px; nút bước 1 theo `§ A6` | ~~trước khi đóng `03a`~~ |
 | **`/staff` hero còn làm theo cách cũ** — `§ 0a` vừa lật luật, `designs/staff.dc.html` chưa theo | lượt sửa riêng, không phải `03a` |
 | **`§ A1` còn thiếu hai câu**: ô icon 42px lấy màu ông nội (§ 1.2); vật mô phỏng thế giới thật nằm ngoài hệ bốn tầng (§ 1.3) | khi viết `docs/DESIGN.md` |
 | **Sage có được mang nghĩa phụ "cái đang diễn ra" không** (§ 2, cột hôm nay) | khi viết `docs/DESIGN.md` |

@@ -168,7 +168,12 @@ chữ tiếng Anh rồi vỡ khi dịch. Tên người Việt dài — hàng dan
 ## A4. Kích thước và hình dáng
 
 - Bo góc: khối 24px · thẻ con 18px · nút và chip 999px (viên thuốc)
-- Vùng chạm tối thiểu **52px**. Tay ướt mồ hôi ở cửa phòng tập.
+- Vùng chạm tối thiểu **52px** cho **hành động chính** và cho **mọi thứ ở `/staff`**
+  (tay ướt mồ hôi ở cửa phòng tập), **kể cả điều hướng** — thanh nav là điều hướng
+  chính nên cũng ≥52px. **44px là sàn tuyệt đối cho nút phụ trên `/admin`** (link
+  chữ gạch chân kiểu "Chọn file khác", "Quay lại hồ sơ") — chủ trung tâm ngồi giữa
+  hai ca, 44px (ngưỡng Apple HIG) đủ; dưới 44px là sai. Ràng buộc này rõ ra từ
+  `admin-A8.md` R1/R2.
 - Chữ trong ô nhập tối thiểu **16px**. Dưới ngưỡng đó Safari iOS tự phóng to trang khi chạm vào ô.
 - Mọi màn phải đọc được ở bề rộng **360px**.
 - **Màn rộng ≥ 720px: một cột `max-width:440px` căn giữa trên nền than, không bố cục lại.** Không
