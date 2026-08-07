@@ -67,22 +67,22 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#F3C24A;color:#2C1F03">!</span>
             <div style="min-width:0">
               <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ alertTitle }}</h5>
-              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">Trong 7 ngày tới. Gọi trước khi hội viên tự bỏ.</p>
+              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">{{ t2 }}</p>
             </div>
           </div>
 
           <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:14px;background:#F4573F;color:#2A0C06">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
-              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Lượt điểm<br>danh</p>
-              <span style="display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.30);font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">7 ngày
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t3 }}<br>{{ t4 }}</p>
+              <span style="display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.30);font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">{{ t5 }}
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></span>
             </div>
             <div style="border-radius:18px;padding:13px 14px;background:#F98872">
               <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase">Trung bình mỗi ngày</span>
+                <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase">{{ t6 }}</span>
                 <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.55)">+7,5%</span>
               </div>
-              <div style="font-size:33px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:7px">19<small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.75">lượt</small></div>
+              <div style="font-size:33px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:7px">19<small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.75">{{ t7 }}</small></div>
             </div>
             <div style="display:flex;align-items:flex-end;gap:6px;height:88px">
               <sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
@@ -91,25 +91,25 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             </div>
             <div style="display:flex;gap:7px;flex-wrap:wrap">
               <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#C4D4C1;display:block"></i>{{ legendToday }}</span>
-              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#FFFFFF;display:block"></i>TB 7 ngày 19</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#FFFFFF;display:block"></i>{{ t8 }}</span>
             </div>
           </div>
 
           <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:14px;background:#6F66F0;color:#0D0838">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
-              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Chỗ gói<br>miễn phí</p>
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t9 }}<br>{{ t10 }}</p>
               <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.22);font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">{{ limitPill }}</span>
             </div>
             <div style="border-radius:18px;padding:13px 14px;background:#9E98F6">
               <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-                <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase">Đã dùng</span>
+                <span style="font-size:11px;font-weight:700;letter-spacing:.11em;text-transform:uppercase">{{ t11 }}</span>
                 <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.55)">{{ seatsLeft }}</span>
               </div>
               <div style="font-size:33px;font-weight:800;letter-spacing:-.035em;line-height:1.05;margin-top:7px">{{ memberCount }}<small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.75">{{ limitOf }}</small></div>
             </div>
           </div>
 
-          <p style="margin:2px 2px -4px;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;flex:none">Đang vào · trực tiếp</p>
+          <p style="margin:2px 2px -4px;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62;flex:none">{{ t12 }}</p>
           <div style="flex:none;display:flex;flex-direction:column;gap:8px;padding-bottom:2px">
             <sc-for list="{{ feed }}" as="f" hint-placeholder-count="3">
               <div style="display:flex;align-items:center;gap:12px;min-height:56px;background:#1F211F;border-radius:18px;padding:8px 16px">
@@ -128,17 +128,17 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sW1 }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
           <div style="flex:none;display:flex;flex-direction:column;gap:7px">
-            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Tên trung tâm</p>
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ t13 }}</p>
             <input value="{{ fOrg }}" onChange="{{ onOrg }}" placeholder="Gym Thành Phát" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
           </div>
           <div style="flex:none;display:flex;flex-direction:column;gap:7px">
-            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Địa chỉ</p>
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ t14 }}</p>
             <input value="{{ fAddr }}" onChange="{{ onAddr }}" placeholder="123 Nguyễn Thị Thập, Quận 7" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
           </div>
-          <p style="margin:0 2px;font-size:13px;color:#9AA096;line-height:1.45;flex:none">Tên này sẽ hiện trên poster QR dán ở cửa, và trên máy của cô giáo khi điểm danh.</p>
+          <p style="margin:0 2px;font-size:13px;color:#9AA096;line-height:1.45;flex:none">{{ t15 }}</p>
         </div>
         <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
-          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;opacity:{{ w1Op }}" style-active="opacity:.8">Tiếp tục
+          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;opacity:{{ w1Op }}" style-active="opacity:.8">{{ t16 }}
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
         </div>
       </sc-if>
@@ -147,24 +147,24 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sW2 }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
           <div style="flex:none;display:flex;flex-direction:column;gap:7px">
-            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Tên điểm quét</p>
-            <input value="{{ fSpot }}" onChange="{{ onSpot }}" placeholder="Cửa chính" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ t17 }}</p>
+            <input value="{{ fSpot }}" onChange="{{ onSpot }}" placeholder="{{ phSpot }}" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
           </div>
           <div style="flex:none;display:flex;flex-direction:column;gap:7px">
-            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Giờ mở cửa</p>
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ t18 }}</p>
             <div style="display:flex;align-items:center;gap:10px">
               <input value="{{ fOpen }}" onChange="{{ onOpen }}" inputmode="numeric" style="flex:1;min-width:0;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
-              <span style="font-size:15px;font-weight:700;opacity:.5;flex:none">tới</span>
+              <span style="font-size:15px;font-weight:700;opacity:.5;flex:none">{{ t19 }}</span>
               <input value="{{ fClose }}" onChange="{{ onClose }}" inputmode="numeric" style="flex:1;min-width:0;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
             </div>
           </div>
           <div style="flex:none;border-radius:24px;padding:17px;background:#1F211F;display:flex;flex-direction:column;gap:12px">
-            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Mã QR sẽ sinh ra</p>
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t20 }}</p>
             <div style="display:flex;gap:14px;align-items:center;border-radius:18px;padding:13px 14px;background:#2A2D2A">
               <span style="width:96px;height:96px;flex:none;background:#FFFFFF;border-radius:10px;padding:6px;box-sizing:border-box">{{ qrArt }}</span>
               <div style="min-width:0">
                 <p style="margin:0 0 5px;font-size:15px;font-weight:700;line-height:1.25">{{ spotLine }}</p>
-                <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Mã này chỉ dùng cho điểm quét này. Thêm điểm quét khác sau cũng được.</p>
+                <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">{{ t21 }}</p>
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
           <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
-          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">Tiếp tục
+          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">{{ t22 }}
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
         </div>
       </sc-if>
@@ -181,10 +181,10 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sW3 }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
           <div style="flex:none;display:flex;flex-direction:column;gap:7px">
-            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Thêm bộ môn</p>
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ t23 }}</p>
             <div style="display:flex;gap:10px">
               <input value="{{ fNewProg }}" onChange="{{ onNewProg }}" placeholder="Boxing" style="flex:1;min-width:0;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
-              <button onClick="{{ addProg }}" style="flex:none;min-height:56px;padding:0 22px;border:0;border-radius:999px;background:rgba(255,255,255,.13);color:#F2F2EC;font:inherit;font-size:13.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer" style-active="opacity:.7">Thêm</button>
+              <button onClick="{{ addProg }}" style="flex:none;min-height:56px;padding:0 22px;border:0;border-radius:999px;background:rgba(255,255,255,.13);color:#F2F2EC;font:inherit;font-size:13.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer" style-active="opacity:.7">{{ t24 }}</button>
             </div>
           </div>
           <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}">
@@ -200,8 +200,8 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
           <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
-          <button onClick="{{ skipProgs }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:rgba(255,255,255,.13);color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.7">Bỏ qua</button>
-          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Tiếp tục</button>
+          <button onClick="{{ skipProgs }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:rgba(255,255,255,.13);color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.7">{{ t25 }}</button>
+          <button onClick="{{ next }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">{{ t26 }}</button>
         </div>
       </sc-if>
 
@@ -211,24 +211,24 @@ textarea::placeholder { color:currentColor; opacity:.45; }
           <div style="flex:none;display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:#1F211F">
             <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:20px;font-weight:800;background:#F3C24A;color:#2C1F03">!</span>
             <div style="min-width:0">
-              <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">Bước này bắt buộc</h5>
-              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">Danh sách rỗng thì không ai điểm danh được. Cú quét thử của anh/chị sẽ rơi vào form học thử, dễ tưởng là phần mềm hỏng.</p>
+              <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ t27 }}</h5>
+              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">{{ t28 }}</p>
             </div>
           </div>
           <button onClick="{{ pickFile }}" style="flex:none;display:flex;gap:14px;align-items:center;text-align:left;width:100%;box-sizing:border-box;border:0;cursor:pointer;font:inherit;color:#F2F2EC;min-height:76px;background:{{ srcFileBg }};border-radius:18px;padding:12px 16px" style-active="opacity:.8">
             <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#2A2D2A;color:#F2F2EC">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"></path><path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7z"></path></svg></span>
             <span style="flex:1;min-width:0">
-              <span style="display:block;font-size:16px;font-weight:700;line-height:1.25">Chọn file</span>
-              <span style="display:block;font-size:12.5px;color:#9AA096;margin-top:2px">Excel (.xlsx) hoặc .csv</span>
+              <span style="display:block;font-size:16px;font-weight:700;line-height:1.25">{{ t29 }}</span>
+              <span style="display:block;font-size:12.5px;color:#9AA096;margin-top:2px">{{ t30 }}</span>
             </span>
           </button>
           <button onClick="{{ pickPaste }}" style="flex:none;display:flex;gap:14px;align-items:center;text-align:left;width:100%;box-sizing:border-box;border:0;cursor:pointer;font:inherit;color:#F2F2EC;min-height:76px;background:{{ srcPasteBg }};border-radius:18px;padding:12px 16px" style-active="opacity:.8">
             <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#2A2D2A;color:#F2F2EC">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M4 9.5h16M9.5 4v16"></path></svg></span>
             <span style="flex:1;min-width:0">
-              <span style="display:block;font-size:16px;font-weight:700;line-height:1.25">Dán từ Excel</span>
-              <span style="display:block;font-size:12.5px;color:#9AA096;margin-top:2px">Chọn cột trong Excel rồi dán vào đây</span>
+              <span style="display:block;font-size:16px;font-weight:700;line-height:1.25">{{ t31 }}</span>
+              <span style="display:block;font-size:12.5px;color:#9AA096;margin-top:2px">{{ t32 }}</span>
             </span>
           </button>
           <sc-if value="{{ srcPaste }}" hint-placeholder-val="{{ false }}">
@@ -241,12 +241,12 @@ textarea::placeholder { color:currentColor; opacity:.45; }
               <span style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.55;flex:none">{{ fileRowsLabel }}</span>
             </div>
           </sc-if>
-          <p style="margin:2px 2px 0;font-size:13px;color:#9AA096;line-height:1.45;flex:none">Chưa có file? <a href="#tai-file-mau">Tải file mẫu</a> — ba cột: tên, số điện thoại, bộ môn.</p>
+          <p style="margin:2px 2px 0;font-size:13px;color:#9AA096;line-height:1.45;flex:none">{{ t34 }} <a href="#tai-file-mau">{{ t35 }}</a> {{ t36 }}</p>
         </div>
         <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
           <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
-          <button onClick="{{ toPreview }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;opacity:{{ w4Op }}" style-active="opacity:.8">Xem trước
+          <button onClick="{{ toPreview }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;opacity:{{ w4Op }}" style-active="opacity:.8">{{ t37 }}
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
         </div>
       </sc-if>
@@ -255,7 +255,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sPv }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
           <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:13px;background:#F4573F;color:#2A0C06">
-            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Sẽ ghi vào danh sách</p>
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t38 }}</p>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
               <sc-for list="{{ pvTiles }}" as="t" hint-placeholder-count="3">
                 <div style="border-radius:18px;padding:12px 11px;background:#F98872">
@@ -275,22 +275,22 @@ textarea::placeholder { color:currentColor; opacity:.45; }
                   <div style="font-size:12.5px;font-weight:600;opacity:.78;margin-top:3px;line-height:1.4">{{ e.why }}</div>
                 </div>
               </sc-for>
-              <p style="margin:0;font-size:12.5px;font-weight:600;opacity:.8;line-height:1.45">Ba dòng này sẽ bị bỏ qua. Sửa trong file rồi nhập lại lần nữa là xong — nhập lại không ghi trùng ai.</p>
+              <p style="margin:0;font-size:12.5px;font-weight:600;opacity:.8;line-height:1.45">{{ t39 }}</p>
             </div>
           </sc-if>
 
           <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px">
-            <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">Nhập danh sách <b>không xoá ai cả</b>. Hội viên vắng mặt trong file để nguyên.</p>
+            <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">{{ t40 }} <b>{{ t41 }}</b>{{ t42 }}</p>
           </div>
 
           <sc-if value="{{ pvNewProgs }}" hint-placeholder-val="{{ true }}">
             <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px;display:flex;flex-direction:column;gap:10px">
-              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Sẽ tạo 2 bộ môn mới</p>
+              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ t43 }}</p>
               <div style="display:flex;gap:7px;flex-wrap:wrap">
                 <span style="font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.55);color:#131413">Boxing</span>
                 <span style="font-size:13px;font-weight:700;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.55);color:#131413">Yoga</span>
               </div>
-              <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Chỉ tạo khi anh/chị bấm xác nhận.</p>
+              <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">{{ t46 }}</p>
             </div>
           </sc-if>
 
@@ -309,7 +309,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
           <button onClick="{{ confirmImport }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">{{ pvCta }}</button>
-          <button onClick="{{ back }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Chọn file khác</button>
+          <button onClick="{{ back }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">{{ t47 }}</button>
         </div>
       </sc-if>
 
@@ -321,10 +321,10 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             <span style="flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">danh-sach-hoi-vien.xlsx</span>
           </div>
           <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px">
-            <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">Đọc được 1 cột. Không thấy cột nào tên giống <b>Tên</b> hay <b>Số điện thoại</b>, nên không biết dòng nào là hội viên nào.</p>
+            <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">{{ t49 }} <b>{{ t50 }}</b> {{ t51 }} <b>{{ t52 }}</b>{{ t53 }}</p>
           </div>
           <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:11px;background:#F3C24A;color:#2C1F03">
-            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Sửa theo 3 bước</p>
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t54 }}</p>
             <sc-for list="{{ fixSteps }}" as="s" hint-placeholder-count="3">
               <div style="display:flex;gap:12px;align-items:center;border-radius:18px;padding:12px 14px;background:#F8DC96">
                 <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;font-size:19px;font-weight:800;background:#F3C24A;color:#2C1F03">{{ s.n }}</span>
@@ -332,12 +332,12 @@ textarea::placeholder { color:currentColor; opacity:.45; }
               </div>
             </sc-for>
           </div>
-          <p style="margin:2px 2px 0;font-size:13px;color:#9AA096;line-height:1.45;flex:none">Không sửa được file? <a href="#tai-file-mau">Tải file mẫu</a> rồi gõ tay vài người trước, thêm sau cũng được.</p>
+          <p style="margin:2px 2px 0;font-size:13px;color:#9AA096;line-height:1.45;flex:none">{{ t55 }} <a href="#tai-file-mau">{{ t56 }}</a> {{ t57 }}</p>
         </div>
         <div style="display:flex;gap:10px;flex:none;padding-bottom:2px">
           <button onClick="{{ back }}" style="width:56px;height:56px;flex:none;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;display:grid;place-items:center;cursor:pointer" style-active="opacity:.7">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
-          <button onClick="{{ back }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Chọn file khác</button>
+          <button onClick="{{ back }}" style="flex:1;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">{{ t58 }}</button>
         </div>
       </sc-if>
 
@@ -350,17 +350,17 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             </sc-for>
           </div>
           <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:rgba(255,255,255,.55)">
-            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Bước tiếp theo</p>
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t59 }}</p>
             <div style="border-radius:18px;padding:13px 14px;background:#FFFFFF">
-              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Còn một bước: in poster QR để dán ở cửa. Có poster là quét thử được ngay.</p>
+              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ t60 }}</p>
             </div>
           </div>
           <div style="flex:1"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
-          <button onClick="{{ next }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.85">Tiếp tục: poster QR
+          <button onClick="{{ next }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.85">{{ t61 }}
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
-          <button onClick="{{ goList }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Xem danh sách hội viên</button>
+          <button onClick="{{ goList }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">{{ t62 }}</button>
         </div>
       </sc-if>
 
@@ -370,25 +370,25 @@ textarea::placeholder { color:currentColor; opacity:.45; }
           <!-- xem trước tờ A4: đây là ảnh của giấy in, không phải khối UI — ngoài hệ bốn tầng -->
           <div style="flex:none;width:100%;max-width:238px;aspect-ratio:1/1.414;box-sizing:border-box;background:#F2F2EC;color:#131413;border-radius:12px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:11px;box-shadow:0 14px 30px rgba(0,0,0,.5)">
             <p style="margin:0;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;text-align:center;font-variation-settings:'wdth' 88;line-height:1.15">{{ headTitle }}</p>
-            <p style="margin:0;font-size:25px;font-weight:800;line-height:.95;letter-spacing:-.03em;text-transform:uppercase;text-align:center;font-variation-settings:'wdth' 82">Quét để<br>điểm danh</p>
+            <p style="margin:0;font-size:25px;font-weight:800;line-height:.95;letter-spacing:-.03em;text-transform:uppercase;text-align:center;font-variation-settings:'wdth' 82">{{ t63 }}<br>{{ t64 }}</p>
             <span style="width:132px;height:132px;flex:none">{{ qrArt }}</span>
             <p style="margin:0;font-size:12px;font-weight:700;text-align:center;line-height:1.35">{{ spotLine }}</p>
             <div style="flex:1"></div>
-            <p style="margin:0;font-size:10px;font-weight:600;opacity:.6;text-align:center;line-height:1.4">Không cần cài ứng dụng.<br>Không cần mật khẩu.</p>
+            <p style="margin:0;font-size:10px;font-weight:600;opacity:.6;text-align:center;line-height:1.4">{{ t65 }}<br>{{ t66 }}</p>
           </div>
           <div style="flex:none;display:flex;gap:13px;align-items:flex-start;border-radius:24px;padding:15px;background:#1F211F;width:100%;box-sizing:border-box">
             <span style="width:42px;height:42px;border-radius:13px;flex:none;display:grid;place-items:center;background:#A9E5F1;color:#052430">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></span>
             <div style="min-width:0">
-              <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">Dán ở đâu</h5>
-              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">Ngang tầm mắt, cạnh cửa chính, chỗ có đèn. In đen trắng cũng quét được.</p>
+              <h5 style="margin:0 0 4px;font-size:15.5px;font-weight:800;text-transform:uppercase;line-height:1.1;font-variation-settings:'wdth' 88">{{ t67 }}</h5>
+              <p style="margin:0;font-size:13px;opacity:.72;line-height:1.4">{{ t68 }}</p>
             </div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
           <button onClick="{{ noop }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"></path><path d="M5 20h14"></path></svg>Tải poster PDF (A4)</button>
-          <button onClick="{{ finishWizard }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Xong, vào trang chủ</button>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"></path><path d="M5 20h14"></path></svg>{{ t69 }}</button>
+          <button onClick="{{ finishWizard }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">{{ t70 }}</button>
         </div>
       </sc-if>
 
@@ -396,7 +396,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sList }}" hint-placeholder-val="{{ false }}">
         <div style="position:relative;flex:none">
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);opacity:.5"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
-          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="Tìm theo tên hoặc số điện thoại" style="width:100%;box-sizing:border-box;min-height:52px;background:#1F211F;border:0;border-radius:999px;padding:0 20px 0 44px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
+          <input value="{{ q }}" onChange="{{ onQ }}" placeholder="{{ phSearch }}" style="width:100%;box-sizing:border-box;min-height:52px;background:#1F211F;border:0;border-radius:999px;padding:0 20px 0 44px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
         </div>
         <div style="display:flex;gap:9px;flex:none">
           <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}">
@@ -441,12 +441,12 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sEmpty }}" hint-placeholder-val="{{ false }}">
         <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:12px;background:#1F211F">
           <div style="border-radius:18px;padding:13px 14px;background:#2A2D2A">
-            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Chưa nhập ai vào danh sách. Nhập từ file Excel xong trong một phút, và không cần gõ tay từng người.</p>
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ t71 }}</p>
           </div>
-          <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">Danh sách rỗng thì cô giáo mở máy lên cũng chỉ thấy màn trống, và cú quét thử của anh/chị sẽ rơi vào form học thử.</p>
+          <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">{{ t72 }}</p>
         </div>
         <div style="flex:1"></div>
-        <button onClick="{{ goImport }}" style="flex:none;width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">Nhập danh sách
+        <button onClick="{{ goImport }}" style="flex:none;width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer" style-active="opacity:.8">{{ t73 }}
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
       </sc-if>
 
@@ -466,10 +466,10 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             <p style="margin:0 0 5px;font-size:13px;font-weight:600;opacity:.78">{{ mName }}</p>
             <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
               <div style="min-width:0">
-                <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1;white-space:nowrap">{{ mLeft }}<span style="font-size:22px;font-weight:700;opacity:.55">{{ mTotal }}</span><small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.7">buổi</small></div>
+                <div style="font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1;white-space:nowrap">{{ mLeft }}<span style="font-size:22px;font-weight:700;opacity:.55">{{ mTotal }}</span><small style="font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;opacity:.7">{{ t74 }}</small></div>
               </div>
               <div style="text-align:right;flex:none">
-                <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;white-space:nowrap">Hết hạn · {{ mExp }}</div>
+                <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.62;white-space:nowrap">{{ t128 }} {{ mExp }}</div>
                 <div style="font-size:13.5px;font-weight:800;letter-spacing:.08em;margin-top:3px">{{ mPhone }}</div>
               </div>
             </div>
@@ -477,8 +477,8 @@ textarea::placeholder { color:currentColor; opacity:.45; }
 
           <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:#1F211F">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
-              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Lịch sử điểm danh</p>
-              <span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.13);white-space:nowrap;flex:none">30 ngày</span>
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t75 }}</p>
+              <span style="font-size:11px;font-weight:700;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.13);white-space:nowrap;flex:none">{{ t76 }}</span>
             </div>
             <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
               <div style="display:flex;align-items:center;gap:10px;border-radius:18px;padding:12px 14px;background:#2A2D2A">
@@ -486,12 +486,12 @@ textarea::placeholder { color:currentColor; opacity:.45; }
                 <span style="font-size:13px;font-weight:600;color:#9AA096;flex:none">{{ h.at }}</span>
               </div>
             </sc-for>
-            <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.4">26 buổi trong 30 ngày qua. Buổi gần nhất: hôm nay.</p>
-            <button onClick="{{ goMemberHist }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:6px 0 0;text-align:left;min-height:44px" style-active="opacity:.7">Xem tất cả lịch sử theo tháng</button>
+            <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.4">{{ t77 }}</p>
+            <button onClick="{{ goMemberHist }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:6px 0 0;text-align:left;min-height:44px" style-active="opacity:.7">{{ t78 }}</button>
           </div>
 
           <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:11px;background:#1F211F">
-            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Thao tác</p>
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t79 }}</p>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
               <sc-for list="{{ actions }}" as="a" hint-placeholder-count="7">
                 <button onClick="{{ a.go }}" style="text-align:left;border:0;cursor:pointer;font:inherit;color:#F2F2EC;min-height:62px;border-radius:18px;padding:11px 13px;background:#2A2D2A;grid-column:{{ a.col }}" style-active="opacity:.75">
@@ -500,7 +500,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
                 </button>
               </sc-for>
             </div>
-            <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Thao tác này được ghi lại.</p>
+            <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">{{ t80 }}</p>
           </div>
         </div>
       </sc-if>
@@ -509,31 +509,31 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sPhoneEdit }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
           <div style="flex:none;display:flex;flex-direction:column;gap:7px">
-            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">Số điện thoại mới</p>
+            <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ t81 }}</p>
             <input value="{{ editPhone }}" onChange="{{ onEditPhone }}" inputmode="tel" style="width:100%;box-sizing:border-box;min-height:56px;background:#1F211F;border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:19px;font-weight:700;letter-spacing:.04em;color:#F2F2EC">
           </div>
           <sc-if value="{{ dupShow }}" hint-placeholder-val="{{ true }}">
             <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:11px;background:#F3C24A;color:#2C1F03">
-              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Trùng với hội viên khác</p>
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t82 }}</p>
               <div style="border-radius:18px;padding:13px 14px;background:#F8DC96">
                 <div style="font-size:16px;font-weight:800;line-height:1.2">{{ dupName }}</div>
                 <div style="font-size:12.5px;font-weight:600;opacity:.78;margin-top:3px">{{ dupSub }}</div>
               </div>
-              <p style="margin:0;font-size:13px;font-weight:600;line-height:1.45">Một số điện thoại chỉ dùng cho một hội viên. Đổi số khác cho {{ mFirstName }}, hoặc mở hồ sơ {{ dupName }} và sửa số ở đó trước.</p>
-              <button onClick="{{ openDup }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.85">Mở hồ sơ {{ dupName }}</button>
+              <p style="margin:0;font-size:13px;font-weight:600;line-height:1.45">{{ t129 }}{{ mFirstName }}{{ t130 }}{{ dupName }}{{ t131 }}</p>
+              <button onClick="{{ openDup }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:#131413;color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.85">{{ t132 }}{{ dupName }}</button>
             </div>
           </sc-if>
           <sc-if value="{{ dupClear }}" hint-placeholder-val="{{ false }}">
             <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px">
-              <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">Số này chưa ai dùng. Lưu xong, hội viên nhập số mới ở màn quét là vào được ngay.</p>
+              <p style="margin:0;font-size:14px;font-weight:600;line-height:1.45">{{ t83 }}</p>
             </div>
           </sc-if>
-          <p style="margin:0 2px;font-size:12.5px;color:#9AA096;line-height:1.4;flex:none">Thao tác này được ghi lại.</p>
+          <p style="margin:0 2px;font-size:12.5px;color:#9AA096;line-height:1.4;flex:none">{{ t84 }}</p>
           <div style="flex:1"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
-          <button onClick="{{ savePhone }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer;opacity:{{ saveOp }}" style-active="opacity:.8">Lưu số mới</button>
-          <button onClick="{{ goMember }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Quay lại hồ sơ</button>
+          <button onClick="{{ savePhone }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer;opacity:{{ saveOp }}" style-active="opacity:.8">{{ t85 }}</button>
+          <button onClick="{{ goMember }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">{{ t86 }}</button>
         </div>
       </sc-if>
 
@@ -541,25 +541,25 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sPause }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
           <div style="flex:none;border-radius:24px;padding:15px 16px;background:rgba(255,255,255,.10)">
-            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Trong lúc tạm dừng, {{ mFirstName }} quét mã sẽ <b>không vào được</b> và thấy màn “thẻ đang tạm dừng”. Ngày hết hạn đẩy lùi đúng số ngày nghỉ — không mất buổi nào.</p>
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ t133 }}{{ mFirstName }}{{ t134 }}<b>{{ t87 }}</b> {{ t88 }}</p>
           </div>
           <div style="flex:none;display:flex;gap:10px">
             <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
-              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7">Từ ngày</p>
+              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7">{{ t89 }}</p>
               <input value="{{ pauseFrom }}" onChange="{{ onPauseFrom }}" style="width:100%;box-sizing:border-box;min-height:56px;background:rgba(0,0,0,.20);border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
             </div>
             <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
-              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7">Đến ngày</p>
+              <p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.7">{{ t90 }}</p>
               <input value="{{ pauseTo }}" onChange="{{ onPauseTo }}" style="width:100%;box-sizing:border-box;min-height:56px;background:rgba(0,0,0,.20);border:0;border-radius:999px;padding:0 20px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
             </div>
           </div>
           <p style="margin:0 2px;font-size:13px;line-height:1.45;opacity:.72;flex:none">{{ pauseSum }}</p>
-          <p style="margin:0 2px;font-size:12.5px;line-height:1.4;opacity:.62;flex:none">Thao tác này được ghi lại.</p>
+          <p style="margin:0 2px;font-size:12.5px;line-height:1.4;opacity:.62;flex:none">{{ t91 }}</p>
           <div style="flex:1"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
-          <button onClick="{{ goMember }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Tạm dừng thẻ</button>
-          <button onClick="{{ goMember }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Quay lại hồ sơ</button>
+          <button onClick="{{ goMember }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">{{ t92 }}</button>
+          <button onClick="{{ goMember }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">{{ t93 }}</button>
         </div>
       </sc-if>
 
@@ -600,11 +600,11 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             <div style="flex:none;border-radius:24px;padding:16px;background:#F3C24A;color:#2C1F03;display:flex;align-items:center;gap:14px">
               <span style="width:52px;height:52px;border-radius:999px;flex:none;display:grid;place-items:center;font-size:24px;font-weight:800;background:#2C1F03;color:#F3C24A">1</span>
               <div style="min-width:0;flex:1">
-                <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.7">Quán quân {{ rankMonthLabel }}</div>
+                <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.7">{{ t135 }}{{ rankMonthLabel }}</div>
                 <div style="font-size:19px;font-weight:800;line-height:1.1;margin-top:2px;text-wrap:balance">{{ champName }}</div>
                 <div style="font-size:12.5px;font-weight:700;opacity:.75;margin-top:1px">{{ champSub }}</div>
               </div>
-              <div style="text-align:right;flex:none"><div style="font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1">{{ champCount }}</div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7">buổi</div></div>
+              <div style="text-align:right;flex:none"><div style="font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1">{{ champCount }}</div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7">{{ t94 }}</div></div>
             </div>
           </sc-if>
           <div style="flex:none;display:flex;flex-direction:column;gap:8px">
@@ -615,10 +615,10 @@ textarea::placeholder { color:currentColor; opacity:.45; }
                 <span style="font-size:17px;font-weight:800;flex:none">{{ r.count }}</span>
               </div>
             </sc-for>
-            <sc-if value="{{ rankEmpty }}" hint-placeholder-val="{{ false }}"><div style="background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">Chưa ai tập bộ môn này trong tháng.</p></div></sc-if>
+            <sc-if value="{{ rankEmpty }}" hint-placeholder-val="{{ false }}"><div style="background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">{{ t95 }}</p></div></sc-if>
           </div>
         </div>
-        <div style="flex:none;padding-bottom:2px"><button onClick="{{ noop }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-active="opacity:.8"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"></path></svg>Xuất file CSV</button></div>
+        <div style="flex:none;padding-bottom:2px"><button onClick="{{ noop }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-active="opacity:.8"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11M8 10l4 4 4-4M5 21h14"></path></svg>{{ t96 }}</button></div>
       </sc-if>
 
       <!-- ══ 18 · THẺ SẮP HẾT HẠN (ngưỡng 7/14/30, § B1) ══ -->
@@ -636,7 +636,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
               <span style="font-size:10.5px;font-weight:800;letter-spacing:.09em;padding:4px 10px;border-radius:999px;white-space:nowrap;flex:none;background:{{ r.tagBg }};color:{{ r.tagFg }}">{{ r.tag }}</span>
             </div>
           </sc-for>
-          <sc-if value="{{ expEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">Không có thẻ nào hết hạn trong {{ expDays }} ngày tới. Nới ngưỡng lên để xem xa hơn.</p></div></sc-if>
+          <sc-if value="{{ expEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;background:#1F211F;border-radius:18px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">{{ t136 }}{{ expDays }}{{ t137 }}</p></div></sc-if>
         </div>
       </sc-if>
 
@@ -645,7 +645,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
           <sc-for list="{{ histGroups }}" as="g" hint-placeholder-count="3">
             <div style="flex:none;display:flex;flex-direction:column;gap:8px">
-              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 2px"><p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ g.month }}</p><span style="font-size:12px;font-weight:700;color:#9AA096">{{ g.count }} buổi</span></div>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 2px"><p style="margin:0;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.62">{{ g.month }}</p><span style="font-size:12px;font-weight:700;color:#9AA096">{{ g.count }}{{ t138 }}</span></div>
               <sc-for list="{{ g.items }}" as="h" hint-placeholder-count="4">
                 <div style="display:flex;align-items:center;gap:10px;min-height:52px;background:#1F211F;border-radius:16px;padding:10px 14px">
                   <span style="flex:1;min-width:0;font-size:14.5px;font-weight:700">{{ h.day }}</span>
@@ -655,7 +655,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             </div>
           </sc-for>
           <sc-if value="{{ histMore }}" hint-placeholder-val="{{ true }}">
-            <button onClick="{{ loadMoreHist }}" style="flex:none;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer" style-active="opacity:.8">Xem thêm tháng trước</button>
+            <button onClick="{{ loadMoreHist }}" style="flex:none;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer" style-active="opacity:.8">{{ t97 }}</button>
           </sc-if>
           <p style="margin:0 2px;font-size:12.5px;color:#9AA096;line-height:1.4;flex:none">{{ histFoot }}</p>
         </div>
@@ -685,23 +685,23 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
           <div style="flex:none;border-radius:24px;padding:16px;background:#1F211F;display:flex;flex-direction:column;gap:10px">
             <div style="border-radius:16px;padding:12px 14px;background:#2A2D2A;display:flex;flex-direction:column;gap:6px">
-              <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">Tên</span><span style="font-size:14.5px;font-weight:700">{{ leadName }}</span></div>
-              <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">Số điện thoại</span><span style="font-size:14.5px;font-weight:700;letter-spacing:.03em">{{ leadPhone }}</span></div>
-              <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}"><div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">Bộ môn</span><span style="font-size:14.5px;font-weight:700">{{ leadSport }}</span></div></sc-if>
+              <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">{{ t98 }}</span><span style="font-size:14.5px;font-weight:700">{{ leadName }}</span></div>
+              <div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">{{ t99 }}</span><span style="font-size:14.5px;font-weight:700;letter-spacing:.03em">{{ leadPhone }}</span></div>
+              <sc-if value="{{ hasProgs }}" hint-placeholder-val="{{ true }}"><div style="display:flex;justify-content:space-between;gap:10px"><span style="font-size:12px;font-weight:600;color:#9AA096">{{ t100 }}</span><span style="font-size:14.5px;font-weight:700">{{ leadSport }}</span></div></sc-if>
             </div>
-            <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">Chuyển xong là hội viên có ngay hồ sơ và điểm danh được. Không phải gõ lại thông tin — còn gán gói thì làm sau ở hồ sơ.</p>
+            <p style="margin:0;font-size:13px;color:#9AA096;line-height:1.45">{{ t101 }}</p>
           </div>
           <sc-if value="{{ leadDup }}" hint-placeholder-val="{{ false }}">
             <div style="flex:none;border-radius:24px;padding:15px;display:flex;flex-direction:column;gap:9px;background:#F3C24A;color:#2C1F03">
-              <p style="margin:0;font-size:18px;font-weight:800;line-height:1.1;text-transform:uppercase;font-variation-settings:'wdth' 88">Số này đã có hội viên</p>
+              <p style="margin:0;font-size:18px;font-weight:800;line-height:1.1;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t102 }}</p>
               <p style="margin:0;font-size:13px;font-weight:600;line-height:1.45">{{ leadDupText }}</p>
             </div>
           </sc-if>
           <div style="flex:1"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
-          <button onClick="{{ doConvert }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer;opacity:{{ convertOp }}" style-active="opacity:.8">Chuyển thành hội viên</button>
-          <button onClick="{{ goTrials }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">Quay lại danh sách học thử</button>
+          <button onClick="{{ doConvert }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer;opacity:{{ convertOp }}" style-active="opacity:.8">{{ t103 }}</button>
+          <button onClick="{{ goTrials }}" style="border:0;background:none;cursor:pointer;font:inherit;font-size:13.5px;font-weight:700;color:inherit;text-decoration:underline;padding:8px;min-height:44px">{{ t104 }}</button>
         </div>
       </sc-if>
 
@@ -709,7 +709,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sConvRate }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
           <div style="flex:none;border-radius:24px;padding:16px;background:#C4D4C1;color:#14180F;display:flex;flex-direction:column;gap:6px">
-            <div style="font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.65">3 tháng gần nhất</div>
+            <div style="font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.65">{{ t105 }}</div>
             <div style="font-size:40px;font-weight:800;letter-spacing:-.035em;line-height:1">{{ convBigPct }}</div>
             <div style="font-size:13px;font-weight:700;opacity:.7">{{ convBigSub }}</div>
           </div>
@@ -727,18 +727,18 @@ textarea::placeholder { color:currentColor; opacity:.45; }
 
       <!-- ══ 23 · BẤT THƯỜNG CHỜ DUYỆT (vàng = cần xử lý, § B1) ══ -->
       <sc-if value="{{ sAnomaly }}" hint-placeholder-val="{{ false }}">
-        <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px"><p style="margin:0;font-size:13.5px;font-weight:600;line-height:1.45;color:#9AA096">Duyệt hay bỏ trước khi chốt xếp hạng tháng — lượt đáng ngờ không tính vào thưởng.</p></div>
+        <div style="flex:none;background:#1F211F;border-radius:18px;padding:13px 16px"><p style="margin:0;font-size:13.5px;font-weight:600;line-height:1.45;color:#9AA096">{{ t106 }}</p></div>
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-top:12px">
           <sc-for list="{{ anomalyRows }}" as="a" hint-placeholder-count="3">
             <div style="flex:none;border-radius:20px;padding:14px 16px;background:#F3C24A;color:#2C1F03;display:flex;flex-direction:column;gap:11px">
               <div><div style="font-size:16.5px;font-weight:800;line-height:1.15">{{ a.n }}</div><div style="font-size:13px;font-weight:600;opacity:.82;margin-top:3px;line-height:1.35">{{ a.why }}</div><div style="font-size:11px;font-weight:700;letter-spacing:.06em;opacity:.6;margin-top:4px;text-transform:uppercase">{{ a.when }}</div></div>
               <div style="display:flex;gap:8px">
-                <button onClick="{{ a.approve }}" style="flex:1;min-height:46px;border:0;border-radius:999px;background:#2C1F03;color:#F3C24A;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer" style-active="opacity:.85">Duyệt — tính buổi</button>
-                <button onClick="{{ a.reject }}" style="flex:1;min-height:46px;border:0;border-radius:999px;background:rgba(0,0,0,.12);color:#2C1F03;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer" style-active="opacity:.7">Bỏ lượt này</button>
+                <button onClick="{{ a.approve }}" style="flex:1;min-height:46px;border:0;border-radius:999px;background:#2C1F03;color:#F3C24A;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer" style-active="opacity:.85">{{ t107 }}</button>
+                <button onClick="{{ a.reject }}" style="flex:1;min-height:46px;border:0;border-radius:999px;background:rgba(0,0,0,.12);color:#2C1F03;font:inherit;font-size:13.5px;font-weight:700;cursor:pointer" style-active="opacity:.7">{{ t108 }}</button>
               </div>
             </div>
           </sc-for>
-          <sc-if value="{{ anomalyEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;border-radius:20px;padding:16px;background:#C4D4C1;color:#14180F"><p style="margin:0;font-size:14.5px;font-weight:700;line-height:1.45">Đã xử lý hết. Không còn lượt nào chờ duyệt — chốt xếp hạng tháng được rồi.</p></div></sc-if>
+          <sc-if value="{{ anomalyEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;border-radius:20px;padding:16px;background:#C4D4C1;color:#14180F"><p style="margin:0;font-size:14.5px;font-weight:700;line-height:1.45">{{ t109 }}</p></div></sc-if>
         </div>
       </sc-if>
 
@@ -761,7 +761,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
               <p style="margin:4px 0 0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9AA096">{{ a.when }}</p>
             </div>
           </sc-for>
-          <sc-if value="{{ auditEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;background:#1F211F;border-radius:16px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">Không có thao tác nào khớp bộ lọc.</p></div></sc-if>
+          <sc-if value="{{ auditEmpty }}" hint-placeholder-val="{{ false }}"><div style="flex:none;background:#1F211F;border-radius:16px;padding:14px 16px"><p style="margin:0;font-size:14px;opacity:.75">{{ t110 }}</p></div></sc-if>
         </div>
       </sc-if>
 
@@ -769,14 +769,14 @@ textarea::placeholder { color:currentColor; opacity:.45; }
       <sc-if value="{{ sCap }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:14px">
           <div style="flex:none;border-radius:24px;padding:18px;background:#F3C24A;color:#2C1F03;display:flex;flex-direction:column;gap:12px">
-            <p style="margin:0;font-size:22px;font-weight:800;line-height:1.08;text-transform:uppercase;font-variation-settings:'wdth' 86">Đã dùng hết<br>50 chỗ</p>
-            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Gói miễn phí dùng được 50 hội viên. Bạn đang có 50. Ngưng những người đã nghỉ để lấy chỗ, hoặc nâng gói để bỏ giới hạn.</p>
+            <p style="margin:0;font-size:22px;font-weight:800;line-height:1.08;text-transform:uppercase;font-variation-settings:'wdth' 86">{{ t111 }}<br>{{ t112 }}</p>
+            <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ t113 }}</p>
           </div>
           <div style="flex:1"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:8px;flex:none;padding-bottom:2px">
-          <button onClick="{{ goUpgrade }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">Nâng gói, bỏ giới hạn</button>
-          <button onClick="{{ goRetired }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer" style-active="opacity:.8">Xem ai đã nghỉ để lấy chỗ</button>
+          <button onClick="{{ goUpgrade }}" style="width:100%;min-height:56px;border:0;border-radius:999px;background:#F2F2EC;color:#131413;font:inherit;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-variation-settings:'wdth' 92;cursor:pointer" style-active="opacity:.8">{{ t114 }}</button>
+          <button onClick="{{ goRetired }}" style="width:100%;min-height:52px;border:0;border-radius:999px;background:rgba(255,255,255,.10);color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;cursor:pointer" style-active="opacity:.8">{{ t115 }}</button>
         </div>
       </sc-if>
 
@@ -785,8 +785,8 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:13px">
           <div style="flex:none;border-radius:24px;padding:17px;display:flex;flex-direction:column;gap:13px;background:linear-gradient(135deg,#9E98F6 0%,#6F66F0 100%);color:#0D0838">
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
-              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Gói Pro</p>
-              <span style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.28);font-size:14px;font-weight:700;white-space:nowrap;flex:none">199k / tháng</span>
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t116 }}</p>
+              <span style="display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.28);font-size:14px;font-weight:700;white-space:nowrap;flex:none">{{ t117 }}</span>
             </div>
             <div style="display:flex;flex-direction:column;gap:7px">
               <sc-for list="{{ proPerks }}" as="p" hint-placeholder-count="5">
@@ -795,15 +795,15 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             </div>
           </div>
           <div style="flex:none;border-radius:24px;padding:17px;background:#1F211F;display:flex;flex-direction:column;gap:13px">
-            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">Chuyển khoản để nâng</p>
+            <p style="margin:0;font-size:20px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t118 }}</p>
             <div style="display:flex;gap:14px;align-items:center;border-radius:18px;padding:14px;background:#2A2D2A">
               <span style="width:104px;height:104px;flex:none;background:#FFFFFF;border-radius:12px;padding:7px;box-sizing:border-box">{{ qrArt }}</span>
               <div style="min-width:0;display:flex;flex-direction:column;gap:8px">
-                <div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9AA096">Nội dung chuyển khoản</div><div style="font-size:16px;font-weight:800;letter-spacing:.04em;margin-top:2px">{{ payCode }}</div></div>
-                <p style="margin:0;font-size:12px;font-weight:600;color:#9AA096;line-height:1.4">Quét mã VietQR, ghi đúng nội dung trên. Gói tự mở trong ít phút — không cần nhập thẻ.</p>
+                <div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9AA096">{{ t119 }}</div><div style="font-size:16px;font-weight:800;letter-spacing:.04em;margin-top:2px">{{ payCode }}</div></div>
+                <p style="margin:0;font-size:12px;font-weight:600;color:#9AA096;line-height:1.4">{{ t120 }}</p>
               </div>
             </div>
-            <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">Chuyển xong mà chưa mở? Nhắn Zalo hỗ trợ kèm mã trung tâm.</p>
+            <p style="margin:0;font-size:12.5px;color:#9AA096;line-height:1.4">{{ t121 }}</p>
           </div>
         </div>
       </sc-if>
@@ -826,14 +826,14 @@ textarea::placeholder { color:currentColor; opacity:.45; }
           <sc-if value="{{ stEmpty }}" hint-placeholder-val="{{ false }}">
             <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:30px 20px">
               <span style="width:60px;height:60px;border-radius:20px;background:#1F211F;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#9AA096" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M3 9h18"></path></svg></span>
-              <p style="margin:0;font-size:15px;font-weight:600;line-height:1.5;color:#9AA096;max-width:250px">Chưa có gì ở đây. Khi có dữ liệu, danh sách sẽ hiện ngay tại chỗ này.</p>
+              <p style="margin:0;font-size:15px;font-weight:600;line-height:1.5;color:#9AA096;max-width:250px">{{ t122 }}</p>
             </div>
           </sc-if>
           <sc-if value="{{ stError }}" hint-placeholder-val="{{ false }}">
             <div style="flex:none;border-radius:24px;padding:18px;background:#F4573F;color:#2A0C06;display:flex;flex-direction:column;gap:12px">
-              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.1;text-transform:uppercase;font-variation-settings:'wdth' 88">Mất mạng</p>
-              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">Không tải được danh sách. Kiểm tra mạng rồi thử lại — dữ liệu đã lưu không mất đi đâu.</p>
-              <button onClick="{{ noop }}" style="align-self:flex-start;min-height:48px;border:0;border-radius:999px;background:#2A0C06;color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;padding:0 22px;cursor:pointer" style-active="opacity:.85">Thử lại</button>
+              <p style="margin:0;font-size:20px;font-weight:800;line-height:1.1;text-transform:uppercase;font-variation-settings:'wdth' 88">{{ t123 }}</p>
+              <p style="margin:0;font-size:14.5px;font-weight:600;line-height:1.5">{{ t124 }}</p>
+              <button onClick="{{ noop }}" style="align-self:flex-start;min-height:48px;border:0;border-radius:999px;background:#2A0C06;color:#F2F2EC;font:inherit;font-size:14px;font-weight:700;padding:0 22px;cursor:pointer" style-active="opacity:.85">{{ t125 }}</button>
             </div>
           </sc-if>
         </div>
@@ -862,18 +862,22 @@ textarea::placeholder { color:currentColor; opacity:.45; }
 
   <!-- bảng nhảy nhanh giữa trạng thái — dụng cụ xem bản dựng, không phải UI sản phẩm -->
   <div style="position:fixed;top:20px;right:20px;width:248px;max-height:calc(100vh - 40px);overflow:auto;background:#1F211F;color:#F2F2EC;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.4)">
-    <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.55;margin:0">Trạng thái /admin</p>
+    <p style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.55;margin:0">{{ t126 }}</p>
+    <div style="display:flex;gap:6px">
+      <button onClick="{{ setVi }}" style="flex:1;min-height:34px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:11.5px;font-weight:800;letter-spacing:.08em;background:{{ viBg }};color:{{ viFg }}" style-active="opacity:.8">VI</button>
+      <button onClick="{{ setEn }}" style="flex:1;min-height:34px;border:0;border-radius:999px;cursor:pointer;font:inherit;font-size:11.5px;font-weight:800;letter-spacing:.08em;background:{{ enBg }};color:{{ enFg }}" style-active="opacity:.8">EN</button>
+    </div>
     <div style="display:flex;flex-direction:column;gap:5px">
       <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="15">
         <button onClick="{{ item.go }}" style="display:flex;gap:8px;align-items:baseline;width:100%;text-align:left;border:0;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;padding:9px 12px;border-radius:999px;background:{{ item.bg }};color:{{ item.fg }}"><span style="font-size:10px;font-weight:800;opacity:.55;width:16px;flex:none">{{ item.num }}</span>{{ item.label }}</button>
       </sc-for>
     </div>
-    <p style="font-size:11px;line-height:1.5;opacity:.55;margin:6px 2px 0">Trang chủ tự nhận thêm người vào — con số hero tăng theo. Ở màn 11, bấm hai pill lọc và gõ ô tìm đều lọc thật.</p>
+    <p style="font-size:11px;line-height:1.5;opacity:.55;margin:6px 2px 0">{{ t127 }}</p>
   </div>
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 920}, &quot;orgName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Gym Thành Phát&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;branchName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Quận 7&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;freeLimit&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 50, &quot;min&quot;: 20, &quot;max&quot;: 200, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;coBoMon&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Bộ môn&quot;}, &quot;heroTheoBoLoc&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Luật hero&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 920}, &quot;orgName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Gym Thành Phát&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;branchName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Quận 7&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;freeLimit&quot;: {&quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 50, &quot;min&quot;: 20, &quot;max&quot;: 200, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Trung tâm&quot;}, &quot;coBoMon&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Bộ môn&quot;}, &quot;heroTheoBoLoc&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Luật hero&quot;}, &quot;lang&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;vi&quot;, &quot;en&quot;], &quot;default&quot;: &quot;vi&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Ngôn ngữ&quot;}}">
 class Component extends DCLogic {
   // ── DỮ LIỆU GIẢ (§ B5) — lượt 03b dùng lại chính object này và thêm dữ liệu vào ──
   static ORG = { name: 'Gym Thành Phát', branch: 'Quận 7', address: '123 Nguyễn Thị Thập, Quận 7' };
@@ -1023,7 +1027,7 @@ class Component extends DCLogic {
     scr: 'home', progs: null, orgName: '', addr: '', spot: '', open: '06:00', close: '22:00',
     newProg: '', src: null, paste: '', q: '', fSport: 'all', fStatus: 'all', openFilter: null,
     memberId: 1, editPhone: '0983 550 128', pauseFrom: '05/08/2026', pauseTo: '05/09/2026',
-    arrived: 24, feedIx: 0, skipped: false, impResult: null,
+    arrived: 24, feedIx: 0, skipped: false, impResult: null, lang: null,
     rankMonth: 0, rankSport: 'all', expDays: 7, leadId: 't1', trialState: {},
     auditWho: 'all', auditType: 'all', anomalyDone: [], histPages: 1, stateVar: 'loading'
   };
@@ -1071,9 +1075,278 @@ class Component extends DCLogic {
       React.createElement('path', { d: d, fill: '#131413' }));
   }
 
+  // ══════════ SONG NGỮ VI / EN (§ A3 — bản EN để đo chiều dài nhãn) ══════════
+  // TPL_* = chữ tĩnh trong template (hole {{ tN }}); EN/EN_RE/EN_SUB = chuỗi sinh trong logic.
+  static TPL_VI = {"2":"Trong 7 ngày tới. Gọi trước khi hội viên tự bỏ.","3":"Lượt điểm","4":"danh","5":"7 ngày","6":"Trung bình mỗi ngày","7":"lượt","8":"TB 7 ngày 19","9":"Chỗ gói","10":"miễn phí","11":"Đã dùng","12":"Đang vào · trực tiếp","13":"Tên trung tâm","14":"Địa chỉ","15":"Tên này sẽ hiện trên poster QR dán ở cửa, và trên máy của cô giáo khi điểm danh.","16":"Tiếp tục","17":"Tên điểm quét","18":"Giờ mở cửa","19":"tới","20":"Mã QR sẽ sinh ra","21":"Mã này chỉ dùng cho điểm quét này. Thêm điểm quét khác sau cũng được.","22":"Tiếp tục","23":"Thêm bộ môn","24":"Thêm","25":"Bỏ qua","26":"Tiếp tục","27":"Bước này bắt buộc","28":"Danh sách rỗng thì không ai điểm danh được. Cú quét thử của anh/chị sẽ rơi vào form học thử, dễ tưởng là phần mềm hỏng.","29":"Chọn file","30":"Excel (.xlsx) hoặc .csv","31":"Dán từ Excel","32":"Chọn cột trong Excel rồi dán vào đây","34":"Chưa có file?","35":"Tải file mẫu","36":"— ba cột: tên, số điện thoại, bộ môn.","37":"Xem trước","38":"Sẽ ghi vào danh sách","39":"Ba dòng này sẽ bị bỏ qua. Sửa trong file rồi nhập lại lần nữa là xong — nhập lại không ghi trùng ai.","40":"Nhập danh sách","41":"không xoá ai cả","42":". Hội viên vắng mặt trong file để nguyên.","43":"Sẽ tạo 2 bộ môn mới","46":"Chỉ tạo khi anh/chị bấm xác nhận.","47":"Chọn file khác","49":"Đọc được 1 cột. Không thấy cột nào tên giống","50":"Tên","51":"hay","52":"Số điện thoại","53":", nên không biết dòng nào là hội viên nào.","54":"Sửa theo 3 bước","55":"Không sửa được file?","56":"Tải file mẫu","57":"rồi gõ tay vài người trước, thêm sau cũng được.","58":"Chọn file khác","59":"Bước tiếp theo","60":"Còn một bước: in poster QR để dán ở cửa. Có poster là quét thử được ngay.","61":"Tiếp tục: poster QR","62":"Xem danh sách hội viên","63":"Quét để","64":"điểm danh","65":"Không cần cài ứng dụng.","66":"Không cần mật khẩu.","67":"Dán ở đâu","68":"Ngang tầm mắt, cạnh cửa chính, chỗ có đèn. In đen trắng cũng quét được.","69":"Tải poster PDF (A4)","70":"Xong, vào trang chủ","71":"Chưa nhập ai vào danh sách. Nhập từ file Excel xong trong một phút, và không cần gõ tay từng người.","72":"Danh sách rỗng thì cô giáo mở máy lên cũng chỉ thấy màn trống, và cú quét thử của anh/chị sẽ rơi vào form học thử.","73":"Nhập danh sách","74":"buổi","75":"Lịch sử điểm danh","76":"30 ngày","77":"26 buổi trong 30 ngày qua. Buổi gần nhất: hôm nay.","78":"Xem tất cả lịch sử theo tháng","79":"Thao tác","80":"Thao tác này được ghi lại.","81":"Số điện thoại mới","82":"Trùng với hội viên khác","83":"Số này chưa ai dùng. Lưu xong, hội viên nhập số mới ở màn quét là vào được ngay.","84":"Thao tác này được ghi lại.","85":"Lưu số mới","86":"Quay lại hồ sơ","87":"không vào được","88":"và thấy màn “thẻ đang tạm dừng”. Ngày hết hạn đẩy lùi đúng số ngày nghỉ — không mất buổi nào.","89":"Từ ngày","90":"Đến ngày","91":"Thao tác này được ghi lại.","92":"Tạm dừng thẻ","93":"Quay lại hồ sơ","94":"buổi","95":"Chưa ai tập bộ môn này trong tháng.","96":"Xuất file CSV","97":"Xem thêm tháng trước","98":"Tên","99":"Số điện thoại","100":"Bộ môn","101":"Chuyển xong là hội viên có ngay hồ sơ và điểm danh được. Không phải gõ lại thông tin — còn gán gói thì làm sau ở hồ sơ.","102":"Số này đã có hội viên","103":"Chuyển thành hội viên","104":"Quay lại danh sách học thử","105":"3 tháng gần nhất","106":"Duyệt hay bỏ trước khi chốt xếp hạng tháng — lượt đáng ngờ không tính vào thưởng.","107":"Duyệt — tính buổi","108":"Bỏ lượt này","109":"Đã xử lý hết. Không còn lượt nào chờ duyệt — chốt xếp hạng tháng được rồi.","110":"Không có thao tác nào khớp bộ lọc.","111":"Đã dùng hết","112":"50 chỗ","113":"Gói miễn phí dùng được 50 hội viên. Bạn đang có 50. Ngưng những người đã nghỉ để lấy chỗ, hoặc nâng gói để bỏ giới hạn.","114":"Nâng gói, bỏ giới hạn","115":"Xem ai đã nghỉ để lấy chỗ","116":"Gói Pro","117":"199k / tháng","118":"Chuyển khoản để nâng","119":"Nội dung chuyển khoản","120":"Quét mã VietQR, ghi đúng nội dung trên. Gói tự mở trong ít phút — không cần nhập thẻ.","121":"Chuyển xong mà chưa mở? Nhắn Zalo hỗ trợ kèm mã trung tâm.","122":"Chưa có gì ở đây. Khi có dữ liệu, danh sách sẽ hiện ngay tại chỗ này.","123":"Mất mạng","124":"Không tải được danh sách. Kiểm tra mạng rồi thử lại — dữ liệu đã lưu không mất đi đâu.","125":"Thử lại","126":"Trạng thái /admin","127":"Trang chủ tự nhận thêm người vào — con số hero tăng theo. Ở màn 11, bấm hai pill lọc và gõ ô tìm đều lọc thật.","128":"Hết hạn ·","129":"Một số điện thoại chỉ dùng cho một hội viên. Đổi số khác cho ","130":", hoặc mở hồ sơ ","131":" và sửa số ở đó trước.","132":"Mở hồ sơ ","133":"Trong lúc tạm dừng, ","134":" quét mã sẽ ","135":"Quán quân ","136":"Không có thẻ nào hết hạn trong ","137":" ngày tới. Nới ngưỡng lên để xem xa hơn.","138":" buổi"};
+  static TPL_EN = {"2":"Within 7 days. Call before they quietly quit.","3":"Check-in","4":"volume","5":"7 days","6":"Average per day","7":"check-ins","8":"7-day avg 19","9":"Free plan","10":"seats","11":"Used","12":"Coming in · live","13":"Gym name","14":"Address","15":"This name shows on the QR poster at the door, and on staff phones during check-in.","16":"Continue","17":"Scan point name","18":"Opening hours","19":"to","20":"The QR code we will create","21":"This code works for this scan point only. You can add more scan points later.","22":"Continue","23":"Add a class","24":"Add","25":"Skip","26":"Continue","27":"This step is required","28":"With an empty roster nobody can check in. Your test scan lands in the trial form and looks like a broken app.","29":"Choose a file","30":"Excel (.xlsx) or .csv","31":"Paste from Excel","32":"Copy the columns in Excel and paste them here","34":"No file yet? ","35":"Download the template","36":" — three columns: name, phone number, class.","37":"Preview","38":"Will be saved to the roster","39":"These three rows will be skipped. Fix them in the file and import again — importing twice never duplicates anyone.","40":"Importing ","41":"never deletes anyone","42":". Members missing from the file stay as they are.","43":"Will create 2 new classes","46":"Created only when you confirm.","47":"Choose another file","49":"Read 1 column. No column is named like ","50":"Name","51":" or ","52":"Phone number","53":", so we cannot tell which row is which member.","54":"Fix it in 3 steps","55":"Cannot fix the file? ","56":"Download the template","57":" and type a few people by hand — add the rest later.","58":"Choose another file","59":"Next step","60":"One step left: print the QR poster for the door. With the poster up you can test a scan right away.","61":"Continue: QR poster","62":"View the member list","63":"Scan to","64":"check in","65":"No app to install.","66":"No password.","67":"Where to put it","68":"At eye level, next to the main door, somewhere lit. Black-and-white prints scan fine.","69":"Download poster PDF (A4)","70":"Done, go to home","71":"No one imported yet. An Excel import takes a minute and saves typing everyone by hand.","72":"With an empty roster your staff only sees a blank screen, and your test scan lands in the trial form.","73":"Import the roster","74":"sessions","75":"Check-in history","76":"30 days","77":"26 sessions in the last 30 days. Most recent: today.","78":"See all history by month","79":"Actions","80":"This action is logged.","81":"New phone number","82":"Already used by another member","83":"No one uses this number. After saving, the member types the new number at the scan screen and is in.","84":"This action is logged.","85":"Save new number","86":"Back to profile","87":"cannot get in","88":" and sees the “card paused” screen. The expiry date moves back by exactly the days paused — no sessions lost.","89":"From","90":"To","91":"This action is logged.","92":"Pause card","93":"Back to profile","94":"sessions","95":"Nobody trained in this class this month.","96":"Export CSV","97":"See the previous month","98":"Name","99":"Phone number","100":"Class","101":"Once converted the person has a profile and can check in. Nothing to retype — assign a package later from the profile.","102":"This number belongs to a member","103":"Convert to member","104":"Back to the trial list","105":"Last 3 months","106":"Approve or drop before locking the monthly ranking — suspicious scans do not count toward prizes.","107":"Approve — count it","108":"Drop this scan","109":"All done. Nothing left to review — the monthly ranking is ready to lock.","110":"No actions match this filter.","111":"All seats used","112":"50 of 50","113":"The free plan covers 50 members. You have 50. Retire people who left to free a seat, or upgrade to remove the limit.","114":"Upgrade, remove the limit","115":"See who left to free a seat","116":"Pro plan","117":"199k / month","118":"Bank transfer to upgrade","119":"Transfer reference","120":"Scan the VietQR code and keep the reference above. The plan opens within minutes — no card needed.","121":"Paid but nothing happened? Message support on Zalo with your gym code.","122":"Nothing here yet. When data arrives, the list shows up right here.","123":"No connection","124":"Could not load the list. Check the connection and try again — saved data is not lost.","125":"Try again","126":"States /admin","127":"The home screen keeps pulling people in — the hero number rises with it. On screen 11 both filter pills and the search box filter for real.","128":"Expires ·","129":"One phone number belongs to one member. Give ","130":" a different number, or open the profile of ","131":" and fix the number there first.","132":"Open the profile of ","133":"While the card is paused, ","134":" scans the code, ","135":"Champion of ","136":"No cards expire within the next ","137":" days. Widen the threshold to look further ahead.","138":" sessions"};
+  static EN = {
+    "Thông tin trung tâm": "Gym details",
+    "Điểm quét": "Scan point",
+    "Bộ môn": "Classes",
+    "Nhập danh sách": "Import roster",
+    "Xem trước · nhập danh sách": "Preview · import roster",
+    "Poster QR": "QR poster",
+    "Báo cáo": "Reports",
+    "Chỗ gói miễn phí": "Free plan seats",
+    "Trạng thái màn": "Screen states",
+    "Mở tài khoản": "Set up",
+    "trong 5 bước": "in 5 steps",
+    "Dán mã QR": "Where to put",
+    "ở đâu?": "the QR code?",
+    "Trung tâm dạy": "What does the",
+    "những gì?": "gym teach?",
+    "Ai đang tập": "Who trains",
+    "ở đây?": "here?",
+    "Kiểm lại": "Check it",
+    "trước khi ghi": "before saving",
+    "Không đọc được": "Cannot read",
+    "file này": "this file",
+    "Đã ghi": "Saved",
+    "In poster": "Print a poster",
+    "dán ở cửa": "for the door",
+    "Chưa có": "No members",
+    "hội viên nào": "yet",
+    "Số này đã có": "This number",
+    "người dùng": "is taken",
+    "Đổi số": "Change the",
+    "điện thoại": "phone number",
+    "Xem gì": "What to see",
+    "tháng này": "this month",
+    "Lịch sử": "Check-in",
+    "điểm danh": "history",
+    "Chuyển thành": "Convert to",
+    "hội viên": "member",
+    "đã chuyển": "converted",
+    "Ai làm gì": "Who did what",
+    "lúc nào": "and when",
+    "Hết chỗ": "Free plan",
+    "gói free": "is full",
+    "Gói Pro": "Pro plan",
+    "bỏ giới hạn": "no limits",
+    "Ba trạng": "Three screen",
+    "thái màn": "states",
+    "học thử": "sign-ups",
+    "chờ duyệt": "to review",
+    "thẻ này?": "this card?",
+    "Số điện thoại không đọc được: “091234”. Cần 10 số, bắt đầu bằng 0.": "Phone number unreadable: “091234”. Needs 10 digits starting with 0.",
+    "Số 0983 550 128 đã có ở dòng 4 trong cùng file này.": "Number 0983 550 128 already appears on row 4 of this same file.",
+    "Ô tên để trống. Có số điện thoại nhưng không biết là ai.": "The name cell is empty. There is a phone number but no name.",
+    "Dòng 23 · (không có tên)": "Row 23 · (no name)",
+    "Trang chủ": "Home",
+    "Bước 1 · Trung tâm": "Step 1 · Gym",
+    "Bước 2 · Điểm quét": "Step 2 · Scan point",
+    "Bước 3 · Bộ môn": "Step 3 · Classes",
+    "Bước 4 · Chọn nguồn": "Step 4 · Source",
+    "Xem trước nhập liệu": "Import preview",
+    "Xem trước — có dòng lỗi": "Preview — with bad rows",
+    "Xem trước — file hỏng": "Preview — broken file",
+    "Nhập xong": "Import done",
+    "Bước 5 · Poster QR": "Step 5 · QR poster",
+    "Danh sách hội viên": "Member list",
+    "Danh sách — chưa có ai": "Member list — empty",
+    "Chi tiết hội viên": "Member detail",
+    "Sửa SĐT — trùng số": "Edit phone — duplicate",
+    "Tạm dừng thẻ": "Pause card",
+    "Báo cáo — trang gom": "Reports — hub",
+    "Xếp hạng tháng": "Monthly ranking",
+    "Thẻ sắp hết hạn": "Cards expiring soon",
+    "Lịch sử một hội viên": "One member history",
+    "Danh sách học thử": "Trial list",
+    "Chuyển học thử → hội viên": "Trial → member",
+    "Tỉ lệ chuyển đổi": "Conversion rate",
+    "Bất thường chờ duyệt": "Anomalies to review",
+    "Nhật ký thao tác": "Action log",
+    "Chạm trần 50": "Hit the 50 cap",
+    "Nâng gói": "Upgrade",
+    "Trạng thái chung": "Common states",
+    "Tất cả trạng thái": "All statuses",
+    "Trạng thái: tất cả": "Status: all",
+    "Bộ môn: tất cả": "Class: all",
+    "Còn hạn": "Active",
+    "Sắp hết hạn": "Expiring soon",
+    "Hết hạn": "Expired",
+    "Thẻ tạm dừng": "Card paused",
+    "Tạm dừng": "Paused",
+    "Tất cả": "All",
+    "Tất cả bộ môn": "All classes",
+    "SẮP HẾT HẠN": "EXPIRING SOON",
+    "HẾT HẠN": "EXPIRED",
+    "TẠM DỪNG": "PAUSED",
+    "VỪA XONG": "JUST NOW",
+    "HÔM NAY · 04/08": "TODAY · 04/08",
+    "HÔM NAY": "TODAY",
+    "Đã liên hệ": "Contacted",
+    "Đã chuyển đổi": "Converted",
+    "Đã bỏ": "Dropped",
+    "Thẻ & gói": "Cards & plans",
+    "Sửa hồ sơ": "Profile edits",
+    "Duyệt": "Reviews",
+    "Học thử": "Trials",
+    "Nhập DS": "Imports",
+    "Thiết bị": "Devices",
+    "Ngưng": "Retire",
+    "Mọi người": "Everyone",
+    "Cô Lan": "Ms. Lan",
+    "Anh Phát": "Mr. Phát",
+    "Đang tải": "Loading",
+    "Rỗng": "Empty",
+    "Lỗi mạng": "Network error",
+    "Ai đi tập chăm nhất": "Who trains the most",
+    "Gọi trước khi hội viên bỏ": "Call before they quit",
+    "Học thử thành hội viên": "Trials into members",
+    "Lead đang theo đuổi": "Leads in progress",
+    "Lượt quét đáng ngờ": "Suspicious scans",
+    "Ai làm gì lúc nào": "Who did what, when",
+    "Mới": "New",
+    "Cập nhật": "Updated",
+    "Không đổi": "Unchanged",
+    "MỚI": "NEW",
+    "CẬP NHẬT": "UPDATED",
+    "Gán gói mới": "Assign a package",
+    "Gói 12 / 24 / 36 buổi": "12 / 24 / 36 sessions",
+    "Gia hạn": "Renew",
+    "Nghỉ dài, không mất buổi": "Long break, no sessions lost",
+    "Sửa số điện thoại": "Edit phone number",
+    "Sửa bộ môn": "Edit class",
+    "Thu hồi thiết bị": "Revoke devices",
+    "Chưa máy nào nhớ": "No device remembered",
+    "Ngưng hội viên": "Retire member",
+    "Không xoá lịch sử điểm danh": "Check-in history is kept",
+    "Xác nhận ghi vào danh sách": "Confirm and save to roster",
+    "Dòng đầu tiên của file phải là tên cột: Tên · Số điện thoại · Bộ môn.": "The first row must hold the column names: Name · Phone number · Class.",
+    "Mỗi hội viên một dòng. Số điện thoại 10 số, bắt đầu bằng 0.": "One member per row. Phone numbers are 10 digits starting with 0.",
+    "Lưu lại dạng .xlsx hoặc .csv rồi chọn file lần nữa.": "Save as .xlsx or .csv, then choose the file again.",
+    "Không có hội viên nào ở mục này. Bấm hai pill trên để bỏ lọc.": "No members in this group. Tap the two pills above to clear the filters.",
+    "Bỏ qua cũng được. Trung tâm không chia bộ môn thì mọi màn sau đều không hỏi tới bộ môn nữa.": "Skipping is fine. If the gym does not split by class, no later screen asks for one.",
+    "Chưa khai bộ môn nào. Bỏ qua là xong — mọi màn sau sẽ không hỏi tới bộ môn.": "No classes yet. Skip and you are done — no later screen asks for a class.",
+    "Bỏ giới hạn 50 hội viên": "No 50-member limit",
+    "Nối với Google Sheet — sửa bên nào cũng khớp": "Google Sheet sync — edit either side",
+    "Nhiều cơ sở, phân quyền cho nhân viên": "Several branches, staff permissions",
+    "Nhắc hội viên sắp hết hạn qua Zalo": "Zalo reminders before cards expire",
+    "Hội viên tự nhận thẻ bằng mã gửi tin nhắn": "Members claim their card with an SMS code",
+    "Quét lúc 03:14 — ngoài giờ mở cửa": "Scanned at 03:14 — outside opening hours",
+    "5 lượt quét trong một ngày · hai cửa": "5 scans in one day · two doors",
+    "đang lọc": "in this filter",
+    "trong danh sách": "on the roster",
+    "Quán quân": "Champion",
+    "hôm nay": "today"
+  };
+  static EN_RE = [
+    [/^(\d+) đã tới$/, '$1 checked in'],
+    [/^Còn (\d+) buổi$/, '$1 sessions left'],
+    [/^tới (.+)$/, 'until $1'],
+    [/^(\d+) thẻ$/, '$1 cards'],
+    [/^Dòng (\d+) · \(không có tên\)$/, 'Row $1 · (no name)'],
+    [/^Dòng (\d+) · (.+)$/, 'Row $1 · $2'],
+    [/^sửa số điện thoại của (.+)$/, 'changed the phone number for $1'],
+    [/^gia hạn thẻ cho (.+) — thêm (\d+) buổi$/, 'renewed the card for $1 — +$2 sessions'],
+    [/^duyệt một lượt điểm danh bất thường của (.+)$/, 'approved an unusual check-in for $1'],
+    [/^bỏ một lượt điểm danh bất thường của (.+)$/, 'dropped an unusual check-in for $1'],
+    [/^chuyển học thử (.+) thành hội viên$/, 'converted trial $1 into a member'],
+    [/^tạm dừng thẻ của (.+) — nghỉ (.+)$/, 'paused the card for $1 — $2 off'],
+    [/^nhập danh sách từ file — thêm (\d+) hội viên$/, 'imported a file — $1 members added'],
+    [/^gán gói (\d+) buổi cho (.+)$/, 'assigned a $1-session package to $2'],
+    [/^thu hồi thiết bị đã nhớ của (.+)$/, 'revoked remembered devices for $1'],
+    [/^ngưng hội viên (.+) — giữ lại lịch sử điểm danh$/, 'retired member $1 — check-in history kept'],
+    [/^sửa bộ môn của (.+): (.+)$/, 'changed the class for $1: $2'],
+    [/^(\d+) lượt quét cách nhau (\d+) giây · (.+)$/, '$1 scans $2 seconds apart · $3'],
+    [/^(\d+) PHÚT$/, '$1 MIN'],
+    [/^CÒN (\d+) NGÀY$/, '$1 DAYS LEFT'],
+    [/^(\d+) ngày$/, '$1 days'],
+    [/^Tất cả · (\d+) hội viên$/, 'All · $1 members'],
+    [/^(.+) — (\d+) trong (\d+) hội viên$/, '$1 — $2 of $3 members'],
+    [/^(\d+) hội viên$/, '$1 members'],
+    [/^(\d+) thẻ sắp hết hạn$/, '$1 cards expiring soon'],
+    [/^(\d+) thẻ hết hạn trong (\d+) ngày tới$/, '$1 cards expire within the next $2 days'],
+    [/^(\d+) dòng không ghi được$/, '$1 rows cannot be saved'],
+    [/^(\d+) dòng sẽ ghi$/, '$1 rows to save'],
+    [/^(\d+) DÒNG$/, '$1 ROWS'],
+    [/^Ghi (\d+) dòng, bỏ (\d+) dòng lỗi$/, 'Save $1 rows, skip $2 bad rows'],
+    [/^(\d+) mới$/, '$1 new'],
+    [/^(\d+) cập nhật$/, '$1 updated'],
+    [/^(\d+) không đổi$/, '$1 unchanged'],
+    [/^(\d+) chỗ$/, '$1 seats'],
+    [/^còn (\d+)$/, '$1 left'],
+    [/^Hôm nay (\d+)$/, 'Today $1'],
+    [/^Bước (\d+)\/5$/, 'Step $1/5'],
+    [/^Thẻ hiện tại tới (.+)$/, 'Current card until $1'],
+    [/^(\d+) máy đã nhớ$/, '$1 devices remembered'],
+    [/^Không thấy ai khớp “(.*)”\. Thử gõ ngắn hơn, hoặc gõ 3 số cuối của số điện thoại\.$/, 'No one matches “$1”. Try fewer letters, or the last 3 digits of the phone number.'],
+    [/^Nghỉ (\d+) ngày\. Hết hạn đẩy từ (.+) sang (.+)\.$/, '$1 days off. Expiry moves from $2 to $3.'],
+    [/^Tổng (\d+) buổi trong 3 tháng\. Buổi mới nhất ở trên\.$/, 'Total $1 sessions across 3 months. Most recent on top.'],
+    [/^Số (.+) đang là của (.+)\. Sửa số ở một trong hai người trước khi chuyển\.$/, 'Number $1 belongs to $2. Change the number on one of them before converting.'],
+    [/^(\d+) \/ (\d+) lead thành hội viên$/, '$1 of $2 leads became members'],
+    [/^(\d+) \/ (\d+) lead đã thành hội viên$/, '$1 of $2 leads became members'],
+    [/^(.+) · còn (\d+) buổi · tới (.+)$/, '$1 · $2 sessions left · until $3'],
+    [/^còn (\d+) buổi · tới (.+)$/, '$1 sessions left · until $2'],
+    [/^(.+) · hết hạn (.+)$/, '$1 · expired $2'],
+    [/^hết hạn (.+)$/, 'expired $1'],
+    [/^(.+) · Mở (.+)$/, '$1 · Open $2']
+  ];
+  static EN_SUB = [
+    ['Cửa chính', 'Main door'],
+    ['Cửa sau', 'Back door'],
+    ['Tháng 8', 'August'],
+    ['Tháng 7', 'July'],
+    ['Tháng 6', 'June'],
+    ['Hôm nay', 'Today'],
+    ['Hôm qua', 'Yesterday'],
+    ['Thứ hai', 'Mon'],
+    ['Thứ ba', 'Tue'],
+    ['Thứ tư', 'Wed'],
+    ['Thứ năm', 'Thu'],
+    ['Thứ sáu', 'Fri'],
+    ['Thứ bảy', 'Sat'],
+    ['Chủ nhật', 'Sun'],
+    ['1 tháng', '1 month'],
+    ['2 tuần', '2 weeks'],
+    ['thẻ tạm dừng', 'card paused'],
+    ['sắp hết hạn', 'expiring soon'],
+    ['còn hạn', 'active'],
+    ['hết hạn', 'expired'],
+    ['tạm dừng', 'paused']
+  ];
+
+  lang() { return this.state.lang || this.props.lang || 'vi'; }
+
+  trStr(v) {
+    const C = Component;
+    if (C.EN[v] != null) return C.EN[v];
+    let out = v;
+    for (let i = 0; i < C.EN_RE.length; i++) { if (C.EN_RE[i][0].test(out)) { out = out.replace(C.EN_RE[i][0], C.EN_RE[i][1]); break; } }
+    for (let i = 0; i < C.EN_SUB.length; i++) { if (out.indexOf(C.EN_SUB[i][0]) >= 0) out = out.split(C.EN_SUB[i][0]).join(C.EN_SUB[i][1]); }
+    return out;
+  }
+
+  tr(v) {
+    if (typeof v === 'string') return this.trStr(v);
+    if (Array.isArray(v)) return v.map(x => this.tr(x));
+    if (v && typeof v === 'object' && !v.$$typeof && v.constructor === Object) {
+      const o = {}; for (const k in v) o[k] = this.tr(v[k]); return o;
+    }
+    return v;
+  }
+
   renderVals() {
+    const C = Component, en = this.lang() === 'en';
+    const base = this.baseVals();
+    const out = en ? this.tr(base) : base;
+    const T = en ? C.TPL_EN : C.TPL_VI;
+    for (const k in T) out['t' + k] = T[k];
+    const on = ['#A9E5F1', '#052430'], off = ['rgba(255,255,255,.10)', '#F2F2EC'];
+    out.setVi = () => this.setState({ lang: 'vi' });
+    out.setEn = () => this.setState({ lang: 'en' });
+    out.viBg = (en ? off : on)[0]; out.viFg = (en ? off : on)[1];
+    out.enBg = (en ? on : off)[0]; out.enFg = (en ? on : off)[1];
+    out.phSearch = en ? 'Search by name or phone number' : 'Tìm theo tên hoặc số điện thoại';
+    out.phSpot = en ? 'Main door' : 'Cửa chính';
+    return out;
+  }
+
+  baseVals() {
     const S = this.state;
     const C = Component;
+    const en = this.lang() === 'en';
     const scr = S.scr;
     const orgName = (S.orgName.trim() || (this.props.orgName ?? C.ORG.name)).toUpperCase();
     const branch = this.props.branchName ?? C.ORG.branch;
@@ -1117,7 +1390,7 @@ class Component extends DCLogic {
     const daysLeft = e => { const p = e.split('/'); return (Number(p[1]) - 8) * 30 + (Number(p[0]) - 4); };
     const expThresholds = [7, 14, 30].map(d => Object.assign({ label: d + ' ngày', pick: () => this.setState({ expDays: d }) }, pill(S.expDays === d)));
     const expList = C.MEMBERS.map(x => ({ x, dl: daysLeft(x.exp) })).filter(o => o.x.st !== 'exp' && o.dl >= 0 && o.dl <= S.expDays).sort((a, b) => a.dl - b.dl);
-    const expRows = expList.map(o => ({ n: o.x.n, sub: (hasProgs ? o.x.s + ' · ' : '') + 'hết hạn ' + o.x.exp, tag: o.dl === 0 ? 'HÔM NAY' : 'CÒN ' + o.dl + ' NGÀY', tagBg: o.dl <= 7 ? '#F3C24A' : 'rgba(255,255,255,.14)', tagFg: o.dl <= 7 ? '#2C1F03' : '#9AA096', open: () => this.setState({ scr: 'member', memberId: o.x.id }) }));
+    const expRows = expList.map(o => ({ n: o.x.n, sub: (hasProgs ? o.x.s + ' · ' : '') + (en ? 'expires ' : 'hết hạn ') + o.x.exp, tag: o.dl === 0 ? 'HÔM NAY' : 'CÒN ' + o.dl + ' NGÀY', tagBg: o.dl <= 7 ? '#F3C24A' : 'rgba(255,255,255,.14)', tagFg: o.dl <= 7 ? '#2C1F03' : '#9AA096', open: () => this.setState({ scr: 'member', memberId: o.x.id }) }));
 
     // 19 · Lịch sử một hội viên (nhóm theo tháng, phân trang)
     const HIST_ALL = [
@@ -1199,16 +1472,16 @@ class Component extends DCLogic {
       listEmpty: ['Chưa có', 'hội viên nào'],
       member: ['Còn ' + m.left + ' buổi', 'tới ' + m.exp],
       phoneEdit: dup ? ['Số này đã có', 'người dùng'] : ['Đổi số', 'điện thoại'],
-      pause: ['Tạm dừng', 'thẻ này?'],
+      pause: en ? ['Pause', 'this card?'] : ['Tạm dừng', 'thẻ này?'],
       // 03b — hero là câu trạng thái/con số (§ A1b)
       reports: ['Xem gì', 'tháng này'],
       rank: ['Quán quân', rk.month],
       expiring: [expRows.length + ' thẻ', 'sắp hết hạn'],
       memberHist: ['Lịch sử', 'điểm danh'],
-      trials: [C.TRIAL_LEADS.length + ' lượt', 'học thử'],
+      trials: en ? [C.TRIAL_LEADS.length + ' trial', 'sign-ups'] : [C.TRIAL_LEADS.length + ' lượt', 'học thử'],
       trialConvert: ['Chuyển thành', 'hội viên'],
       convRate: [convBigPct, 'đã chuyển'],
-      anomaly: [anomalyRows.length + ' lượt', 'chờ duyệt'],
+      anomaly: en ? [anomalyRows.length + ' scans', 'to review'] : [anomalyRows.length + ' lượt', 'chờ duyệt'],
       audit: ['Ai làm gì', 'lúc nào'],
       cap: ['Hết chỗ', 'gói free'],
       upgrade: ['Gói Pro', 'bỏ giới hạn'],
