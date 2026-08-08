@@ -1,0 +1,153 @@
+/* ============================================================================
+ * Checkino — design tokens
+ * Source of truth: docs/DESIGN.md (D15). Every hex copied character-for-character
+ * from DESIGN.md §2 + Appendix "Exact values". Edits here must match DESIGN.md.
+ *
+ * Shared by BOTH tiers:
+ *   - Thymeleaf  → /q          (server-render)
+ *   - Angular    → /admin, /staff (SPA)
+ * Hence framework-neutral token names.
+ *
+ * Vital rules (DESIGN.md §1–§2) that tokens CANNOT enforce — read DESIGN.md:
+ *   - Color = fixed meaning. Pick a token by MEANING, not for looks.
+ *   - Screen bg has ONLY 3 values: --c-ink · --c-sage · --c-rust.
+ *   - --c-rust is screen bg ONLY, never a block.
+ *   - Max 2 saturated blocks per screen.
+ *   - Color is never the only signal — always pair it with text.
+ * ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------ *
+   * §2 · COLOR — one fixed meaning per token
+   * Each saturated color has a trio: <color> base · <color>-tint (light
+   * shade, subcard bg) · <color>-fg (text placed on that color).
+   * ------------------------------------------------------------------ */
+
+  /* Ink — default bg · neutral block · disabled object */
+  --c-ink:          #131413;
+  --c-ink-desktop:  #0B0C0B; /* desktop "tabletop", outside the device frame */
+  --c-ink-tint:     #1F211F; /* light shade: layer 1b (list rows), neutral block */
+  --c-ink-tint-2:   #2A2D2A; /* darker light shade: disabled member card */
+  --c-ink-fg:       #F2F2EC; /* = cream, text on ink */
+
+  /* Cream — text on dark bg · primary button on dark · <a> link (underlined) */
+  --c-cream:        #F2F2EC;
+
+  /* Dim — secondary text on ink · text on a disabled object */
+  --c-dim:          #9AA096;
+
+  /* Coral — PRIMARY NUMBER · current/ongoing status · NEVER an error */
+  --c-coral:        #F4573F;
+  --c-coral-tint:   #F98872;
+  --c-coral-fg:     #2A0C06;
+
+  /* Rust — blocked, can't get in today. Screen bg ONLY */
+  --c-rust:         #8E2C1B;
+  --c-rust-fg:      #F2F2EC; /* rust bg uses cream text */
+
+  /* Purple — numbers ABOUT PEOPLE: headcount + capacity/quota (count/50, X/24) */
+  --c-purple:       #6F66F0;
+  --c-purple-tint:  #9E98F6;
+  --c-purple-fg:    #0D0838;
+
+  /* Yellow — needs handling AND STILL IN TIME (not "achievement"). Yellow bg → dark text */
+  --c-yellow:       #F3C24A;
+  --c-yellow-tint:  #F8DC96;
+  --c-yellow-fg:    #2C1F03;
+
+  /* Sage — done / completed, soft area (not "ongoing") */
+  --c-sage:         #C4D4C1;
+  --c-sage-tint:    #DCE7DA;
+  --c-sage-fg:      #14180F;
+
+  /* Sky — selected / ticked. NEVER a button */
+  --c-sky:          #A9E5F1;
+  --c-sky-fg:       #052430;
+
+  /* ------------------------------------------------------------------ *
+   * Screen bg — EXACTLY 3 values (DESIGN.md §2 rule 4). Meaning aliases.
+   * ------------------------------------------------------------------ */
+  --screen-default: var(--c-ink);   /* default */
+  --screen-done:    var(--c-sage);  /* onLight — done */
+  --screen-blocked: var(--c-rust);  /* onRust — blocked */
+
+  /* ------------------------------------------------------------------ *
+   * Single-family gradient (DESIGN.md §2 rule 5, Appendix member card)
+   * Gradient stays within ONE family; bridging two families mixes meaning → banned.
+   * ------------------------------------------------------------------ */
+  --grad-member-card: linear-gradient(135deg, #9E98F6 0%, #6F66F0 100%);
+
+  /* Member card shadow (plastic-card mock) */
+  --shadow-card: 0 12px 26px rgba(13, 8, 56, .26);
+
+  /* Layer-3 small-label bg (badge/chip/pill inside a subcard) — DESIGN.md §1 */
+  --c-chip-on-light: rgba(0, 0, 0, .20);
+  --c-chip-on-dark:  rgba(255, 255, 255, .55);
+
+  /* ================================================================== *
+   * §3 · TYPE — Archivo scale
+   * Archivo has the `vietnamese` block and a width (wdth) axis 75–125.
+   * On block, fall back to system-ui — DON'T swap Poppins/Outfit (breaks VN diacritics).
+   * ================================================================== */
+  --font-sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Font sizes — fixed role */
+  --fs-hero:        36px;   /* status sentence. FIXED on every screen — trim words, don't shrink */
+  --fs-org:         17px;   /* org name (header) */
+  --fs-block-title: 20px;   /* block title */
+  --fs-number-lg:   33px;   /* large number — must NOT exceed hero */
+  --fs-body:        15px;   /* body */
+  --fs-label:       10.5px; /* small label / eyebrow */
+  --fs-input-min:   16px;   /* input text floor — below it Safari iOS auto-zooms */
+
+  /* Weights */
+  --fw-bold:        800;    /* hero, org name, block title, large number */
+  --fw-label:       700;    /* small label */
+  --fw-body:        400;    /* body regular */
+  --fw-body-strong: 600;    /* body emphasis */
+
+  /* Archivo width axis (font-variation-settings 'wdth') */
+  --wdth-hero:      82;
+  --wdth-header:    88;     /* org name + block title + monogram */
+  --wdth-body:      100;    /* regular width */
+
+  /* Letter spacing */
+  --ls-hero:        -0.035em;
+  --ls-number:      -0.035em;
+  --ls-label:       0.13em;
+
+  /* Line height */
+  --lh-hero:        0.95;
+  --lh-org:         1.05;
+
+  /* Small-label (eyebrow) opacity */
+  --op-label:       0.62;
+
+  /* ================================================================== *
+   * §4 · SIZE & LAYOUT
+   * ================================================================== */
+
+  /* Radius */
+  --radius-block: 24px;   /* layer-1 block */
+  --radius-card:  18px;   /* layer-2 subcard · layer-1b list row */
+  --radius-icon:  13px;   /* square 3b icon box (warning !, action icon) */
+  --radius-pill:  999px;  /* button · chip · layer-1b when ≤ 56px tall · round 3b icon box */
+
+  /* Touch targets */
+  --touch-primary:   52px; /* primary action + EVERYTHING on /staff */
+  --touch-secondary: 44px; /* absolute floor for secondary buttons on /admin (underlined links) */
+  --tap-back:        42px; /* white round back button · header avatar box · 3b icon box */
+
+  /* Column layout (D13) */
+  --col-max:        440px; /* wide screen → single centered column, NO relayout */
+  --col-breakpoint: 720px; /* ≥ this, apply the single-440-column rule */
+  --screen-min:     360px; /* every screen must be readable at this width */
+  --screen-pad:     16px;  /* screen (layer 0) side padding */
+
+  /* Padding per box layer (DESIGN.md §1) */
+  --pad-block:   16px;  /* layer-1 block (16–17px) */
+  --pad-card:    13px;  /* layer-2 subcard (13–14px) */
+  --pad-row:     12px;  /* layer-1b list row (8–16px) */
+  --pad-chip-y:  3px;   /* layer-3 small label */
+  --pad-chip-x:  9px;
+}
