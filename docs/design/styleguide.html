@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkino · Style guide</title>
+<!-- Archivo (khối vietnamese, trục wdth). Online thì đẹp, offline lùi system-ui —
+     bố cục + màu vẫn xem được offline (DESIGN.md §3). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../design/tokens.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--c-ink-desktop);
+    color: var(--c-cream);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    padding: 40px 24px 120px;
+  }
+
+  .wrap { max-width: 960px; margin: 0 auto; }
+
+  /* Đầu trang */
+  .doc-head { margin-bottom: 48px; }
+  .doc-head h1 {
+    font-size: 44px; font-weight: var(--fw-bold);
+    text-transform: uppercase; letter-spacing: -0.03em; line-height: 1;
+    font-variation-settings: 'wdth' var(--wdth-header);
+  }
+  .doc-head p { color: var(--c-dim); font-size: var(--fs-body); margin-top: 12px; max-width: 62ch; }
+  .doc-head code { color: var(--c-cream); }
+
+  /* Đề mục */
+  section { margin-top: 56px; }
+  h2 {
+    font-size: 22px; font-weight: var(--fw-bold);
+    text-transform: uppercase; letter-spacing: -0.01em;
+    font-variation-settings: 'wdth' var(--wdth-header);
+    padding-bottom: 12px; margin-bottom: 24px;
+    border-bottom: 1px solid var(--c-ink-tint-2);
+  }
+  h2 small { display: block; font-size: 12px; font-weight: var(--fw-body); color: var(--c-dim);
+    text-transform: none; letter-spacing: 0; margin-top: 6px; font-variation-settings: 'wdth' 100; }
+
+  .note { color: var(--c-dim); font-size: 13.5px; margin: 14px 0 22px; max-width: 70ch; }
+  .note b { color: var(--c-cream); }
+
+  .grid { display: grid; gap: 16px; }
+  .grid-2 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .grid-3 { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+
+  /* ===== §2 · Swatch màu ===== */
+  .swatch { border-radius: var(--radius-card); overflow: hidden; border: 1px solid var(--c-ink-tint-2); }
+  .swatch .chip-row { height: 88px; display: flex; }
+  .swatch .chip-main { flex: 2; display: grid; place-items: center; font-weight: var(--fw-bold);
+    font-size: 20px; font-variation-settings: 'wdth' var(--wdth-header); }
+  .swatch .chip-tint { flex: 1; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+  .swatch .meta { background: var(--c-ink-tint); padding: 12px 14px; }
+  .swatch .meta .name { font-weight: 800; font-size: 14px; }
+  .swatch .meta .hex { color: var(--c-dim); font-size: 12px; letter-spacing: 0.02em;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace; margin-top: 2px; }
+  .swatch .meta .mean { color: var(--c-cream); font-size: 12.5px; margin-top: 8px; }
+
+  /* ===== §1 · Bốn tầng hộp ===== */
+  .layer-demo { background: var(--c-ink); border-radius: var(--radius-block); padding: var(--screen-pad); }
+  .block {
+    background: var(--c-purple); color: var(--c-purple-fg);
+    border-radius: var(--radius-block); padding: 17px;
+  }
+  .block-title {
+    font-size: var(--fs-block-title); font-weight: var(--fw-bold); text-transform: uppercase;
+    font-variation-settings: 'wdth' var(--wdth-header); margin-bottom: 12px;
+  }
+  .subcard {
+    background: var(--c-purple-tint); color: var(--c-purple-fg);
+    border-radius: var(--radius-card); padding: var(--pad-card);
+  }
+  .pill3 {
+    display: inline-block; background: var(--c-chip-on-light); color: var(--c-purple-fg);
+    border-radius: var(--radius-pill); padding: var(--pad-chip-y) var(--pad-chip-x);
+    font-size: var(--fs-label); font-weight: var(--fw-label);
+    text-transform: uppercase; letter-spacing: var(--ls-label);
+  }
+  .row1b {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--c-ink-tint); color: var(--c-cream);
+    border-radius: var(--radius-card); padding: 12px 14px; min-height: 56px;
+  }
+  .tier-tag { font-size: 11px; color: var(--c-dim); font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; }
+
+  /* Ô hình 3b (42–44px) */
+  .iconbox {
+    width: var(--tap-back); height: var(--tap-back); flex: none;
+    display: grid; place-items: center; font-weight: 800;
+  }
+  .iconbox.sq { border-radius: var(--radius-icon); }
+  .iconbox.round { border-radius: var(--radius-pill); }
+
+  /* ===== §3 · Thang chữ ===== */
+  .type-row { display: flex; align-items: baseline; gap: 20px; padding: 14px 0;
+    border-bottom: 1px solid var(--c-ink-tint); }
+  .type-row .tag { flex: none; width: 150px; color: var(--c-dim); font-size: 12px;
+    font-family: ui-monospace, Menlo, monospace; }
+  .t-hero { font-size: var(--fs-hero); font-weight: var(--fw-bold); text-transform: uppercase;
+    font-variation-settings: 'wdth' var(--wdth-hero); letter-spacing: var(--ls-hero); line-height: var(--lh-hero); }
+  .t-org { font-size: var(--fs-org); font-weight: var(--fw-bold); text-transform: uppercase;
+    font-variation-settings: 'wdth' var(--wdth-header); line-height: var(--lh-org); }
+  .t-block { font-size: var(--fs-block-title); font-weight: var(--fw-bold); text-transform: uppercase;
+    font-variation-settings: 'wdth' var(--wdth-header); }
+  .t-num { font-size: var(--fs-number-lg); font-weight: var(--fw-bold); letter-spacing: var(--ls-number); }
+  .t-body { font-size: var(--fs-body); font-weight: var(--fw-body); }
+  .t-label { font-size: var(--fs-label); font-weight: var(--fw-label); text-transform: uppercase;
+    letter-spacing: var(--ls-label); opacity: var(--op-label); }
+
+  /* ===== Ba slot đầu màn ===== */
+  .screen { max-width: var(--col-max); background: var(--c-ink); border-radius: var(--radius-block);
+    padding: 18px var(--screen-pad); }
+  .header-bar { display: flex; align-items: center; gap: 11px; }
+  .header-bar .avatar { width: var(--tap-back); height: var(--tap-back); border-radius: var(--radius-pill);
+    background: var(--c-cream); color: var(--c-ink); display: grid; place-items: center;
+    font-weight: 800; font-size: 18px; font-variation-settings: 'wdth' var(--wdth-header); }
+  .header-bar .org { font-size: var(--fs-org); font-weight: var(--fw-bold); text-transform: uppercase;
+    font-variation-settings: 'wdth' var(--wdth-header); line-height: var(--lh-org); }
+  .header-bar .base-pill { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--c-dim);
+    border: 1px solid var(--c-ink-tint-2); border-radius: var(--radius-pill); padding: 5px 11px; }
+  .eyebrow { min-height: 20px; margin: 20px 0 8px; font-size: var(--fs-label); font-weight: var(--fw-label);
+    text-transform: uppercase; letter-spacing: var(--ls-label); opacity: var(--op-label); }
+  .hero { font-size: var(--fs-hero); font-weight: var(--fw-bold); text-transform: uppercase;
+    font-variation-settings: 'wdth' var(--wdth-hero); letter-spacing: var(--ls-hero); line-height: var(--lh-hero); }
+
+  /* ===== Nút ===== */
+  .btn { border: none; border-radius: var(--radius-pill); font-family: var(--font-sans);
+    font-weight: 700; font-size: 15px; min-height: var(--touch-primary); padding: 0 22px;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  .btn-ink { background: var(--c-ink); color: var(--c-cream); }        /* nút chính trên nền sáng */
+  .btn-cream { background: var(--c-cream); color: var(--c-ink); }       /* nút chính trên nền than/rust */
+  .btn-secondary { background: none; color: var(--c-cream); text-decoration: underline;
+    min-height: var(--touch-secondary); padding: 0 4px; }
+  a.link { color: var(--c-cream); text-decoration: underline; }
+
+  /* ===== Thẻ hội viên (mock) ===== */
+  .member-card { aspect-ratio: 1.586; border-radius: var(--radius-block); padding: 18px;
+    display: flex; flex-direction: column; background: var(--grad-member-card);
+    color: var(--c-purple-fg); box-shadow: var(--shadow-card); max-width: 340px; }
+  .member-card.expired { background: var(--c-ink-tint-2); color: var(--c-dim); box-shadow: none; }
+  .member-card .sessions { font-size: 52px; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
+    margin-top: auto; }
+  .member-card.expired .sessions { opacity: 0.45; }
+  .emv { width: 40px; height: 30px; border-radius: 6px; background: rgba(13,8,56,.22); }
+
+  /* ===== Poster A4 (mock) ===== */
+  .poster { aspect-ratio: 0.7072; background: var(--c-cream); color: var(--c-ink);
+    border-radius: 6px; padding: 22px; max-width: 260px; display: flex; flex-direction: column;
+    align-items: center; text-align: center; box-shadow: var(--shadow-card); }
+  .poster .p-org { font-weight: 800; text-transform: uppercase; font-size: 15px;
+    font-variation-settings: 'wdth' var(--wdth-header); }
+  .poster .p-cta { font-weight: 800; text-transform: uppercase; font-size: 22px; margin-top: 6px;
+    font-variation-settings: 'wdth' var(--wdth-hero); line-height: 1; }
+  .poster .qr { width: 130px; height: 130px; margin: 18px 0; background:
+    repeating-conic-gradient(var(--c-ink) 0% 25%, var(--c-cream) 0% 50%) 50% / 18px 18px; border-radius: 4px; }
+  .poster .p-foot { font-size: 11px; color: #555; }
+
+  .caption { color: var(--c-dim); font-size: 12px; margin-top: 8px; }
+  .stack { display: flex; flex-direction: column; gap: 10px; }
+  .rowflex { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-start; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="doc-head">
+    <h1>Checkino Style Guide</h1>
+    <p>Render mọi component sống-lâu-dài của hệ thiết kế. Nguồn sự thật là
+    <code>docs/DESIGN.md</code> (D15); token nạp từ <code>design/tokens.css</code>.
+    Trang này <b>không</b> phải nguồn — khi lệch, DESIGN.md thắng. Xem được offline (font lùi system-ui).</p>
+  </div>
+
+  <!-- ============================================================ §2 MÀU -->
+  <section>
+    <h2>§2 · Màu — mỗi token một nghĩa cố định<small>Màu không bao giờ là tín hiệu duy nhất. Nền màn chỉ 3 giá trị: than · sage · rust.</small></h2>
+    <div class="grid grid-2">
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#131413;color:#F2F2EC">Aa</div><div class="chip-tint" style="background:#1F211F;color:#F2F2EC">1F211F</div></div>
+        <div class="meta"><div class="name">Than · <code>--c-ink</code></div><div class="hex">#131413 · tint #1F211F / #2A2D2A</div><div class="mean">Nền mặc định · khối trung tính · vật đã vô hiệu</div></div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#F4573F;color:#2A0C06">Aa</div><div class="chip-tint" style="background:#F98872;color:#2A0C06">F98872</div></div>
+        <div class="meta"><div class="name">Coral · <code>--c-coral</code></div><div class="hex">#F4573F · tint #F98872 · fg #2A0C06</div><div class="mean">Số chính · nhịp đang diễn ra · <b>không bao giờ là lỗi</b></div></div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#8E2C1B;color:#F2F2EC">Aa</div><div class="chip-tint" style="background:#8E2C1B;color:#F2F2EC;opacity:.6">nền màn</div></div>
+        <div class="meta"><div class="name">Rust · <code>--c-rust</code></div><div class="hex">#8E2C1B · fg #F2F2EC</div><div class="mean">Bị chặn, hôm nay không vào được. <b>CHỈ làm nền màn</b></div></div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#6F66F0;color:#0D0838">Aa</div><div class="chip-tint" style="background:#9E98F6;color:#0D0838">9E98F6</div></div>
+        <div class="meta"><div class="name">Tím · <code>--c-purple</code></div><div class="hex">#6F66F0 · tint #9E98F6 · fg #0D0838</div><div class="mean">Con số về người: sĩ số + sức chứa/hạn mức</div></div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#F3C24A;color:#2C1F03">Aa</div><div class="chip-tint" style="background:#F8DC96;color:#2C1F03">F8DC96</div></div>
+        <div class="meta"><div class="name">Vàng · <code>--c-yellow</code></div><div class="hex">#F3C24A · tint #F8DC96 · fg #2C1F03</div><div class="mean">Cần xử lý <b>và còn kịp</b> (không phải "thành tích"). Nền vàng → chữ đậm màu</div></div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#C4D4C1;color:#14180F">Aa</div><div class="chip-tint" style="background:#DCE7DA;color:#14180F">DCE7DA</div></div>
+        <div class="meta"><div class="name">Sage · <code>--c-sage</code></div><div class="hex">#C4D4C1 · tint #DCE7DA · fg #14180F</div><div class="mean">Xong xuôi / đã hoàn tất (không phải "đang diễn ra")</div></div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#A9E5F1;color:#052430">Aa</div><div class="chip-tint" style="background:#A9E5F1;color:#052430;opacity:.55">tick</div></div>
+        <div class="meta"><div class="name">Sky · <code>--c-sky</code></div><div class="hex">#A9E5F1 · fg #052430</div><div class="mean">Đã chọn / đã tick. <b>Không bao giờ là nút</b></div></div>
+      </div>
+
+      <div class="swatch">
+        <div class="chip-row"><div class="chip-main" style="background:#9AA096;color:#131413">Aa</div><div class="chip-tint" style="background:#F2F2EC;color:#131413">kem</div></div>
+        <div class="meta"><div class="name">Dim / Kem · <code>--c-dim</code> · <code>--c-cream</code></div><div class="hex">#9AA096 · #F2F2EC</div><div class="mean">Chữ phụ trên nền than · chữ/nút/liên kết trên nền tối</div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================ §1 TẦNG HỘP -->
+  <section>
+    <h2>§1 · Bốn tầng hộp<small>Mỗi phần tử thuộc đúng một tầng; tầng quyết định nền · bo góc · padding.</small></h2>
+    <div class="layer-demo">
+      <div class="block">
+        <div class="block-title">Tầng 1 · Khối</div>
+        <div class="subcard">
+          <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">Tầng 2 · Thẻ con</div>
+          <div style="margin-top:10px"><span class="pill3">Tầng 3 · nhãn nhỏ</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="caption">Tầng 0 = nền màn (than). Khối tím → thẻ con dùng <b>sắc nhạt của tím</b> (#9E98F6), không mượn màu khác (§1 điều cấm 2).</p>
+
+    <div class="stack" style="margin-top:20px; max-width:440px">
+      <div class="row1b">
+        <div class="iconbox round" style="background:#F3C24A;color:#2C1F03">!</div>
+        <div><div style="font-weight:700">Tầng 1b · hàng danh sách</div><div style="font-size:12.5px;color:var(--c-dim)">Nền #1F211F · trên nền than · không tiêu đề</div></div>
+        <div class="iconbox round" style="background:#A9E5F1;color:#052430;margin-left:auto">✓</div>
+      </div>
+      <p class="caption">Ô hình <b>3b</b> (42–44px) mượn màu theo <b>nghĩa</b>, khác màu cha: tick sky "đã chọn", ô cảnh báo vàng "còn kịp". Không tính vào hạn 2 khối bão hoà.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ §3 THANG CHỮ -->
+  <section>
+    <h2>§3 · Thang chữ — Archivo<small>Hero cùng một cỡ ở mọi màn — dài quá thì rút chữ, đừng thu cỡ.</small></h2>
+    <div class="type-row"><div class="tag">--fs-hero 36/800</div><div class="t-hero">Đã điểm danh</div></div>
+    <div class="type-row"><div class="tag">--fs-org 17/800</div><div class="t-org">Gym Cửa Bắc</div></div>
+    <div class="type-row"><div class="tag">--fs-block-title 20/800</div><div class="t-block">Lượt điểm danh</div></div>
+    <div class="type-row"><div class="tag">--fs-number-lg 33/800</div><div class="t-num">24 / 50</div></div>
+    <div class="type-row"><div class="tag">--fs-body 15/400</div><div class="t-body">Nguyễn Thị Hồng Nhung — thân, bề rộng thường, chịu chữ dài.</div></div>
+    <div class="type-row"><div class="tag">--fs-label 10.5/700</div><div class="t-label">Hôm nay · 04/08</div></div>
+  </section>
+
+  <!-- ============================================================ BA SLOT ĐẦU MÀN -->
+  <section>
+    <h2>§3 · Ba slot đầu màn<small>Header = nơi chốn (đứng yên). Eyebrow = tên người. Hero = câu trạng thái. Không slot nào kiêm hai nghĩa.</small></h2>
+    <div class="rowflex">
+      <div class="screen">
+        <div class="header-bar">
+          <div class="avatar">C</div>
+          <div class="org">Gym Cửa Bắc</div>
+          <div class="base-pill">Cơ sở 1</div>
+        </div>
+        <div class="eyebrow">Nguyễn Thị Hồng Nhung · 18:41</div>
+        <div class="hero">Đã điểm<br>danh</div>
+      </div>
+      <p class="caption" style="max-width:34ch">Avatar header = <b>logo/monogram trung tâm</b> (§5), không emoji bộ môn. Eyebrow giữ <code>min-height</code> cố định kể cả khi trống để hero không nhảy.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ NÚT -->
+  <section>
+    <h2>§2/§4 · Nút<small>Nền sáng → nút than. Nền than/rust → nút kem. Nút phụ = chữ gạch chân. Sky không bao giờ là nút.</small></h2>
+    <div class="rowflex" style="align-items:center">
+      <button class="btn btn-cream">Điểm danh</button>
+      <span style="background:var(--c-sage);padding:14px;border-radius:18px"><button class="btn btn-ink">Xác nhận</button></span>
+      <button class="btn btn-secondary">Chọn file khác</button>
+      <a href="#" class="link">Quay lại hồ sơ</a>
+    </div>
+    <p class="caption">Vùng chạm ≥ 52px cho hành động chính &amp; mọi thứ ở /staff; ≥ 44px sàn nút phụ /admin.</p>
+  </section>
+
+  <!-- ============================================================ VẬT MÔ PHỎNG ĐỒ THẬT -->
+  <section>
+    <h2>Vật mô phỏng đồ thật<small>Thẻ hội viên &amp; poster A4 — ngoài hệ bốn tầng (§1a), nhưng LÀ nội dung sản phẩm.</small></h2>
+    <div class="rowflex">
+      <div>
+        <div class="member-card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div style="font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.06em">Gym Cửa Bắc</div>
+            <div class="emv"></div>
+          </div>
+          <div class="sessions">18</div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.8">buổi còn lại</div>
+        </div>
+        <p class="caption">Thẻ hội viên · aspect 1.586 · gradient một-họ-tím. Dùng lại ở /q &amp; /admin.</p>
+      </div>
+      <div>
+        <div class="member-card expired">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div style="font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.06em">Gym Cửa Bắc</div>
+            <span class="pill3" style="background:#F3C24A;color:#2C1F03">Hết hạn · 28/07</span>
+          </div>
+          <div class="sessions">0</div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">buổi còn lại</div>
+        </div>
+        <p class="caption">Biến thể vô hiệu · nền #2A2D2A · chip vàng nói rồi thì không gạch số nữa (§2 luật 1).</p>
+      </div>
+      <div>
+        <div class="poster">
+          <div class="p-org">Gym Cửa Bắc</div>
+          <div class="p-cta">Quét để<br>điểm danh</div>
+          <div class="qr"></div>
+          <div class="p-foot">Cơ sở 1 · Cửa chính</div>
+        </div>
+        <p class="caption">Poster A4 · aspect 1/1.414 · nền kem. Ảnh tờ giấy in.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ Ô HÌNH 3b -->
+  <section>
+    <h2>§1 · Ô hình 42–44px (tầng 3b)<small>Vật vuông/tròn chứa đúng một icon hoặc một chữ. Màu theo nghĩa, được khác màu cha.</small></h2>
+    <div class="rowflex" style="align-items:center">
+      <div style="text-align:center"><div class="iconbox round" style="background:#F2F2EC;color:#131413;font-size:18px">C</div><div class="caption">logo/monogram</div></div>
+      <div style="text-align:center"><div class="iconbox round" style="background:#A9E5F1;color:#052430">✓</div><div class="caption">tick sky</div></div>
+      <div style="text-align:center"><div class="iconbox sq" style="background:#F3C24A;color:#2C1F03">!</div><div class="caption">cảnh báo còn kịp</div></div>
+      <div style="text-align:center"><div class="iconbox sq" style="background:#F4573F;color:#2A0C06">↑</div><div class="caption">icon action</div></div>
+      <div style="text-align:center"><div class="iconbox round" style="background:#F2F2EC;color:#131413">←</div><div class="caption">nút quay lại</div></div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
