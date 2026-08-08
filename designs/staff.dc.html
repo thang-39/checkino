@@ -32,7 +32,7 @@ input::placeholder { color:currentColor; opacity:.45; }
     <div style="flex:1;padding:8px 16px 0;display:flex;flex-direction:column;gap:13px;min-height:0;overflow:hidden">
       <!-- header bar — đứng yên tuyệt đối, y hệt /q -->
       <div style="display:flex;align-items:center;gap:11px;flex:none">
-        <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:19px">🏋️</span>
+        <span style="width:42px;height:42px;border-radius:999px;flex:none;background:#FFFFFF;color:#131413;display:grid;place-items:center;font-size:21px;font-weight:800;letter-spacing:-.04em;font-variation-settings:'wdth' 88">{{ monogram }}</span>
         <p style="flex:1;min-width:0;margin:0;font-size:17px;font-weight:800;line-height:1.05;text-transform:uppercase;font-variation-settings:'wdth' 88;text-wrap:pretty">{{ orgName }}</p>
         <span style="display:inline-flex;align-items:center;padding:10px 15px;border-radius:999px;background:rgba(255,255,255,.13);font-size:13.5px;font-weight:500;white-space:nowrap;flex:none">{{ branchName }}</span>
       </div>
@@ -73,6 +73,10 @@ input::placeholder { color:currentColor; opacity:.45; }
           <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="position:absolute;left:18px;top:50%;transform:translateY(-50%);opacity:.5"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
           <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="{{ tSearchPh }}" style="width:100%;box-sizing:border-box;min-height:52px;background:#1F211F;border:0;border-radius:999px;padding:0 20px 0 44px;font:inherit;font-size:16px;font-weight:600;color:#F2F2EC">
         </div>
+        <!-- dòng kết quả: con số đổi vì người dùng vừa lọc/gõ thì sống ở đây, không leo lên hero (DESIGN.md § 3) -->
+        <sc-if value="{{ filterLine }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:0;padding:0 4px;flex:none;font-size:13px;font-weight:600;color:#9AA096;line-height:1.35">{{ filterLineText }}</p>
+        </sc-if>
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:8px">
           <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
             <div onClick="{{ r.tap }}" style="flex:none;display:flex;align-items:center;gap:12px;min-height:56px;background:#1F211F;border-radius:18px;padding:8px 10px 8px 16px;cursor:pointer">
@@ -310,9 +314,11 @@ class Component extends DCLogic {
     const en = lang === 'en';
     const L = Component.T[lang];
     const savedAt = this.props.savedAt ?? '17:02';
+    const orgName = this.props.orgName ?? 'TRUNG TÂM ANH NGỮ SAO MAI';
     const isList = !S.empty && !S.ios;
     const roster = Component.MEMBERS.filter(m => S.sport === 'all' || m.s === S.sport);
-    const arrived = roster.filter(m => S.st[m.i]).length;
+    // Hero đếm cả danh sách, không đếm theo bộ lọc: mẫu số chỉ đổi khi DỮ LIỆU đổi (DESIGN.md § 3).
+    const arrivedAll = Component.MEMBERS.filter(m => S.st[m.i]).length;
     const qn = Object.values(S.st).filter(v => v.k === 'pending').length;
     const q = this.norm(S.query.trim());
     const shown = roster.filter(m => !q || this.norm(m.n).includes(q));
@@ -335,7 +341,12 @@ class Component extends DCLogic {
     if (S.empty === 'members') { [hero1, hero2] = L.heroEmptyM; eyebrow = ''; }
     else if (S.empty === 'class') { [hero1, hero2] = L.heroEmptyC; eyebrow = ''; }
     else if (S.ios) { [hero1, hero2] = L.heroIos; eyebrow = ''; }
-    else { hero1 = arrived + '/' + roster.length; hero2 = L.arrived; eyebrow = S.sport !== 'all' ? S.sport.toUpperCase() + ' · ' + L.todayShort : L.today; }
+    else { hero1 = arrivedAll + '/' + Component.MEMBERS.length; hero2 = L.arrived; eyebrow = S.sport !== 'all' ? S.sport.toUpperCase() + ' · ' + L.todayShort : L.today; }
+    // Dòng kết quả cạnh bộ lọc: mang cả nguyên nhân lẫn mẫu số.
+    const cause = [S.sport !== 'all' ? S.sport : null, q.length > 0 ? '“' + S.query.trim() + '”' : null].filter(Boolean).join(' · ');
+    const filterLineText = en
+      ? cause + ' — ' + shown.length + ' of ' + Component.MEMBERS.length + ' members'
+      : cause + ' — ' + shown.length + ' trong ' + Component.MEMBERS.length + ' hội viên';
     // thứ tự chip: "Tất cả" luôn đầu, còn lại A→Z. Không xếp theo số người hôm nay:
     // bộ môn sẽ nhảy chỗ giữa buổi, và cô giáo tap theo vị trí đã nhớ.
     const SPORTS = ['Boxing', 'Gym', 'Kickfit', 'Yoga'];
@@ -351,7 +362,10 @@ class Component extends DCLogic {
     });
     const langBtn = on => ({ bg: on ? '#A9E5F1' : 'rgba(255,255,255,.08)', fg: on ? '#052430' : '#F2F2EC' });
     return {
-      orgName: this.props.orgName ?? 'TRUNG TÂM ANH NGỮ SAO MAI',
+      orgName,
+      // Header = nơi chốn → ô 42px mang monogram trung tâm (DESIGN.md § 5), không phải emoji bộ môn.
+      monogram: orgName.trim().charAt(0).toUpperCase(),
+      filterLine: isList && (S.sport !== 'all' || q.length > 0), filterLineText,
       branchName: this.props.branchName ?? 'Quận 7',
       netLabel: S.offline ? L.noNet : '4G',
       hero1, hero2, eyebrow,

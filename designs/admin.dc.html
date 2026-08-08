@@ -90,7 +90,7 @@ textarea::placeholder { color:currentColor; opacity:.45; }
               </sc-for>
             </div>
             <div style="display:flex;gap:7px;flex-wrap:wrap">
-              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#C4D4C1;display:block"></i>{{ legendToday }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#2A0C06;display:block"></i>{{ legendToday }}</span>
               <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;background:rgba(255,255,255,.85);color:#131413;padding:4px 10px;border-radius:999px"><i style="width:8px;height:8px;border-radius:999px;background:#FFFFFF;display:block"></i>{{ t8 }}</span>
             </div>
           </div>
@@ -581,7 +581,8 @@ textarea::placeholder { color:currentColor; opacity:.45; }
         </div>
       </sc-if>
 
-      <!-- ══ 17 · XẾP HẠNG THÁNG (quán quân = khối vàng, § B1) ══ -->
+      <!-- ══ 17 · XẾP HẠNG THÁNG (quán quân = icon huy chương + số hạng trên nền than — DESIGN.md § 2:
+           vàng chỉ còn nghĩa "cần xử lý, còn kịp", không mang nghĩa thành tích) ══ -->
       <sc-if value="{{ sRank }}" hint-placeholder-val="{{ false }}">
         <div style="flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:12px">
           <div style="flex:none;display:flex;gap:7px">
@@ -597,14 +598,17 @@ textarea::placeholder { color:currentColor; opacity:.45; }
             </div>
           </sc-if>
           <sc-if value="{{ rankHasChamp }}" hint-placeholder-val="{{ true }}">
-            <div style="flex:none;border-radius:24px;padding:16px;background:#F3C24A;color:#2C1F03;display:flex;align-items:center;gap:14px">
-              <span style="width:52px;height:52px;border-radius:999px;flex:none;display:grid;place-items:center;font-size:24px;font-weight:800;background:#2C1F03;color:#F3C24A">1</span>
+            <div style="flex:none;border-radius:24px;padding:16px;background:#1F211F;color:#F2F2EC;display:flex;align-items:center;gap:14px">
+              <span style="width:52px;height:52px;border-radius:999px;flex:none;background:#2A2D2A;color:#F2F2EC;display:grid;place-items:center;position:relative">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:6px;top:6px"><circle cx="12" cy="9" r="6.2"></circle><path d="M8.6 14.3 7.4 22l4.6-2.6 4.6 2.6-1.2-7.7"></path></svg>
+                <span style="position:relative;font-size:15px;font-weight:800;line-height:1;margin-top:-10px">1</span>
+              </span>
               <div style="min-width:0;flex:1">
-                <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;opacity:.7">{{ t135 }}{{ rankMonthLabel }}</div>
+                <div style="font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#9AA096">{{ t135 }}{{ rankMonthLabel }}</div>
                 <div style="font-size:19px;font-weight:800;line-height:1.1;margin-top:2px;text-wrap:balance">{{ champName }}</div>
-                <div style="font-size:12.5px;font-weight:700;opacity:.75;margin-top:1px">{{ champSub }}</div>
+                <div style="font-size:12.5px;font-weight:700;color:#9AA096;margin-top:1px">{{ champSub }}</div>
               </div>
-              <div style="text-align:right;flex:none"><div style="font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1">{{ champCount }}</div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.7">{{ t94 }}</div></div>
+              <div style="text-align:right;flex:none"><div style="font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1">{{ champCount }}</div><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9AA096">{{ t94 }}</div></div>
             </div>
           </sc-if>
           <div style="flex:none;display:flex;flex-direction:column;gap:8px">
@@ -1610,7 +1614,9 @@ class Component extends DCLogic {
       // trang chủ
       alertTitle: soonCount + ' thẻ sắp hết hạn',
       goExpiring: () => this.setState({ scr: 'list', fStatus: 'soon', fSport: 'all', q: '', openFilter: null }),
-      bars: [52, 66, 44, 71, 58, 38, 100].map((h, i) => ({ h: h + '%', bg: i === 6 ? '#C4D4C1' : 'rgba(255,255,255,.42)' })),
+      // Cột "hôm nay" = nhịp đang diễn ra → họ san hô (mực #2A0C06 trên khối san hô), không phải
+      // sage: sage chỉ còn nghĩa "xong xuôi" (DESIGN.md § 2).
+      bars: [52, 66, 44, 71, 58, 38, 100].map((h, i) => ({ h: h + '%', bg: i === 6 ? '#2A0C06' : 'rgba(255,255,255,.42)' })),
       legendToday: 'Hôm nay ' + S.arrived,
       limitPill: limit + ' chỗ', limitOf: '/ ' + limit,
       memberCount: all.length, seatsLeft: 'còn ' + (limit - all.length),
