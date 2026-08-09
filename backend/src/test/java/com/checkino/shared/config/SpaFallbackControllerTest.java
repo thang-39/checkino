@@ -10,7 +10,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 /**
- * Deep link vào route client không được 404 — AC của M1-S01, và là lý do miếng keo tồn tại.
+ * Deep links into client routes must not 404 — the M1-S01 AC, and the reason the glue exists.
  */
 @WebMvcTest(SpaFallbackController.class)
 class SpaFallbackControllerTest {
@@ -18,21 +18,21 @@ class SpaFallbackControllerTest {
   @Autowired private MockMvc mockMvc;
 
   @Test
-  void deepLinkVaoAdminForwardVeIndexHtml() throws Exception {
+  void deepLinkIntoAdminForwardsToIndexHtml() throws Exception {
     mockMvc
         .perform(get("/admin/members"))
         .andExpect(status().isOk())
         .andExpect(forwardedUrl("/index.html"));
   }
 
-  /** Gõ domain trần phải ra app, không ra 404 — xem javadoc của controller. */
+  /** Typing the bare domain must reach the app, not a 404 — see the controller javadoc. */
   @Test
-  void gocForwardVeIndexHtml() throws Exception {
+  void rootForwardsToIndexHtml() throws Exception {
     mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(forwardedUrl("/index.html"));
   }
 
   @Test
-  void deepLinkVaoStaffForwardVeIndexHtml() throws Exception {
+  void deepLinkIntoStaffForwardsToIndexHtml() throws Exception {
     mockMvc
         .perform(get("/staff/today"))
         .andExpect(status().isOk())
@@ -40,12 +40,12 @@ class SpaFallbackControllerTest {
   }
 
   /**
-   * /q/{code} KHÔNG được fallback dính vào — nó là trang Thymeleaf riêng (PLAN.md § 1.2). Ở
-   * story này chưa có controller cho /q, nên nó phải rơi ra ngoài SPA fallback chứ không được
-   * trả index.html.
+   * /q/{code} must NOT be caught by the fallback — it is a separate Thymeleaf page
+   * (PLAN.md § 1.2). This story has no controller for /q yet, so it must fall outside the SPA
+   * fallback rather than returning index.html.
    */
   @Test
-  void fallbackKhongNuotRouteCuaQ() throws Exception {
+  void fallbackDoesNotSwallowQRoute() throws Exception {
     mockMvc.perform(get("/q/ABC123")).andExpect(status().isNotFound());
   }
 }

@@ -5,17 +5,17 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Serve bundle Angular từ {@code classpath:/static/app/} nhưng ở URL gốc.
+ * Serves the Angular bundle from {@code classpath:/static/app/} but at the root URL.
  *
- * <p>Hai ràng buộc kéo ngược nhau: D5 chốt bundle nằm ở {@code static/app/} <em>trên đĩa</em>,
- * còn Angular build ra {@code <base href="/">} nên trình duyệt xin asset ở {@code /main-*.js}.
- * Nếu map {@code /app/**} đúng theo đường dẫn đĩa thì asset 404; nếu đổi thành
- * {@code <base href="/app/">} thì router đẻ ra {@code /app/admin/members} và phá luôn deep
- * link. Cách giải: giữ đường dẫn đĩa theo D5, map về URL gốc ở đây.
+ * <p>Two constraints pull against each other: D5 pins the bundle at {@code static/app/}
+ * <em>on disk</em>, while Angular builds with {@code <base href="/">} so the browser requests
+ * assets at {@code /main-*.js}. Mapping {@code /app/**} to the on-disk path would 404 the assets;
+ * switching to {@code <base href="/app/">} would make the router emit {@code /app/admin/members}
+ * and break deep links. The fix: keep the on-disk path per D5, map it to the root URL here.
  *
- * <p>Map {@code /**} không che controller: {@code RequestMappingHandlerMapping} có order 0,
- * còn resource handler nằm gần {@code Integer.MAX_VALUE} — nên {@code /q/**} (Thymeleaf) và
- * {@code /api/**} vẫn thắng.
+ * <p>Mapping {@code /**} does not shadow controllers: {@code RequestMappingHandlerMapping} has
+ * order 0 while the resource handler sits near {@code Integer.MAX_VALUE} — so {@code /q/**}
+ * (Thymeleaf) and {@code /api/**} still win.
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

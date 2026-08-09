@@ -1,6 +1,6 @@
 /**
- * Pipeline khách thử: số lạ ở /q dẫn tới form đăng ký thử (F4).
+ * Trial pipeline: an unknown number at /q leads to the trial sign-up form (F4).
  *
- * <p>Thuộc free tier, không phải Pro — D2 chỉ đứng được khi luồng này tồn tại (D6).
+ * <p>In the free tier, not Pro — D2 only holds up if this flow exists (D6).
  */
 package com.checkino.trial;
