@@ -70,8 +70,11 @@ lịch sử, không đọc để làm việc.
 | `/status` | Bảng tiến độ theo epic |
 | `/sync-issues` | Đẩy `docs/STORIES.yml` lên GitHub issues |
 
-GitHub: `thang-39/checkino`. Account **work** là mặc định của `gh` trên máy này — 404 ở mọi
-lệnh nghĩa là cần `gh auth switch -u thang-39`. Remote dùng ssh alias `github.com-personal`.
+GitHub: `thang-39/checkino`. `gh` tự chọn account **theo thư mục** (hook trong `~/.zshrc`):
+`~/Documents/personal/*` → `thang-39` (cá nhân), `~/Documents/workspace/*` → account công ty.
+Repo này nằm dưới `personal/` nên `gh` đã là `thang-39` — **không** cần `gh auth switch`. Cơ chế:
+mỗi shell export `GH_TOKEN` riêng, không đụng active account toàn cục. Remote dùng ssh alias
+`github.com-personal`. Nếu vẫn 404 → kiểm `gh api user --jq .login` phải trả `thang-39`.
 
 ## Mốc thời gian — đừng lặp lại con số 8 tuần
 
