@@ -16,7 +16,8 @@ import org.testcontainers.utility.DockerImageName;
 /**
  * App boot được với Postgres thật, và Flyway chạy xong dù chưa có migration nào.
  *
- * <p>{@code db/migration} cố ý rỗng ở M1-S01 — {@code V1__core_schema.sql} là việc của M1-S02.
+ * <p>M1-S02 đã thêm {@code V1__core_schema.sql}: các assertion dưới phản ánh đã có 1 migration
+ * và bảng nghiệp vụ đã tồn tại. Kiểm schema chi tiết nằm ở {@link SchemaMigrationV1Test}.
  *
  * <p><strong>Vì sao có assertion "Flyway được wire":</strong> Boot 4 modularise
  * autoconfiguration. Nếu pom chỉ có {@code flyway-core} trần thay vì
@@ -38,9 +39,12 @@ class ApplicationContextTest {
   @Test
   void flywayDuocWireVaChayKhongLoi() {
     assertThat(flyway).as("Flyway phải được autoconfigure").isNotNull();
-    assertThat(flyway.info().all())
-        .as("M1-S01 chưa có migration nào; M1-S02 sẽ thêm V1__core_schema.sql")
-        .isEmpty();
+    assertThat(flyway.info().applied())
+        .as("M1-S02 đã thêm V1__core_schema.sql — phải có đúng 1 migration đã áp dụng")
+        .hasSize(1);
+    assertThat(flyway.info().current().getVersion().getVersion())
+        .as("migration hiện tại là V1")
+        .isEqualTo("1");
   }
 
   @Test
@@ -51,10 +55,23 @@ class ApplicationContextTest {
   }
 
   @Test
-  void chuaCoBangNghiepVuNao() throws Exception {
+  void daDungBangNghiepVuLoi() throws Exception {
     assertThat(tableNames())
-        .as("M1-S01 không dựng bảng nghiệp vụ — đó là việc của M1-S02")
-        .containsExactly("flyway_schema_history");
+        .as("M1-S02 dựng 12 bảng lõi + bảng lịch sử Flyway")
+        .contains(
+            "org",
+            "staff_user",
+            "program",
+            "scan_point",
+            "member",
+            "member_program",
+            "member_device",
+            "audit_log",
+            "entitlement",
+            "checkin_event",
+            "lead",
+            "notification_outbox",
+            "flyway_schema_history");
   }
 
   private java.util.List<String> tableNames() throws Exception {
