@@ -153,6 +153,5 @@ worker), `/admin` chỉ cần manifest cho icon. Đừng viết "PWA" cho cả s
 
 ## Quy ước
 
-- Tài liệu viết bằng **tiếng Việt**.
 - Business logic nằm ở tầng ứng dụng, không nằm trong DB — giữ đường thoát `pg_dump`
   sang Postgres VN-region cho PDPL.
