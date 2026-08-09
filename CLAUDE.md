@@ -1,160 +1,162 @@
 # Checkino
 
-SaaS điểm danh QR + quản lý thẻ hội viên cho các trung tâm nhỏ ở Việt Nam
-(gym, võ thuật, yoga, trung tâm ngoại ngữ, gia sư). Một người xây, part-time.
+QR check-in SaaS + membership card management for small centers in Vietnam
+(gym, martial arts, yoga, language centers, tutoring). Built by one person, part-time.
 
-## Trạng thái
+## Status
 
-Monorepo đã dựng (`M1-S01`): backend Spring Boot 4.1 + frontend Angular 22, chưa có bảng
-nghiệp vụ nào. Backlog: 5 epic, 58 story ở [`docs/STORIES.yml`](docs/STORIES.yml), render
-thành GitHub issues.
+Monorepo scaffolded (`M1-S01`): backend Spring Boot 4.1 + frontend Angular 22, no business
+tables yet. Backlog: 5 epics, 58 stories in [`docs/STORIES.yml`](docs/STORIES.yml), rendered
+into GitHub issues.
 
-Muốn biết làm gì tiếp → chạy **`/next`**. Đừng tự suy ra từ tài liệu.
+Want to know what to do next → run **`/next`**. Don't infer it yourself from the docs.
 
-## Lệnh build / test / run
+## Build / test / run commands
 
-Toolchain pin ở [`.tool-versions`](.tool-versions) — Java 25, Node 22.23.1, Maven 3.9.3.
-Node **phải** ≥ 22.22.3, nếu không Angular 22 từ chối chạy.
+Toolchain pinned in [`.tool-versions`](.tool-versions) — Java 25, Node 22.23.1, Maven 3.9.3.
+Node **must** be ≥ 22.22.3, otherwise Angular 22 refuses to run.
 
 ```bash
-./scripts/build.sh          # ng build → copy vào static/app/ → mvn package → MỘT jar
-mvn -f backend/pom.xml test # test backend (Testcontainers → cần Docker chạy)
-npx ng test --watch=false   # test frontend, trong frontend/ (Vitest + jsdom, không cần Chrome)
-docker compose up -d db     # chỉ Postgres 18
-docker compose up -d --build  # cả stack
+./scripts/build.sh          # ng build → copy into static/app/ → mvn package → ONE jar
+mvn -f backend/pom.xml test # backend tests (Testcontainers → needs Docker running)
+npx ng test --watch=false   # frontend tests, inside frontend/ (Vitest + jsdom, no Chrome needed)
+docker compose up -d db     # Postgres 18 only
+docker compose up -d --build  # whole stack
 java -jar backend/target/checkino-*.jar
 ```
 
-Chạy `mvn` với sandbox **tắt** ngay từ lần đầu, và export `TESTCONTAINERS_RYUK_DISABLED=true`.
+Run `mvn` with the sandbox **off** from the very first time, and export `TESTCONTAINERS_RYUK_DISABLED=true`.
 
-Hai cái bẫy môi trường trên máy dev hiện tại:
+Two environment traps on the current dev machine:
 
-- **Port 5432 và 8080 có thể đã bị project khác chiếm.** Compose đọc `DB_PORT` / `PORT` —
-  copy [`.env.example`](.env.example) sang `.env` để đổi (5433 / 8081).
-- **TLS interception của công ty.** `docker build` fail vì Maven trong container không có CA
-  của công ty (`PKIX path building failed`). `docker pull` thì qua được vì daemon có CA.
-  Trên máy host thì `mvn` chạy được nhờ `JAVA_TOOL_OPTIONS` trỏ truststore vào JDK 17 —
-  **đừng xoá temurin-17 khỏi asdf.** Image build được ở CI không có MITM.
+- **Ports 5432 and 8080 may already be taken by another project.** Compose reads `DB_PORT` / `PORT` —
+  copy [`.env.example`](.env.example) to `.env` to change them (5433 / 8081).
+- **Corporate TLS interception.** `docker build` fails because Maven inside the container lacks the
+  company CA (`PKIX path building failed`). `docker pull` gets through because the daemon has the CA.
+  On the host machine `mvn` works thanks to `JAVA_TOOL_OPTIONS` pointing the truststore at JDK 17 —
+  **don't remove temurin-17 from asdf.** The image builds fine in CI, which has no MITM.
 
-## Tài liệu nằm ở đâu, và cái nào thắng
+## Where the docs live, and which one wins
 
-| Tầng | File | Chứa gì | Thắng khi lệch |
+| Layer | File | Contains | Wins when there's a conflict |
 |---|---|---|---|
-| Tại sao | [`DECISIONS.md`](DECISIONS.md) | D1–D15 + Ba cơ chế + SQL mẫu | **Luôn thắng** |
-| Sản phẩm làm gì | `PRD.md` (v2.3) | F1–F11, NFR, tier, metric | Hành vi sản phẩm |
-| Giao diện | [`docs/DESIGN.md`](docs/DESIGN.md) | bốn tầng hộp, ba slot đầu màn, token màu, thang chữ, đặc tả từng màn | **Hình dáng UI** |
-| Stack & hình dáng | `PLAN.md` (v2.2) | stack, schema, M0–M4, DoD, danh sách cắt | Ý định milestone |
-| **Việc phải làm** | [`docs/STORIES.yml`](docs/STORIES.yml) | acceptance criteria + thứ tự phụ thuộc | **Chia việc** |
-| Trạng thái | GitHub issues | open/closed, comment, PR | Không phải nguồn |
+| Why | [`DECISIONS.md`](DECISIONS.md) | D1–D15 + Three mechanisms + sample SQL | **Always wins** |
+| What the product does | `PRD.md` (v2.3) | F1–F11, NFR, tiers, metrics | Product behavior |
+| UI | [`docs/DESIGN.md`](docs/DESIGN.md) | four box layers, three top-of-screen slots, color tokens, type scale, per-screen spec | **UI shape** |
+| Stack & shape | `PLAN.md` (v2.2) | stack, schema, M0–M4, DoD, cut list | Milestone intent |
+| **Work to do** | [`docs/STORIES.yml`](docs/STORIES.yml) | acceptance criteria + dependency order | **Work breakdown** |
+| Status | GitHub issues | open/closed, comments, PRs | Not a source of truth |
 
-Quy tắc chống rối — **tuân thủ, đừng lách:**
+Anti-confusion rules — **follow them, don't work around them:**
 
-- **Chi tiết mức việc CHỈ nằm ở `docs/STORIES.yml`.** Không thêm checklist vào PRD/PLAN nữa.
-- **Story TRỎ tới docs, không sao lại nội dung.** Story chỉ tự sinh ra hai thứ chưa có ở đâu:
-  acceptance criteria và thứ tự phụ thuộc. Ngoại lệ duy nhất được nhắc lại: câu **cấm** ngắn.
-- **Issue là bản render một chiều** từ `STORIES.yml`. Sửa body issue trên GitHub sẽ bị ghi đè.
-- Thêm/sửa story → dùng skill **`write-story`**, rồi `/sync-issues`.
-- Đang code mà phát hiện quyết định còn thiếu → **ghi vào `DECISIONS.md`**, không quyết ngầm
-  trong code hay trong acceptance criteria.
+- **Task-level detail lives ONLY in `docs/STORIES.yml`.** Don't add checklists to PRD/PLAN anymore.
+- **Stories POINT to the docs, they don't copy the content.** A story only originates two things that
+  exist nowhere else: acceptance criteria and dependency order. The one repeated exception: a short
+  **forbidden** clause.
+- **An issue is a one-way render** of `STORIES.yml`. Editing an issue body on GitHub will be overwritten.
+- Add/edit a story → use the **`write-story`** skill, then `/sync-issues`.
+- While coding, if you find a missing decision → **write it into `DECISIONS.md`**, don't decide it
+  implicitly in code or in acceptance criteria.
 
-`docs/archive/` là tài liệu đã hết vai trò (`GRILL-LOG.md`, `plan-v2-rewrite.md`) — giữ làm
-lịch sử, không đọc để làm việc.
+`docs/archive/` holds docs that have served their purpose (`GRILL-LOG.md`, `plan-v2-rewrite.md`) — kept
+as history, not read for work.
 
-## Lệnh
+## Commands
 
-| Lệnh | Làm gì |
+| Command | What it does |
 |---|---|
-| `/next` | Nên làm story nào tiếp, kèm lý do |
-| `/plan <N>` | Lập plan thi hành cho issue #N, comment lên issue |
+| `/next` | Which story to do next, with the reason |
+| `/plan <N>` | Draft an execution plan for issue #N, comment it on the issue |
 | `/work <N>` | Branch, code, test, PR |
-| `/status` | Bảng tiến độ theo epic |
-| `/sync-issues` | Đẩy `docs/STORIES.yml` lên GitHub issues |
+| `/status` | Progress table by epic |
+| `/sync-issues` | Push `docs/STORIES.yml` to GitHub issues |
 
-GitHub: `thang-39/checkino`. `gh` tự chọn account **theo thư mục** (hook trong `~/.zshrc`):
-`~/Documents/personal/*` → `thang-39` (cá nhân), `~/Documents/workspace/*` → account công ty.
-Repo này nằm dưới `personal/` nên `gh` đã là `thang-39` — **không** cần `gh auth switch`. Cơ chế:
-mỗi shell export `GH_TOKEN` riêng, không đụng active account toàn cục. Remote dùng ssh alias
-`github.com-personal`. Nếu vẫn 404 → kiểm `gh api user --jq .login` phải trả `thang-39`.
+GitHub: `thang-39/checkino`. `gh` picks the account **by directory** (hook in `~/.zshrc`):
+`~/Documents/personal/*` → `thang-39` (personal), `~/Documents/workspace/*` → the company account.
+This repo lives under `personal/` so `gh` is already `thang-39` — **no** `gh auth switch` needed. Mechanism:
+each shell exports its own `GH_TOKEN`, without touching the global active account. The remote uses the ssh
+alias `github.com-personal`. If you still get 404 → check `gh api user --jq .login` returns `thang-39`.
 
-## Mốc thời gian — đừng lặp lại con số 8 tuần
+## Timeline — don't repeat the "8 weeks" number
 
-`PLAN.md § 4` nêu ~8 tuần tới hết M3. Backlog cộng lại là **43 ngày-người part-time**
-(M0→M3), tức **17–21 tuần** ở 15–20h/tuần. `PLAN.md` chỉ ước lượng hai hạng mục rồi suy ra
-tổng. Khi báo tiến độ thì dùng con số của backlog và quy đổi ra tuần.
+`PLAN.md § 4` states ~8 weeks to finish M3. The backlog adds up to **43 person-days part-time**
+(M0→M3), i.e. **17–21 weeks** at 15–20h/week. `PLAN.md` only estimated two line items and extrapolated
+the total. When reporting progress, use the backlog number and convert it to weeks.
 
-## Mười lăm quyết định đã chốt (tóm tắt — chi tiết ở `DECISIONS.md`)
+## The fifteen locked decisions (summary — details in `DECISIONS.md`)
 
-- **D1** — Zalo OA/ZNS là tính năng **gói Pro**, không thuộc lõi v1. Free tier chạy hoàn toàn
-  không cần Zalo. Lý do: xác thực OA bắt buộc có GPKD của khách hàng, giết mục tiêu onboarding
-  tự phục vụ dưới 10 phút.
-- **D2** — v1 **không gửi OTP** cho hội viên. Chủ import danh sách → hội viên nhập SĐT →
-  khớp thì bind device token ngay. ZNS không có free tier (300đ/tin xác thực).
-- **D3** — Tách hai nhu cầu auth: chủ/nhân viên dùng **email magic link**; hội viên dùng
-  **device token** (cookie httpOnly, TTL 1 năm). Email cho hội viên là sai thị trường.
-- **D4** — Stack **Spring Boot 4.1 + Java 25 + Postgres 18 + Angular 22** (bump 29/07/2026).
-  Riêng `/q/{code}` server-render bằng Thymeleaf, không phải SPA. Đã lật ngược Next.js +
-  Supabase. **Đã xét lại React ngày 25/07 và giữ Angular** — muốn mở lại câu hỏi này phải nêu
-  được một ràng buộc kỹ thuật, không phải một cảm giác. Angular build ra file tĩnh cho Spring
-  Boot serve, **không SSR**. Hai ripple đừng quên: Boot 4.1 kéo **Testcontainers 2.0.5** (major,
-  API khác 1.x) và Angular 22 đòi **Node ≥ 22.22.3** (ràng buộc lúc build, pin ở `.tool-versions`).
-- **D5** — **Monorepo + modular monolith, một tiến trình.** Microservices không nằm trên bàn:
-  nó phá cả ba cơ chế dưới, vì cả ba dựa vào một database + một transaction.
+- **D1** — Zalo OA/ZNS is a **Pro-tier** feature, not part of the v1 core. The free tier runs entirely
+  without Zalo. Reason: OA verification requires the customer's business license, which kills the goal of
+  under-10-minute self-serve onboarding.
+- **D2** — v1 **does not send OTP** to members. The owner imports the roster → the member enters their
+  phone number → on a match, bind the device token immediately. ZNS has no free tier (300đ/verification message).
+- **D3** — Split the two auth needs: owner/staff use an **email magic link**; members use a
+  **device token** (httpOnly cookie, TTL 1 year). Email for members is wrong for the market.
+- **D4** — Stack **Spring Boot 4.1 + Java 25 + Postgres 18 + Angular 22** (bumped 29/07/2026).
+  `/q/{code}` specifically is server-rendered with Thymeleaf, not a SPA. Reversed the earlier Next.js +
+  Supabase choice. **Re-evaluated React on 25/07 and kept Angular** — reopening this question requires a
+  technical constraint, not a feeling. Angular builds static files for Spring Boot to serve, **no SSR**.
+  Two ripples not to forget: Boot 4.1 pulls in **Testcontainers 2.0.5** (major, API differs from 1.x) and
+  Angular 22 requires **Node ≥ 22.22.3** (a build-time constraint, pinned in `.tool-versions`).
+- **D5** — **Monorepo + modular monolith, one process.** Microservices are off the table: they break all
+  three mechanisms below, because all three rely on one database + one transaction.
 
-- **D6** — **Xếp hạng tháng và trial pipeline thuộc free tier.** Pro bán bằng: gỡ cap 50 hội viên,
-  mirror Sheet, đa cơ sở + phân quyền, Zalo, member OTP. Lý do: xếp hạng chính là việc gig gốc
-  thuê làm, và D2 chỉ đứng được khi xếp hạng tồn tại.
-- **D7** — **`program` (bộ môn) là bảng riêng** + `member_program` nhiều–nhiều; `scan_point` có
-  `program_id` nullable. Bộ môn là **tuỳ chọn**, bỏ qua được, để không phá north-star 10 phút.
-- **D8** — **Một SĐT = một hội viên** (`UNIQUE (org_id, phone_normalized)`). Không hỗ trợ hội viên
-  không có SĐT; trẻ con dùng số phụ huynh, mỗi đứa một số. Ở `/staff` cô giáo tap theo **tên**,
-  không đụng SĐT.
+- **D6** — **Monthly ranking and the trial pipeline are in the free tier.** Pro is sold by: lifting the
+  50-member cap, Sheet mirror, multi-location + roles, Zalo, member OTP. Reason: ranking is exactly the
+  original gig work, and D2 only stands if ranking exists.
+- **D7** — **`program` (discipline) is its own table** + `member_program` many-to-many; `scan_point` has a
+  nullable `program_id`. A discipline is **optional**, skippable, so it doesn't break the 10-minute north star.
+- **D8** — **One phone = one member** (`UNIQUE (org_id, phone_normalized)`). Members without a phone number
+  aren't supported; kids use a parent's number, one number per kid. At `/staff` the teacher taps by **name**,
+  never touching the phone number.
 
-- **D9** — **Bỏ fallback "mã 6 số" ở `/q`.** Không mạng thì `/q` không mở được (không service
-  worker), nên chẳng có mã nào để hiện. Mạng hỏng → nhờ nhân viên điểm danh hộ qua `/staff` (F3).
-- **D10** — **`audit_log` thuộc v1**, bảng dựng ở M1. Roster là dữ liệu định danh (D2) nên thao
-  tác sửa nó phải để lại vết. Nhưng lý do loại Sheet-làm-roster **dẫn đầu bằng "không phân quyền"**,
-  không phải bằng audit trail.
-- **D11** — Tên thương hiệu: **Checkino** (hết tên tạm CheckinHub). Brand = repo = package,
-  một token: `checkino`, `com.checkino`. Tiêu chí, các tên đã loại và kiểm chứng va chạm
-  ở `DECISIONS.md`. Domain chưa mua — cần whois tay trước.
-- **D12** — Hướng thiết kế **Bản 2 · Bảng điều khiển**, tám token màu mỗi màu một nghĩa. Ba thứ
-  dễ làm sai: **nền màn chỉ có ba giá trị** (than / sage / rust `#8E2C1B`); **header = nơi chốn,
-  nhãn nhỏ = tên người, hero 36px = trạng thái**, không slot nào kiêm hai nghĩa; **gradient chỉ
-  đi trong một họ màu**. Vàng = còn kịp, rust = bị chặn, san hô không bao giờ là lỗi. Luật đầy đủ
-  ở `docs/DESIGN.md` (D15 dời từ prompt build-time sang). Bản dựng ở `designs/*.dc.html` (Claude Design) — chạy
-  bằng `designs/support.js` đã commit, nhưng phải **phục vụ qua HTTP cục bộ** (runtime `fetch` lại
-  chính file, không nhận `file://`) và **cần mạng** (React + Archivo).
-- **D13** — **`/admin` trên màn rộng là một cột `max-width:440px` căn giữa**, không bố cục lại,
-  không breakpoint nào khác. Áp cho `/staff` luôn. Rủi ro nhận rõ: nhập Excel và in poster A4 là
-  việc-của-laptop nhưng vẫn phải làm trong cột hẹp — mở lại chỉ khi pilot `M4-S13` báo về, và mở
-  bằng một lượt dựng riêng, không thêm breakpoint lẻ lúc code.
-- **D14** — **Giao diện song ngữ vi/en, mặc định tiếng Việt** ở cả ba bề mặt; người dùng đổi được,
-  lựa chọn được nhớ (localStorage ở `/admin` `/staff`, cookie ở `/q`). Chỉ hai ngôn ngữ, không khung
-  đa-locale. Lý do là **cược mở rộng thị trường sau**, không phải nhu cầu v1 đã xác nhận — chi phí là
-  hai bộ khoá copy phải giữ đồng bộ; được phép rút về vi-only tới M4 nếu không có tín hiệu ngoài VN.
-- **D15** — **`docs/DESIGN.md` là nguồn sự thật của hệ thiết kế** cho giai đoạn code sản phẩm; nó hấp
-  thụ toàn bộ luật chung của `00-he-thong.md` (bốn tầng, token màu, thang chữ) + đặc tả từng màn. Các
-  prompt `docs/design/prompts/*` thành **lịch sử build-time đã đóng vai trò**, không đọc để làm việc.
-  Không đảo D12–D14 — DESIGN.md thi hành chúng. Bốn nghĩa được chốt lại khi hấp thụ: **vàng** chỉ "còn
-  kịp" (bỏ "thành tích"), **sage** chỉ "xong xuôi" (cái "hôm nay" → coral), **tím** = "con số về người",
-  **header avatar** = logo/monogram (bỏ emoji 🏋️). Bản dựng `*.dc.html` cần một lượt sửa riêng theo bốn nghĩa này.
+- **D9** — **Drop the "6-digit code" fallback at `/q`.** Offline, `/q` can't open (no service worker), so
+  there's no code to show. If the network fails → ask staff to check in on your behalf via `/staff` (F3).
+- **D10** — **`audit_log` is in v1**, table built in M1. The roster is identity data (D2), so operations that
+  edit it must leave a trace. But the reason for rejecting Sheet-as-roster **leads with "no role separation"**,
+  not with the audit trail.
+- **D11** — Brand name: **Checkino** (the temporary name CheckinHub is retired). Brand = repo = package, one
+  token: `checkino`, `com.checkino`. The criteria, rejected names, and collision checks are in `DECISIONS.md`.
+  Domain not bought yet — needs a manual whois first.
+- **D12** — Design direction **Variant 2 · Dashboard**, eight color tokens, each color one meaning. Three things
+  easy to get wrong: **screen background has only three values** (charcoal / sage / rust `#8E2C1B`); **header =
+  place, small label = person's name, 36px hero = state**, no slot doubles up on two meanings; **gradients only
+  travel within one color family**. Yellow = still on time, rust = blocked, coral is never an error. Full rules in
+  `docs/DESIGN.md` (D15 moved them here from the build-time prompt). Builds live in `designs/*.dc.html` (Claude Design) — run them
+  with the committed `designs/support.js`, but they must be **served over local HTTP** (the runtime `fetch`es the
+  file itself, doesn't accept `file://`) and **need the network** (React + Archivo).
+- **D13** — **`/admin` on a wide screen is a single centered `max-width:440px` column**, no reflow, no other
+  breakpoint. Applies to `/staff` too. Recognized risk: importing Excel and printing an A4 poster are
+  laptop-jobs but still have to happen in the narrow column — reopen only when the `M4-S13` pilot reports back,
+  and reopen with a dedicated design pass, not by adding a stray breakpoint while coding.
+- **D14** — **Bilingual vi/en UI, Vietnamese by default** across all three surfaces; the user can switch, and the
+  choice is remembered (localStorage at `/admin` `/staff`, cookie at `/q`). Only two languages, no multi-locale
+  framework. The reason is a **bet on later market expansion**, not a confirmed v1 need — the cost is two copy-key
+  sets that must stay in sync; it's allowed to fall back to vi-only until M4 if there's no signal outside VN.
+- **D15** — **`docs/DESIGN.md` is the source of truth for the design system** during the product-coding phase; it
+  absorbs all the shared rules from `00-he-thong.md` (four layers, color tokens, type scale) + the per-screen spec.
+  The `docs/design/prompts/*` prompts become **build-time history that has served its role**, not read for work.
+  Don't reverse D12–D14 — DESIGN.md enforces them. Four meanings locked in on absorption: **yellow** means only
+  "still on time" (drop "achievement"), **sage** means only "done" (the "today" one → coral), **purple** = "a number
+  about a person", **header avatar** = logo/monogram (drop the 🏋️ emoji). The `*.dc.html` builds need a dedicated
+  fix pass to match these four meanings.
 
-**Ràng buộc xuyên suốt:** free tier phải có chi phí biến đổi = **0đ**.
+**Cross-cutting constraint:** the free tier must have a variable cost = **0đ**.
 
-**Chữ "PWA" chỉ áp cho `/staff`** — `/q` là một trang web thường (không manifest, không service
-worker), `/admin` chỉ cần manifest cho icon. Đừng viết "PWA" cho cả sản phẩm.
+**The word "PWA" applies only to `/staff`** — `/q` is a plain web page (no manifest, no service worker),
+`/admin` only needs a manifest for the icon. Don't call the whole product a "PWA".
 
-## Ba cơ chế dễ làm sai (chi tiết + code mẫu ở `DECISIONS.md`)
+## Three mechanisms easy to get wrong (details + sample code in `DECISIONS.md`)
 
-1. **Dedupe check-in** — đẩy xuống `UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)`
-   + `ON CONFLICT DO NOTHING`. **Không** kiểm tra bằng `if (!exists)` ở tầng app.
-2. **Cô lập đa tenant** — Postgres RLS + `SET LOCAL app.org_id`, **và** bộ test tự động
-   cross-tenant cho mọi endpoint. Viết test này trước, không phải sau.
-3. **Roster offline** — idempotency key `client_event_id` với unique index ở server, **và**
-   service worker (offline "mức 2"). Không có service worker thì F5 lúc offline là app chết —
-   mà trên mobile F5 tự xảy ra khi OS hủy tab.
+1. **Check-in dedupe** — push it down to `UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)`
+   + `ON CONFLICT DO NOTHING`. **Do not** check with `if (!exists)` at the app layer.
+2. **Multi-tenant isolation** — Postgres RLS + `SET LOCAL app.org_id`, **and** an automated cross-tenant
+   test suite for every endpoint. Write these tests first, not after.
+3. **Offline roster** — idempotency key `client_event_id` with a unique index on the server, **and** a
+   service worker (offline "level 2"). Without a service worker, an F5 while offline is a dead app —
+   and on mobile F5 happens on its own when the OS kills the tab.
 
-## Quy ước
+## Conventions
 
-- Business logic nằm ở tầng ứng dụng, không nằm trong DB — giữ đường thoát `pg_dump`
-  sang Postgres VN-region cho PDPL.
+- Business logic lives in the application layer, not in the DB — keep the `pg_dump` escape hatch
+  to a VN-region Postgres for PDPL.
