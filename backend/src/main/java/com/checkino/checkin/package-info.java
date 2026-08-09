@@ -1,8 +1,8 @@
 /**
- * Sự kiện điểm danh: checkin_event và dedupe bucket.
+ * Check-in events: checkin_event and the dedupe bucket.
  *
- * <p>Chống trùng bằng {@code UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)} +
- * {@code ON CONFLICT DO NOTHING}. TUYỆT ĐỐI không kiểm bằng {@code if (!exists)} ở tầng app
- * (cơ chế 1).
+ * <p>Deduplication is done with {@code UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)} +
+ * {@code ON CONFLICT DO NOTHING}. NEVER check with {@code if (!exists)} in the app layer
+ * (mechanism 1).
  */
 package com.checkino.checkin;

@@ -4,19 +4,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Trả {@code index.html} cho route phía client, để deep link và F5 không 404.
+ * Returns {@code index.html} for client-side routes so deep links and F5 do not 404.
  *
- * <p>Đây là "một miếng keo nhỏ" mà {@code PLAN.md § 2.1} nói tới — cái giá của việc không dùng
- * SSR.
+ * <p>This is the "small piece of glue" that {@code PLAN.md § 2.1} refers to — the cost of not
+ * using SSR.
  *
- * <p>Các prefix được liệt kê <strong>tường minh</strong>. KHÔNG dùng catch-all kiểu
- * {@code /{path:[^\.]*}}: nó sẽ nuốt luôn {@code /q/{code}}, mà {@code /q} là trang Thymeleaf
- * server-render chứ không phải route SPA ({@code PLAN.md § 1.2}). Thêm khu vực SPA mới thì
- * thêm vào danh sách dưới đây, đừng nới rộng pattern.
+ * <p>The prefixes are listed <strong>explicitly</strong>. Do NOT use a catch-all like
+ * {@code /{path:[^\.]*}}: it would swallow {@code /q/{code}}, and {@code /q} is a server-rendered
+ * Thymeleaf page, not an SPA route ({@code PLAN.md § 1.2}). When adding a new SPA area, add it to
+ * the list below — do not widen the pattern.
  *
- * <p>{@code "/"} cũng phải có mặt: {@code WelcomePageHandlerMapping} của Spring chỉ tìm
- * {@code index.html} ở gốc {@code static/}, không tìm trong {@code static/app/}, nên nếu thiếu
- * thì gõ domain trần sẽ ra 404.
+ * <p>{@code "/"} must be present too: Spring's {@code WelcomePageHandlerMapping} only looks for
+ * {@code index.html} at the root of {@code static/}, not inside {@code static/app/}, so without it
+ * the bare domain would 404.
  */
 @Controller
 public class SpaFallbackController {

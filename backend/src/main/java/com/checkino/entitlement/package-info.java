@@ -1,7 +1,7 @@
 /**
- * Gói thẻ / thẻ hội viên và chính sách trừ buổi.
+ * Session packs / membership cards and the session-consumption policy.
  *
- * <p>Trừ buổi phải nằm cùng transaction với insert check-in (cơ chế 1). Đây là lý do cứng
- * nhất khiến microservices bị loại (D5).
+ * <p>Consuming a session must happen in the same transaction as the check-in insert (mechanism 1).
+ * This is the hardest reason microservices were ruled out (D5).
  */
 package com.checkino.entitlement;

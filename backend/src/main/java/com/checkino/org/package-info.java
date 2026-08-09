@@ -1,8 +1,8 @@
 /**
- * Tenant và cấu hình của tenant: org, scan_point, program, giờ mở cửa, GPS.
+ * The tenant and its configuration: org, scan_point, program, opening hours, GPS.
  *
- * <p>{@code program} (bộ môn) nằm ở đây chứ không ở {@code member}: nó là một phần của việc
- * chủ cấu hình cơ sở, được tạo trong wizard F1, và {@code scan_point.program_id} trỏ tới nó
- * (D7). Bảng nối {@code member_program} thì thuộc {@code member}.
+ * <p>{@code program} (discipline) lives here, not under {@code member}: it is part of how an owner
+ * configures a site, is created in the F1 wizard, and {@code scan_point.program_id} points to it
+ * (D7). The {@code member_program} join table belongs to {@code member}.
  */
 package com.checkino.org;

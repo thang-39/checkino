@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-// Chỉ /admin và /staff là route của SPA. /q/{code} KHÔNG nằm ở đây — nó là trang Thymeleaf
-// server-render, không phải phần của SPA (PLAN.md § 1.2).
+// Only /admin and /staff are SPA routes. /q/{code} is NOT here — it is a server-rendered
+// Thymeleaf page, not part of the SPA (PLAN.md § 1.2).
 export const routes: Routes = [
   {
     path: 'admin',

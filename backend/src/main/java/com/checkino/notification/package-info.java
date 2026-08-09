@@ -1,8 +1,8 @@
 /**
- * Hàng chờ gửi tin: notification_outbox, Zalo OA/ZNS (gói Pro).
+ * The send queue: notification_outbox, Zalo OA/ZNS (Pro tier).
  *
- * <p>Bảng {@code notification_outbox} CHÍNH LÀ hàng chờ — một {@code @Scheduled} quét bảng là
- * đủ ở quy mô 1–2 write/giây. Không dựng message broker, không tách service (D5).
- * Zalo thuộc Pro, free tier chạy hoàn toàn không cần Zalo (D1).
+ * <p>The {@code notification_outbox} table IS the queue — a single {@code @Scheduled} sweep is
+ * enough at a scale of 1–2 writes/second. No message broker, no separate service (D5). Zalo is
+ * Pro; the free tier runs entirely without Zalo (D1).
  */
 package com.checkino.notification;

@@ -1,6 +1,7 @@
 /**
- * Xếp hạng tháng, xuất CSV, mirror Google Sheet.
+ * Monthly ranking, CSV export, Google Sheet mirror.
  *
- * <p>Xếp hạng thuộc free tier: đó chính là việc gig gốc thuê làm (D6). Mirror Sheet là Pro.
+ * <p>Ranking is in the free tier: it is exactly the original gig the founder was hired to do (D6).
+ * The Sheet mirror is Pro.
  */
 package com.checkino.report;
