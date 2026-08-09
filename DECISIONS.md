@@ -765,3 +765,18 @@ nó — đăng ký ở `/staff/` thì `/q` và `/admin` không bị dính vào. 
    (`checkino.vn` / `.com` / `.app`).
 3. **Độ chính xác GPS** tại cửa hàng thật (trong nhà) — quyết định ngưỡng bán kính cho lớp
    soft-check chống gian lận.
+4. **Phân quyền staff theo bộ môn** — có nên khoá một staff chỉ thấy/điểm danh đúng một (vài)
+   bộ môn không. **Chưa quyết, hoãn có chủ đích.** Trục phân quyền mà spec đã chọn là *theo cơ
+   sở* (`F8`: Owner / Manager per location / Staff), và cả cụm "đa cơ sở + phân quyền" là tính
+   năng **Pro**, sequenced về M4 — ở M1 chỉ có "roles skeleton" (một cột `role`), nên schema
+   cũng chưa có liên kết `staff_user ↔ location`, không riêng gì `program`.
+   - **Ca "một staff một lớp" v1 xử lý bằng bộ lọc, không bằng quyền:** `/staff` lọc roster
+     theo bộ môn (`F3`, đọc `member_program` — [D7](#d7--program-bộ-môn-là-bảng-riêng-quan-hệ-nhiều-nhiều-với-hội-viên)).
+     Là tiện lợi, **không** phải rào quyền — staff đổi bộ lọc vẫn xem lớp khác. Với trung tâm
+     nhỏ ≤50 hội viên, mức đe doạ thấp; RLS ([cơ chế 2](#ba-cơ-chế-kỹ-thuật-đã-chốt)) là để chặn
+     rò **chéo org**, không phải trong nội bộ org.
+   - **Nếu về sau quyết là cần cứng:** thêm bảng nối `staff_program (staff_user_id, program_id)`
+     — rẻ, y hệt `member_program`. Chi phí thật là **tầng thực thi** (mỗi query `/staff` lọc theo
+     program được phép) + UI gán quyền ở `/admin` — đúng loại việc của cụm roles Pro (M4). Build
+     thì build cùng cả cụm, đừng nhỏ giọt một bảng lẻ vào M1.
+   - Tín hiệu để mở lại: pilot ([M4-S13](docs/STORIES.yml)) có khách kêu cần khoá cứng.
