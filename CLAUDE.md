@@ -146,7 +146,9 @@ worker), `/admin` chỉ cần manifest cho icon. Đừng viết "PWA" cho cả s
 1. **Dedupe check-in** — đẩy xuống `UNIQUE INDEX (member_id, scan_point_id, dedupe_bucket)`
    + `ON CONFLICT DO NOTHING`. **Không** kiểm tra bằng `if (!exists)` ở tầng app.
 2. **Cô lập đa tenant** — Postgres RLS + `SET LOCAL app.org_id`, **và** bộ test tự động
-   cross-tenant cho mọi endpoint. Viết test này trước, không phải sau.
+   cross-tenant cho mọi endpoint. Viết test này trước, không phải sau. **Endpoint mới không có
+   test cross-tenant là chưa done** — guard `CrossTenantCoverageTest` (extend
+   `CrossTenantTestSupport`) sẽ đỏ ở CI nếu quên.
 3. **Roster offline** — idempotency key `client_event_id` với unique index ở server, **và**
    service worker (offline "mức 2"). Không có service worker thì F5 lúc offline là app chết —
    mà trên mobile F5 tự xảy ra khi OS hủy tab.

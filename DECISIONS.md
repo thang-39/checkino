@@ -894,6 +894,25 @@ tái lập y hệt cho bộ test cô lập.
 token của A cố đọc/sửa dữ liệu của B → assert 403 hoặc rỗng. Chạy trong CI.
 Không có bộ test này thì lớp 1 chỉ là niềm tin. **Viết test này trước, không phải sau.**
 
+**Cách lớp 2 hạ cánh (M1-S04, 2026-08-16).** Lúc làm M1-S04 chưa có auth (magic link là M1-S05)
+và chưa có một data-endpoint nào — chỉ có `SpaFallbackController` forward SPA tĩnh. Nên "viết
+test trước" **không** thể là một ma trận test-per-endpoint (chưa có gì để assert). Lớp 2 hạ cánh
+làm hai phần, và đây là hình dáng chuẩn cho về sau:
+
+1. **Guard tự phát hiện** (`CrossTenantCoverageTest`) — quét `RequestMappingHandlerMapping`, đối
+   chiếu mọi URL pattern với hai danh sách tường minh trong test: `PUBLIC_ALLOWLIST` (endpoint
+   không gắn org: forward SPA, `/error`) và `CROSS_TENANT_COVERED` (endpoint đã có test cross-tenant).
+   Endpoint không thuộc nhóm nào → **fail**. Đây là cơ chế thi hành: thêm endpoint gắn org mà quên
+   test → CI đỏ. Đó là nghĩa vận hành của "endpoint mới không test cross-tenant là chưa done".
+2. **Harness tái dùng** (`CrossTenantTestSupport`) — base cắm sẵn: Testcontainers dùng chung,
+   split role (app = `checkino_app`, Flyway = role đặc quyền), seed org A + org B, `actingAsOrg(...)`.
+   Story endpoint từ M1-S05 trở đi kế thừa base này, viết assert 403/rỗng, rồi ghi pattern vào
+   `CROSS_TENANT_COVERED`. "Token org A" ở HTTP layer là điểm mở rộng khi M1-S05 có auth; primitive
+   hiện tại là `OrgContext` (thread-local) đủ cho test tầng service/repository.
+
+Hệ quả: assert HTTP-per-endpoint là **latent** cho tới endpoint org đầu tiên, nhưng guard làm nó
+**bắt buộc** kể từ giây phút đó — không bị bỏ sót vì con người quên.
+
 ### 3. Roster offline — idempotency key **và** service worker
 
 Nhân viên tap tên → ghi vào outbox trong IndexedDB `{client_event_id: uuid, member_id, ...}` →
