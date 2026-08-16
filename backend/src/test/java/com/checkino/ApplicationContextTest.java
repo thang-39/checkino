@@ -41,11 +41,11 @@ class ApplicationContextTest {
   void flywayIsWiredAndRunsWithoutError() {
     assertThat(flyway).as("Flyway must be autoconfigured").isNotNull();
     assertThat(flyway.info().applied())
-        .as("M1-S02 added V1__core_schema.sql — exactly 1 migration must be applied")
-        .hasSize(1);
+        .as("V1 (M1-S02 schema) + V2 (M1-S03 RLS) — 2 migrations must be applied")
+        .hasSize(2);
     assertThat(flyway.info().current().getVersion().getVersion())
-        .as("current migration is V1")
-        .isEqualTo("1");
+        .as("current migration is V2")
+        .isEqualTo("2");
   }
 
   @Test

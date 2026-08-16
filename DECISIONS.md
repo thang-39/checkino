@@ -861,10 +861,34 @@ với kiểm tra affected rows = 0 → hết buổi → rollback.
 **Lớp 1 — Postgres RLS** (không phụ thuộc Supabase):
 ```sql
 ALTER TABLE checkin_event ENABLE ROW LEVEL SECURITY;
+ALTER TABLE checkin_event FORCE  ROW LEVEL SECURITY;   -- (2) áp cả với owner
 CREATE POLICY org_isolation ON checkin_event
-  USING (org_id = current_setting('app.org_id')::uuid);
+  USING      (org_id = NULLIF(current_setting('app.org_id', true), '')::uuid)
+  WITH CHECK (org_id = NULLIF(current_setting('app.org_id', true), '')::uuid);  -- (3)
 ```
 Đầu mỗi transaction: `SET LOCAL app.org_id = '...'`.
+
+**Bốn điểm bắt buộc khi hiện thực (M1-S03) — mẫu tối giản ở trên đã gói sẵn 1–3, đừng dùng
+bản `current_setting('app.org_id')::uuid` trần vì nó sai AC:**
+
+1. **`current_setting('app.org_id', true)` + `NULLIF(...,'')`** — tham số thứ hai `true`
+   (`missing_ok`) trả `NULL` khi GUC **chưa** set, thay vì ném
+   `unrecognized configuration parameter`. Nhờ đó "chưa set org → query trả **rỗng**, không nổ
+   exception". Bản một-tham-số trong sách vở sẽ nổ.
+2. **App phải nối bằng role riêng, KHÔNG superuser** (`checkino_app`, NOSUPERUSER NOBYPASSRLS).
+   User bootstrap của Postgres (compose `POSTGRES_USER=checkino`) là **superuser**, mà superuser
+   **bỏ qua RLS hoàn toàn** — `FORCE` cũng vô hiệu với nó. Flyway/DDL vẫn chạy bằng role đặc
+   quyền; app runtime nối bằng `checkino_app`. `FORCE ROW LEVEL SECURITY` để phòng trường hợp
+   chạy bằng chính owner của bảng.
+3. **Policy có cả `WITH CHECK`, không chỉ `USING`.** `USING` chỉ lọc lúc đọc; thiếu `WITH CHECK`
+   thì org A vẫn `INSERT`/`UPDATE` được row gắn `org_id` của B. Cô lập đường ghi = bắt buộc.
+4. **`member_program` / `member_device` không có cột `org_id`** (bảng nối). Không áp policy theo
+   `org_id` được → dùng policy **bắc cầu** qua bảng cha:
+   `USING (member_id IN (SELECT id FROM member))`. Vì `member` đã bị RLS lọc, subquery chỉ thấy
+   member của org hiện tại → hai bảng nối tự động cô lập theo.
+
+Role `checkino_app` được tạo **trong migration** (không phải trong compose init) để Testcontainers
+tái lập y hệt cho bộ test cô lập.
 
 **Lớp 2 — test tự động, không thương lượng:** tạo org A và org B; với **mọi** endpoint, dùng
 token của A cố đọc/sửa dữ liệu của B → assert 403 hoặc rỗng. Chạy trong CI.
