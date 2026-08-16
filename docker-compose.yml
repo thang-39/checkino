@@ -25,8 +25,12 @@ services:
       dockerfile: Dockerfile
     environment:
       DB_URL: jdbc:postgresql://db:5432/${DB_NAME:-checkino}
+      # Role đặc quyền cho Flyway/DDL (tạo role + bảng).
       DB_USER: ${DB_USER:-checkino}
       DB_PASSWORD: ${DB_PASSWORD:-checkino}
+      # Role runtime KHÔNG-superuser cho app (RLS, cơ chế 2 — M1-S03). V2 tạo role này.
+      APP_DB_USER: ${APP_DB_USER:-checkino_app}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:-checkino_app}
     ports:
       - "${PORT:-8080}:8080"
     depends_on:

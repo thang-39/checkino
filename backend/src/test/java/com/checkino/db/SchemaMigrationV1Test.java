@@ -46,12 +46,13 @@ class SchemaMigrationV1Test {
   @Test
   void flywayRunsCleanOnBlankDb() {
     // migrate() in @BeforeAll ran without throwing; this is the "runs clean on a blank DB" evidence.
+    // V1 (this story's schema) + V2 (M1-S03 RLS) both live in classpath:db/migration now.
     assertThat(flyway.info().applied())
-        .as("exactly 1 migration applied")
-        .hasSize(1);
+        .as("V1 + V2 applied")
+        .hasSize(2);
     assertThat(flyway.info().current().getVersion().getVersion())
-        .as("current migration is V1")
-        .isEqualTo("1");
+        .as("current migration is V2")
+        .isEqualTo("2");
   }
 
   @Test
