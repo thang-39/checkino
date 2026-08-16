@@ -31,10 +31,15 @@ Hai cái bẫy môi trường trên máy dev hiện tại:
 
 - **Port 5432 và 8080 có thể đã bị project khác chiếm.** Compose đọc `DB_PORT` / `PORT` —
   copy [`.env.example`](.env.example) sang `.env` để đổi (5433 / 8081).
-- **TLS interception của công ty.** `docker build` fail vì Maven trong container không có CA
-  của công ty (`PKIX path building failed`). `docker pull` thì qua được vì daemon có CA.
-  Trên máy host thì `mvn` chạy được nhờ `JAVA_TOOL_OPTIONS` trỏ truststore vào JDK 17 —
-  **đừng xoá temurin-17 khỏi asdf.** Image build được ở CI không có MITM.
+- **TLS interception của công ty.** Maven trong container không có CA công ty → HTTPS ra Maven
+  Central `PKIX path building failed`. Cách xử: copy CA vào **`certs/company-ca.crt`** (gitignore,
+  KHÔNG commit — có sẵn ở image Jenkins của davos); `Dockerfile` tự import vào JDK cacerts (stage
+  backend) + `NODE_EXTRA_CA_CERTS` (stage frontend), và **no-op khi vắng cert** nên CI/máy sạch
+  build bình thường. Trên máy host thì `mvn` chạy được nhờ `JAVA_TOOL_OPTIONS` trỏ truststore vào
+  JDK 17 — **đừng xoá temurin-17 khỏi asdf.** Image build được ở CI không có MITM.
+  - Máy dev chạy **podman** (không phải Docker Desktop — nó đã tắt; `docker` chỉ là CLI trỏ vào
+    podman qua `DOCKER_HOST`). Ưu tiên **`podman build`**; nếu dùng `docker build` mà lỗi x509 lúc
+    kéo base image thì đó là BuildKit, dùng `DOCKER_BUILDKIT=0` hoặc `podman build` (xài cache local).
 
 ## Tài liệu nằm ở đâu, và cái nào thắng
 

@@ -43,6 +43,10 @@ yarn-error.log*
 application-local.yml
 application-local.properties
 
+# CA MITM của công ty — copy tay vào certs/ để build image sau interception TLS; KHÔNG commit.
+# Dockerfile inject có điều kiện; máy/CI không có file thì build vẫn chạy (certs/.gitkeep giữ thư mục).
+certs/*.crt
+
 # Logs & temp
 *.log
 tmp/
